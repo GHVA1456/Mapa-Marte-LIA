@@ -2,29 +2,41 @@
 
 Every coordinate, elevation, weather record and map tile comes from the NASA
 and USGS sources listed in data/config.json. Run `python app.py` to build
-docs/index.html and open it, or `python app.py --build` to only rebuild it.
+docs/index.html and open it in its own window, or `python app.py --build` to
+only rebuild the page. The first run creates a virtual environment in .venv
+and installs Folium and Plotly there; nothing is installed system-wide.
 """
 
 import csv
-import importlib.util
 import json
 import math
+import os
+import shutil
 import subprocess
 import sys
+import threading
+import venv
 import webbrowser
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-if not all(importlib.util.find_spec(name) for name in ("folium", "plotly")):
-    print("Installing folium and plotly (first run only)...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(Path(__file__).parent / "requirements.txt")])
-    importlib.invalidate_caches()
+ROOT = Path(__file__).resolve().parent
+VENV = ROOT / ".venv"
+VENV_PYTHON = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+
+if sys.prefix == sys.base_prefix:  # not inside a virtual environment yet: create it and restart inside it
+    if not VENV_PYTHON.exists():
+        print("Creating the virtual environment in .venv (first run only)...")
+        venv.create(VENV, with_pip=True)
+    if subprocess.call([str(VENV_PYTHON), "-c", "import folium, plotly"], stderr=subprocess.DEVNULL):
+        print("Installing Folium and Plotly into .venv...")
+        subprocess.check_call([str(VENV_PYTHON), "-m", "pip", "install", "-q", "-r", str(ROOT / "requirements.txt")])
+    sys.exit(subprocess.call([str(VENV_PYTHON), str(ROOT / "app.py"), *sys.argv[1:]]))
 
 import folium
 import plotly.graph_objects as go
 
-ROOT = Path(__file__).parent
 DATA, OUT = ROOT / "data", ROOT / "docs"
 CFG = json.loads((DATA / "config.json").read_text(encoding="utf-8"))
 DEM = CFG["dem"]
@@ -104,10 +116,10 @@ def build_2d(route, eva, extra):
                          fill_color="#f85149", fill_opacity=0.55, popup=big(steep)).add_to(hazards)
     folium.PolyLine(latlon([eva[0], eva[-1]]), color="#f85149", weight=6, dash_array="4 16", popup=big(
         f"<b>NO-GO · direct line</b><br>{math.dist(xy_km(eva[0]), xy_km(eva[-1])):.1f} km straight across the Séítah "
-        "sand ripples. Perseverance's drivers ruled this ground out and drove around it.")).add_to(hazards)
+        "sand ripples. Perseverance drove around their north side instead (JPL).")).add_to(hazards)
     folium.PolyLine(latlon(extra), color="#39d0ff", weight=6, dash_array="2 12", popup=big(
         f"<b>Optional leg · delta front</b><br>{extra[-1]['dist_m']} m climb onto the delta front, rover tilt up to "
-        f"{max(p['tilt_deg'] for p in extra):.1f}°. Layered lake sediments.")).add_to(m)
+        f"{max(p['tilt_deg'] for p in extra):.1f}°.")).add_to(m)
     folium.PolyLine(latlon(eva), color="#0e1117", weight=14, interactive=False).add_to(m)
     for a, b in zip(eva, eva[1:]):
         folium.PolyLine(latlon([a, b]), color=slope(b["tilt_deg"])[0], weight=8, interactive=False).add_to(m)
@@ -214,6 +226,18 @@ def build():
     print(f"Built {OUT / 'index.html'} ({len(page) // 1024} KB)")
 
 
+def open_window(url):
+    """Open the map as a program window (Edge or Chrome app mode); return the process, or None if neither exists."""
+    folders = [os.environ.get(k, "") for k in ("PROGRAMFILES(X86)", "PROGRAMFILES", "LOCALAPPDATA")]
+    found = [Path(f) / sub for f in folders if f for sub in ("Microsoft/Edge/Application/msedge.exe", "Google/Chrome/Application/chrome.exe")]
+    found += [Path(p) for name in ("msedge", "google-chrome", "chromium", "chromium-browser") if (p := shutil.which(name))]
+    found += [Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")]
+    for browser in found:
+        if browser.exists():  # its own profile keeps the window a separate process we can wait for
+            return subprocess.Popen([str(browser), f"--app={url}", f"--user-data-dir={VENV / 'window'}", "--window-size=1400,950", "--no-first-run"])
+    webbrowser.open(url)
+
+
 if __name__ == "__main__":
     build()
     if "--build" not in sys.argv:
@@ -223,6 +247,10 @@ if __name__ == "__main__":
         except OSError:  # port 8000 is busy: let the system pick a free one
             server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
         url = f"http://127.0.0.1:{server.server_port}"
-        print(f"Mars EVA Map running at {url} (Ctrl+C to stop)")
-        webbrowser.open(url)
-        server.serve_forever()
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        window = open_window(url)
+        print(f"MARS-NAV running at {url}. " + ("Close the window to exit." if window else "Press Ctrl+C to exit."))
+        try:
+            window.wait() if window else threading.Event().wait()
+        except KeyboardInterrupt:
+            pass

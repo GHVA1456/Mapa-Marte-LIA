@@ -79,10 +79,6 @@
       "https://www-robotics.jpl.nasa.gov/media/documents/2023-rapid-traverse.pdf"
     ],
     [
-      "Exploring the Jezero delta front, Williams et al. 2023 (NASA NTRS)",
-      "https://ntrs.nasa.gov/citations/20230000588"
-    ],
-    [
       "Perseverance completes the Three Forks sample depot (JPL)",
       "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-mars-sample-depot/"
     ],
@@ -93,34 +89,6 @@
     [
       "Viviano-Beck et al. 2014, revised CRISM spectral parameters and summary products, JGR Planets 119",
       "https://doi.org/10.1002/2014JE004627"
-    ],
-    [
-      "Mars facts: atmosphere, temperature, gravity (NASA)",
-      "https://science.nasa.gov/mars/facts/"
-    ],
-    [
-      "Radiation measurements on Mars, Curiosity RAD (NASA)",
-      "https://science.nasa.gov/resource/radiation-measurements-on-mars/"
-    ],
-    [
-      "Hassler et al. 2014, Mars' surface radiation environment, Science 343",
-      "https://doi.org/10.1126/science.1244797"
-    ],
-    [
-      "Space communications: 4 to 24 minutes of latency at Mars (NASA)",
-      "https://www.nasa.gov/missions/tech-demonstration/space-communications-7-things-you-need-to-know"
-    ],
-    [
-      "MOXIE oxygen production on Mars (NASA)",
-      "https://www.nasa.gov/space-technology-mission-directorate/tdm/mars-oxygen-in-situ-resource-utilization-experiment-moxie/"
-    ],
-    [
-      "ISS water recovery reaches 98% (NASA)",
-      "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/"
-    ],
-    [
-      "Five hazards of human spaceflight (NASA)",
-      "https://www.nasa.gov/ochmo-hmta-human-spaceflight-hazards/"
     ],
     [
       "Software: Python, Folium/Leaflet, Plotly. Built with assistance from Claude (Anthropic).",
@@ -145,8 +113,7 @@
           18.732427,
           77.561134
         ]
-      ],
-      "key": "CLAYS (CRISM): bluer colours may indicate Mg/Fe smectite clays or Mg carbonate."
+      ]
     },
     {
       "group": "carbonates",
@@ -161,8 +128,7 @@
           18.732427,
           77.561134
         ]
-      ],
-      "key": "CARBONATES (CRISM): bluish- or yellowish-white often indicates carbonate; red or magenta may indicate Fe/Mg clays."
+      ]
     }
   ],
   "hazard": {

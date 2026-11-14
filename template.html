@@ -66,79 +66,41 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
   </div>
   <aside class="panel">
     <h2>EVA plan · habitat to Three Forks and back</h2>
+    <p class="muted">Distance, weather and daylight are NASA measurements. Times and GO / NO-GO are calculated from the assumptions below.</p>
     <div class="stats">
       <div class="stat"><b id="sTime"></b>total EVA time</div>
       <div class="stat"><b id="sLeave"></b>latest departure</div>
       <div class="stat"><b id="sDist"></b>round trip</div>
       <div class="stat"><b id="sDay"></b>daylight</div>
       <div class="stat"><b id="sTemp"></b>air temperature</div>
-      <div class="stat"><b id="sDose"></b>cosmic-ray dose each</div>
+      <div class="stat"><b id="sPress"></b>air pressure</div>
     </div>
     <p class="muted" id="wx"></p>
     <div class="step"><span>Speed (km/h)</span><button data-step="speed,-0.5">−</button><output id="speed"></output><button data-step="speed,0.5">+</button></div>
     <div class="step"><span>Time at B (min)</span><button data-step="stop,-15">−</button><output id="stop"></output><button data-step="stop,15">+</button></div>
-    <div class="step"><span>Crew</span><button data-step="crew,-1">−</button><output id="crew"></output><button data-step="crew,1">+</button></div>
     <p class="key"><span><i style="background:#3fb950"></i>tilt under 5°</span><span><i style="background:#e3b341"></i>5–10°</span><span><i style="background:#f85149"></i>over 10°, red zone or no-go</span></p>
-    <p class="muted">Speed, the 8 h suit limit, the 1 h daylight margin and the tilt colours are planning assumptions, not NASA limits.</p>
+    <p class="muted">Assumptions (not NASA limits): walking speed, time at B, an 8 h suit limit, a 1 h daylight margin and the tilt colour bands.</p>
   </aside>
 </section>
 <section class="panel">
   <div class="bar" id="tabs">
-    <button data-tab="plan" class="on">PROFILE</button><button data-tab="weather">CONDITIONS</button><button data-tab="emergency">CHECKLISTS</button>
-    <button data-tab="hazards">HAZARDS</button><button data-tab="resources">RESOURCES</button><button data-tab="data">DATA</button>
+    <button data-tab="plan" class="on">PROFILE</button><button data-tab="weather">CONDITIONS</button><button data-tab="data">DATA SOURCES</button>
   </div>
   <div id="plan" class="tab on">
     {{PROFILE}}
-    <p>The straight line from the habitat to Three Forks crosses Séítah, a field of sand ripples that Perseverance's drivers ruled out.
-    This route follows the rover's own tracks around its north side: about twice as long, but nearly flat and already driven by a
-    one-tonne vehicle. At Three Forks the delta's layered lake sediments begin, the rocks Perseverance sampled for return to Earth.</p>
+    <p>Elevation and tilt at each waypoint were measured by Perseverance. The route follows the rover's own tracks around the north side
+    of the Séítah sand ripples (JPL Rapid Traverse Campaign, sols 379 to 409, continued to Three Forks).</p>
   </div>
   <div id="weather" class="tab">
     <p>Measured at Jezero by MEDA, the weather station on Perseverance. These are the latest sols in NASA's public feed, not live readings.</p>
     <table><thead><tr><th>Sol</th><th>Earth date</th><th>High</th><th>Low</th><th>Pressure</th><th>Sunrise</th><th>Sunset</th></tr></thead><tbody id="wxrows"></tbody></table>
-    <p class="muted">Times are local solar time at the rover. Radiation comes from Curiosity's RAD at Gale Crater (0.67 mSv per day on
-    average, 2012–2013) because MEDA does not measure cosmic rays.</p>
+    <p class="muted">Times are local solar time at the rover.</p>
   </div>
-  <div id="emergency" class="tab">
-    <p class="warn">Concept checklists for the interface, not certified flight procedures. Tap anywhere on a row.</p>
-    <div class="two">
-      <div><h3>Before leaving the habitat</h3>
-      <label class="check"><input type="checkbox">Departure is before the latest departure time</label>
-      <label class="check"><input type="checkbox">Buddy check of suit seals and connectors</label>
-      <label class="check"><input type="checkbox">Route and waypoints loaded on both displays</label>
-      <h3>Dust rising</h3>
-      <label class="check"><input type="checkbox">Can you see the last waypoint? If not, stop</label>
-      <label class="check"><input type="checkbox">Return along the green route, never the direct line</label></div>
-      <div><h3>Suit pressure loss</h3>
-      <label class="check"><input type="checkbox">Buddy locates the leak and holds position</label>
-      <label class="check"><input type="checkbox">Abort and return by the route already walked</label>
-      <h3>Solar storm or lost link</h3>
-      <label class="check"><input type="checkbox">Stop work and head for shelter</label>
-      <label class="check"><input type="checkbox">Do not wait for Earth: a reply takes 8 to 48 minutes</label></div>
-    </div>
-  </div>
-  <div id="hazards" class="tab two">
-    <div><h3>Atmosphere and pressure</h3><p>About 95% carbon dioxide at under 1% of Earth's pressure. Nothing to breathe, and
-    water boils near body temperature, so a suit breach is an immediate emergency.</p>
-    <h3>Cold and dust</h3><p>In the MEDA record shown, afternoons at Jezero reach −17 to −25 °C and nights fall to −79 °C. Dust gets
-    into seals, filters and joints.</p>
-    <h3>Sand and slopes</h3><p>Loose ripples like Séítah can trap wheels and boots. In the THERMAL layer, dark ground cooled fast at
-    night: dust or sand. Bright ground stayed warm: rock. Red zones are slopes over 20°, mostly the delta front scarp.</p></div>
-    <div><h3>Radiation</h3><p>Mars has no global magnetic field and a thin atmosphere. Solar particle events arrive with little
-    warning, so every EVA needs a shelter plan.</p>
-    <h3>Gravity</h3><p>3.71 m/s², 38% of Earth's. Loads feel lighter but keep their inertia.</p>
-    <h3>Distance</h3><p>A radio signal takes 4 to 24 minutes each way. The crew decides alone.</p></div>
-  </div>
-  <div id="resources" class="tab"><ul id="res"></ul>
-    <p class="muted">Per astronaut per day: 0.84 kg of oxygen and about 1 gallon (3.8 L) of water (NASA). MOXIE's best rate on Mars
-    was 12 g of oxygen per hour. The ISS recovers about 98% of its water.</p></div>
   <div id="data" class="tab">
     <h3>Map layers</h3><ul id="layers"></ul>
-    <p class="warn">Limits: the route is a planning sketch on rover-driven ground, not an approved traverse. Tilt is the rover's attitude at
-    each stop, a proxy for slope. The 3D terrain is an 80 m grid averaged from the 20 m USGS model, too coarse to show boulders.
-    Minerals: the CRISM images show spectral indicators at 36 m per pixel, not confirmed mineral deposits; reading them takes a spectroscopist.
-    Sand is not in the elevation model, so Séítah is marked by the no-go line and the THERMAL layer, not by a measured outline.
-    Wind, UV and MAVEN space weather are not in NASA's public MEDA feed and are not shown.</p>
+    <p class="warn">What this map does not claim: the route is a planning sketch on rover-driven ground, not an approved traverse. Tilt is the
+    rover's attitude at each stop. Red zones are slopes over 20° computed from the 20 m USGS model. The CRISM layers are NASA's published
+    browse images, shown without interpretation. The Séítah line is the straight A-to-B path the rover avoided, not a measured sand outline.</p>
     <h3>References</h3><ol id="refs"></ol>
   </div>
 </section>
@@ -146,7 +108,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
 <script>{{MAP_SCRIPT}}</script>
 <script>
 const DATA = {{DATA}}, map = window[DATA.map], $ = id => document.getElementById(id), all = s => document.querySelectorAll(s);
-const eva = DATA.eva, total = eva.at(-1).dist_m, wx = DATA.weather.at(-1), state = {speed: 2, stop: 60, crew: 2, wp: 0, relief: 3};
+const eva = DATA.eva, total = eva.at(-1).dist_m, wx = DATA.weather.at(-1), state = {speed: 2, stop: 60, wp: 0, relief: 3};
 const clock = t => { const [h, m] = t.split(":").map(Number); return h + m / 60; };
 const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.floor(h % 1 * 60)).padStart(2, "0")}`;
 const bounds = L.latLngBounds(eva.map(p => [p.lat, p.lon])).pad(0.1);
@@ -160,7 +122,7 @@ function draw() {
   $("minerals").textContent = mineral ? mineral.toUpperCase() : "MINERALS"; $("minerals").classList.toggle("on", !!mineral);
   $("weatherbox").hidden = !shown.weather;
   const names = DATA.layers.filter(l => l.group === "base" || shown[l.group]);
-  $("layerinfo").textContent = (names.find(l => l.key) || {key: ""}).key + " Layers on: " + names.map(l => l.name).join(" + ") + (shown.hazards ? " + red zones: slopes over 20° (USGS elevation model) and the Séítah no-go line" : "");
+  $("layerinfo").textContent = "Layers on: " + names.map(l => l.name).join(" + ") + (shown.hazards ? " + red zones: slopes over 20° (USGS elevation model) and the Séítah no-go line" : "");
 }
 all("[data-layer]").forEach(b => b.onclick = () => { shown[b.dataset.layer] = !shown[b.dataset.layer]; draw(); });
 $("minerals").onclick = () => { [shown.clays, shown.carbonates] = shown.clays ? [false, true] : shown.carbonates ? [false, false] : [true, false]; draw(); };
@@ -197,19 +159,15 @@ $("prev").onclick = () => goto(state.wp - 1); $("next").onclick = () => goto(sta
 function plan() {
   const hours = 2 * total / 1000 / state.speed + state.stop / 60, rise = clock(wx.sunrise), set = clock(wx.sunset);
   const leave = set - DATA.limits.daylight_margin_hours - hours, ok = hours <= DATA.limits.eva_hours && leave >= rise;
-  ["speed", "stop", "crew"].forEach(k => $(k).textContent = state[k]);
+  ["speed", "stop"].forEach(k => $(k).textContent = state[k]);
   $("sTime").textContent = `${hours.toFixed(1)} h`; $("sLeave").textContent = leave >= rise ? hhmm(leave) : "none";
   $("sDist").textContent = `${(2 * total / 1000).toFixed(1)} km`; $("sDay").textContent = `${(set - rise).toFixed(1)} h`;
-  $("sTemp").textContent = `${wx.min_temp_c} to ${wx.max_temp_c} °C`; $("sDose").textContent = `${(0.67 * hours / 24).toFixed(2)} mSv`;
+  $("sTemp").textContent = `${wx.min_temp_c} to ${wx.max_temp_c} °C`; $("sPress").textContent = `${(wx.pressure_pa / 100).toFixed(1)} mbar`;
   $("status").textContent = ok ? "GO · plan fits suit and daylight" : hours > DATA.limits.eva_hours ? `NO-GO · EVA longer than ${DATA.limits.eva_hours} h` : "NO-GO · not enough daylight";
   $("status").classList.toggle("no", !ok);
-  $("wx").textContent = `MEDA sol ${wx.sol} (${wx.earth_date}): sunrise ${wx.sunrise.slice(0, 5)}, sunset ${wx.sunset.slice(0, 5)}, ${(wx.pressure_pa / 100).toFixed(1)} mbar.`;
-  const o2 = 0.84 * state.crew * 30, water = 3.785 * state.crew * 30;
-  $("res").innerHTML = [`Oxygen for ${state.crew} astronauts over 30 days: <b>${o2.toFixed(0)} kg</b>, or <b>${Math.ceil(0.84 * state.crew / 0.288)}</b> MOXIE-size units running non-stop`,
-    `Water used in 30 days: <b>${water.toFixed(0)} L</b>; with 98% recycling only <b>${(water * 0.02).toFixed(1)} L</b> must be replaced`,
-    `Unshielded cosmic-ray dose in 30 days on the surface: <b>${(0.67 * 30).toFixed(0)} mSv</b> each`].map(t => `<li>${t}</li>`).join("");
+  $("wx").textContent = `MEDA sol ${wx.sol} (${wx.earth_date}), latest record in NASA's public feed: sunrise ${wx.sunrise.slice(0, 5)}, sunset ${wx.sunset.slice(0, 5)}.`;
 }
-const floor = {speed: 0.5, stop: 0, crew: 1};
+const floor = {speed: 0.5, stop: 0};
 all("[data-step]").forEach(b => b.onclick = () => { const [k, d] = b.dataset.step.split(","); state[k] = Math.max(floor[k], state[k] + +d); plan(); });
 all("#tabs button").forEach(b => b.onclick = () => {
   all("#tabs button, .tab").forEach(x => x.classList.remove("on"));
@@ -219,7 +177,7 @@ all("#tabs button").forEach(b => b.onclick = () => {
 $("wxrows").innerHTML = DATA.weather.map(w => `<tr><td>${w.sol}</td><td>${w.earth_date}</td><td>${w.max_temp_c} °C</td><td>${w.min_temp_c} °C</td><td>${(w.pressure_pa / 100).toFixed(1)} mbar</td><td>${w.sunrise.slice(0, 5)}</td><td>${w.sunset.slice(0, 5)}</td></tr>`).join("");
 $("layers").innerHTML = DATA.layers.map(l => `<li>${l.name}</li>`).join("") + "<li>3D terrain and red slope zones: USGS Mars 2020 CTX elevation model, 20 m</li>";
 $("refs").innerHTML = DATA.references.map(([t, u]) => `<li>${t}<br><a href="${u}" target="_blank" rel="noreferrer">${u}</a></li>`).join("");
-$("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} to ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>Sun ${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}<br>RAD dose 0.67 mSv/day`;
+$("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} to ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>Sun ${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}`;
 draw(); map.fitBounds(bounds); goto(0, false); plan();
 </script>
 </body>

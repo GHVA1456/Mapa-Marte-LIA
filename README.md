@@ -16,7 +16,6 @@ tracks Perseverance drove around the Séítah sand ripples.
 | Weather | MEDA on Perseverance, sols 1130–1133 (NASA) | Temperature, pressure, daylight |
 | Thermal | Mars Odyssey THEMIS night infrared | Rock versus loose sand |
 | Route | Perseverance waypoints, sols 13–2022 (NASA/JPL) | Position, elevation, tilt |
-| Radiation | Curiosity RAD, 0.67 mSv/day | Dose for the EVA |
 
 Glove-friendly design: every control is at least 64 px, there is nothing to
 type or hover, waypoints are stepped with two large arrows that give heading
@@ -26,16 +25,22 @@ daylight and an 8 h suit limit.
 ## Run it
 
 ```bash
-pip install -r requirements.txt
 python app.py
 ```
 
-The first run installs Folium and Plotly by itself if they are missing, so the `pip` line is optional.
-This builds `docs/index.html` and opens <http://127.0.0.1:8000>. Use
-`python app.py --build` to only regenerate the page. An internet connection
-is needed because map tiles load live from NASA Mars Trek.
+On Windows you can also double-click `run.bat`. The first run creates a
+virtual environment in `.venv`, installs Folium and Plotly inside it, builds
+`docs/index.html` and opens the map in its own window (Edge or Chrome app
+mode, or your default browser if neither is installed). Close the window to
+exit. Use `python app.py --build` to only regenerate the page. An internet
+connection is needed because map tiles load live from NASA.
 
 In VS Code, install the recommended **Python** extension, open `app.py` and press `F5`.
+
+## Embed it in another page
+
+`docs/index.html` is a self-contained page. Put it next to your page and add
+`<iframe src="index.html" style="width:100%;height:100vh;border:0"></iframe>`.
 
 ## Publish it (GitHub Pages)
 
@@ -67,8 +72,8 @@ docs/index.html  ──►  browser loads map tiles from trek.nasa.gov
 
 The route is a planning sketch on rover-driven ground, not an approved
 traverse. The straight line from A to B is 2.5 km but crosses Séítah; the
-route around it is 4.9 km each way. CRISM images show spectral indicators,
-not confirmed deposits. Wind, UV and MAVEN data are not included. Speed, the
+route around it is 4.9 km each way. CRISM images are shown without interpretation.
+Wind, UV, radiation and MAVEN data are not included. Speed, the
 8 h suit limit, the daylight margin and the tilt colours are editable assumptions.
 
 ## References and credits
@@ -83,9 +88,9 @@ AI assistance: Claude (Anthropic) helped write the code.
 ## Español: inicio rápido
 
 ```bash
-pip install -r requirements.txt
 python app.py
 ```
 
-Se abre <http://127.0.0.1:8000> con el mapa 2D y 3D. Para publicarlo, activa
+La primera vez crea el entorno virtual `.venv`, instala las librerías y abre
+el mapa en su propia ventana (en Windows también sirve doble clic en `run.bat`). Para publicarlo, activa
 GitHub Pages en **Settings → Pages** con la rama `main` y la carpeta `/docs`.
