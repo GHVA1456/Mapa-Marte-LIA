@@ -1,17 +1,47 @@
 [
   {
-    "name": "Perseverance",
-    "description": "Aterrizó en Jezero Crater el 18 de febrero de 2021. NASA publica su ubicación y recorrido en un mapa interactivo.",
-    "source": "https://science.nasa.gov/mission/mars-2020-perseverance/location-map/"
-  },
-  {
-    "name": "Curiosity",
-    "description": "Aterrizó en Gale Crater el 5 de agosto de 2012.",
-    "source": "https://science.nasa.gov/mission/msl-curiosity/"
-  },
-  {
     "name": "NASA Mars Trek",
-    "description": "Portal NASA para explorar capas topográficas, imágenes y formaciones de Marte.",
+    "description": "Portal NASA para capas de topografía, imágenes, geología, hielo y sitios de aterrizaje. Se abre en una pestaña independiente porque el sitio puede rechazar iframes.",
     "source": "https://trek.nasa.gov/marsbeta/"
+  },
+  {
+    "name": "Jezero hazard map",
+    "description": "NASA identifica dunas, acantilados y zonas con rocas como peligros para el aterrizaje de Perseverance.",
+    "source": "https://science.nasa.gov/photojournal/jezeros-hazard-map/"
+  },
+  {
+    "name": "Mars radiation measurements",
+    "description": "RAD de Curiosity observó una dosis absorbida de aproximadamente 210 microgray por día, atribuida principalmente a rayos cósmicos galácticos.",
+    "source": "https://science.nasa.gov/resource/radiation-measurements-on-mars/"
+  },
+  {
+    "name": "MOXIE",
+    "description": "Demostración NASA de producción de oxígeno a partir del CO2 de la atmósfera marciana.",
+    "source": "https://www.nasa.gov/space-technology-mission-directorate/tdm/mars-oxygen-in-situ-resource-utilization-experiment-moxie/"
+  },
+  {
+    "name": "SHARAD and subsurface ice",
+    "description": "El radar SHARAD de MRO ha estudiado depósitos subsuperficiales ricos en hielo en Marte.",
+    "source": "https://www.jpl.nasa.gov/news/mars-ice-deposit-holds-as-much-water-as-lake-superior/"
+  },
+  {
+    "name": "Human spaceflight hazards",
+    "description": "NASA resume los riesgos de radiación, aislamiento, distancia, gravedad y entornos hostiles.",
+    "source": "https://www.nasa.gov/ochmo-hmta-human-spaceflight-hazards/"
+  },
+  {
+    "name": "CHAPEA",
+    "description": "Analogía NASA de larga duración con hábitat aislado, recursos limitados y retardos de comunicación.",
+    "source": "https://www.nasa.gov/humans-in-space/chapea/"
+  },
+  {
+    "name": "ECLSS water recovery",
+    "description": "NASA informó que el ECLSS de la ISS alcanzó una recuperación de agua cercana al 98%.",
+    "source": "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/"
+  },
+  {
+    "name": "Mars facts and environment",
+    "description": "NASA documenta la atmósfera delgada, temperaturas aproximadas y características ambientales de Marte.",
+    "source": "https://science.nasa.gov/mars/facts/"
   }
 ]

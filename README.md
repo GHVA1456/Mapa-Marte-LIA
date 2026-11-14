@@ -1,8 +1,10 @@
 # Mapa-Marte-LIA
 
 Prototipo en Python de un mapa interactivo de Marte basado en fuentes de la
-NASA. NASA Mars Trek se integra como mapa geoespacial principal; el proyecto
-no inventa coordenadas ni clasifica rutas como seguras para astronautas.
+NASA. La interfaz local funciona aunque NASA Mars Trek rechace una conexión
+incrustada (`iframe`); el botón superior abre Mars Trek directamente en una
+pestaña nueva. El proyecto no inventa coordenadas ni clasifica rutas como
+seguras para astronautas.
 
 ## Ejecutar localmente
 
@@ -34,3 +36,8 @@ mantiene el servidor en la terminal integrada. Después abre
 Las capas cartográficas y los recorridos deben consultarse en
 [NASA Mars Trek](https://trek.nasa.gov/marsbeta/) o en los mapas oficiales de
 cada misión antes de incorporarse como datos locales.
+
+La demo incluye datos citados sobre atmósfera, temperatura, radiación RAD,
+gravedad, polvo, hielo SHARAD, MOXIE, ECLSS y CHAPEA. Los valores de radiación
+de RAD se muestran como dosis absorbida en `µGy/día`, tal como los publica NASA;
+no se convierten automáticamente a `mSv`.
