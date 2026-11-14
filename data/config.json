@@ -1,0 +1,48 @@
+{
+  "tiles": "https://trek.nasa.gov/tiles/Mars/EQ/{id}/1.0.0/default/default028mm/{z}/{y}/{x}.{ext}",
+  "layers": [
+    {"name": "Optical · Viking colour mosaic (232 m)", "id": "Mars_Viking_MDIM21_ClrMosaic_global_232m", "ext": "jpg", "zoom": 7},
+    {"name": "Topography · MGS MOLA + Mars Express HRSC (200 m)", "id": "Mars_MOLA_blend200ppx_HRSC_ClrShade_clon0dd_200mpp_lzw", "ext": "jpg", "zoom": 8},
+    {"name": "Thermal · Mars Odyssey THEMIS day IR (100 m)", "id": "THEMIS_DayIR_ControlledMosaics_100m_v2_oct2018", "ext": "png", "zoom": 9},
+    {"name": "Thermal · Mars Odyssey THEMIS night IR (100 m)", "id": "THEMIS_NightIR_ControlledMosaics_100m_v2_oct2018", "ext": "png", "zoom": 9},
+    {"name": "Optical · MRO CTX Jezero (6 m)", "id": "JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0", "ext": "png", "zoom": 13,
+     "bounds": [[18.2110274, 77.1604655], [18.7211945, 77.6991776]]},
+    {"name": "Optical · MRO HiRISE Jezero (25 cm)", "id": "JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd", "ext": "png", "zoom": 17,
+     "bounds": [[18.3067994, 77.2229331], [18.669315, 77.583964]]}
+  ],
+  "dem": {
+    "west": 77.19, "east": 77.49, "south": 18.40, "north": 18.52, "offset_m": -2630,
+    "source": "https://trek.nasa.gov/mars/trekarcgis/rest/services/Mars_MOLA_blend200ppx_HRSC_DEM_clon0dd_200mpp_lzw/ImageServer"
+  },
+  "sites": [
+    {"name": "Jezero Crater · Three Forks EVA", "lat": 18.4525, "lon": 77.4040, "zoom": 14,
+     "info": "Ancient river delta explored by Perseverance. This map plans a walk from the flat Three Forks sample depot up to the delta front along ground the rover has already driven.",
+     "source": "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-mars-sample-depot/"},
+    {"name": "Jezero Crater · full Perseverance traverse", "lat": 18.46, "lon": 77.34, "zoom": 11,
+     "info": "45 km driven from the Octavia E. Butler landing site (18.4446°N, 77.4509°E) across the crater floor, the delta and up the crater rim, sols 13–2022.",
+     "source": "https://science.nasa.gov/mission/mars-2020-perseverance/location-map/"},
+    {"name": "Gale Crater · Curiosity", "lat": -4.5895, "lon": 137.4417, "zoom": 8,
+     "info": "Bradbury Landing (4.5895°S, 137.4417°E). Curiosity's RAD instrument measured the surface radiation used in this planner. Only global layers are loaded here.",
+     "source": "https://science.nasa.gov/mission/msl-curiosity/"},
+    {"name": "Utopia Planitia · Viking 2 / SHARAD ice", "lat": 47.64, "lon": 134.29, "zoom": 5,
+     "info": "Viking 2 landed here (47.64°N, 225.71°W). MRO's SHARAD radar found a buried ice-rich deposit in Utopia Planitia; whether a crew could reach it is not demonstrated.",
+     "source": "https://www.jpl.nasa.gov/news/mars-ice-deposit-holds-as-much-water-as-lake-superior/"}
+  ],
+  "references": [
+    ["Perseverance waypoints (M20_waypoints.json, sols 13–2022): position, elevation and tilt", "https://mars.nasa.gov/mmgis-maps/M20/Layers/json/M20_waypoints.json"],
+    ["NASA/JPL Mars Trek: WMTS map tiles (Viking, MOLA, HRSC, THEMIS, CTX, HiRISE) and DEM image service", "https://trek.nasa.gov/mars/"],
+    ["Perseverance completes the Three Forks sample depot (JPL)", "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-mars-sample-depot/"],
+    ["Exploring the Jezero delta front, Williams et al. 2023 (NASA NTRS)", "https://ntrs.nasa.gov/citations/20230000588"],
+    ["Mars facts: atmosphere, temperature, gravity (NASA)", "https://science.nasa.gov/mars/facts/"],
+    ["Radiation measurements on Mars, Curiosity RAD (NASA)", "https://science.nasa.gov/resource/radiation-measurements-on-mars/"],
+    ["Hassler et al. 2014, Mars' surface radiation environment, Science 343", "https://doi.org/10.1126/science.1244797"],
+    ["Space communications: 4 to 24 minutes of latency at Mars (NASA)", "https://www.nasa.gov/missions/tech-demonstration/space-communications-7-things-you-need-to-know"],
+    ["MOXIE oxygen production on Mars (NASA)", "https://www.nasa.gov/space-technology-mission-directorate/tdm/mars-oxygen-in-situ-resource-utilization-experiment-moxie/"],
+    ["SHARAD and subsurface ice in Utopia Planitia (JPL)", "https://www.jpl.nasa.gov/news/mars-ice-deposit-holds-as-much-water-as-lake-superior/"],
+    ["ISS water recovery reaches 98% (NASA)", "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/"],
+    ["Five hazards of human spaceflight (NASA)", "https://www.nasa.gov/ochmo-hmta-human-spaceflight-hazards/"],
+    ["CHAPEA Mars analog missions (NASA)", "https://www.nasa.gov/humans-in-space/chapea/"],
+    ["Perseverance raw images, first-person views by sol (NASA)", "https://science.nasa.gov/mission/mars-2020-perseverance/multimedia/raw-images/"],
+    ["Software: Python, Folium/Leaflet, Plotly. Built with assistance from Claude (Anthropic).", "https://github.com/GHVA1456/Mapa-Marte-LIA"]
+  ]
+}

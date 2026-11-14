@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mars EVA Map · Jezero Crater</title>
+{{MAP_HEAD}}
+<style>
+:root{color-scheme:dark;--bg:#0e1117;--panel:#171d27;--line:#344052;--accent:#ff9d5c;--blue:#8bc7ff;--muted:#aeb8c7}
+*{box-sizing:border-box}[hidden]{display:none!important}body{background:var(--bg);color:#edf0f5;font:15px/1.45 system-ui,sans-serif}
+header{padding:.9rem 1.2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap}
+header h1{font-size:1.25rem;margin:0}header p{margin:0;color:var(--muted);font-size:.9rem}
+a{color:var(--blue)}main{max-width:1500px;margin:auto;padding:1rem;display:grid;gap:1rem}
+.top{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(280px,1fr);gap:1rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:.9rem}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.6rem}
+button,select,input{font:inherit;color:inherit;background:#10151d;border:1px solid var(--line);border-radius:.4rem;padding:.4rem .6rem}
+button{cursor:pointer}button.on{background:#9b4e29;border-color:#d98a52}
+#view2d,#view3d{height:560px;border-radius:.5rem;overflow:hidden;background:#000}
+h2{font-size:1rem;color:var(--accent);margin:0 0 .5rem}h3{font-size:.95rem;margin:.9rem 0 .3rem}
+.muted{color:var(--muted);font-size:.85rem}.stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.stat{background:#10151d;border-radius:.4rem;padding:.5rem}.stat b{display:block;color:var(--accent);font-size:1.1rem}
+.key i{display:inline-block;width:.8rem;height:.8rem;border-radius:50%;margin-right:.35rem;vertical-align:-1px}
+.key span{margin-right:.8rem;white-space:nowrap}label{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin:.35rem 0}aside label input{width:5rem}.tab label{justify-content:flex-start}
+.tab:not(.on){display:none}.two{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
+.warn{border-left:3px solid #e3b341;background:#241f13;padding:.4rem .7rem;margin:.6rem 0;font-size:.9rem}
+.tag{white-space:nowrap;background:#0e1117;color:#fff;border:1px solid #39d0ff;border-radius:.3rem;padding:.1rem .4rem;font:600 11px system-ui;width:max-content}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171d27;color:#edf0f5}
+li{margin:.25rem 0}@media(max-width:900px){.top,.two{grid-template-columns:1fr}#view2d,#view3d{height:420px}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Mars EVA Map · Jezero Crater</h1>
+  <p>A layered 2D + 3D view for planning a walk on Mars, built only from NASA mission data</p></div>
+  <p><a href="https://github.com/GHVA1456/Mapa-Marte-LIA">Source code</a> · <a href="https://trek.nasa.gov/mars/">NASA Mars Trek</a></p>
+</header>
+<main>
+<section class="top">
+  <div class="panel">
+    <div class="bar">
+      <button id="b2d" class="on">2D map</button><button id="b3d">3D terrain</button>
+      <select id="site" aria-label="Go to site"></select>
+      <label class="muted" id="fade">High-resolution overlay <input id="opacity" type="range" min="0" max="1" step="0.05" value="1" style="width:7rem;padding:0"></label>
+      <select id="relief" aria-label="Vertical exaggeration" hidden><option value="1">Relief ×1 (true scale)</option><option value="3" selected>Relief ×3</option><option value="6">Relief ×6</option></select>
+    </div>
+    <div id="view2d">{{MAP_BODY}}</div>
+    <div id="view3d" hidden>{{PLOT3D}}</div>
+    <p class="muted" id="siteinfo"></p>
+    <p class="muted">2D: switch base maps and overlays with the layers button (top right of the map), lower the overlay slider to compare optical, thermal and
+    topographic data on the same ground, click a waypoint for its details. 3D: drag to rotate, scroll to zoom.</p>
+  </div>
+  <aside class="panel">
+    <h2>EVA summary · Three Forks to the delta front</h2>
+    <div class="stats">
+      <div class="stat"><b id="sDist"></b>one way on rover-driven ground</div>
+      <div class="stat"><b id="sClimb"></b>total climb</div>
+      <div class="stat"><b id="sTilt"></b>steepest rover tilt</div>
+      <div class="stat"><b id="sTime"></b>EVA duration</div>
+      <div class="stat"><b id="sDose"></b>GCR dose per astronaut</div>
+      <div class="stat"><b>8–48 min</b>question-and-answer delay with Earth</div>
+    </div>
+    <h3>Route colours (rover tilt at waypoint)</h3>
+    <p class="key"><span><i style="background:#3fb950"></i>&lt; 5° gentle</span><span><i style="background:#e3b341"></i>5–10° moderate</span><span><i style="background:#f85149"></i>&gt; 10° steep</span></p>
+    <h3>Plan inputs</h3>
+    <label>Astronauts <input id="crew" type="number" min="1" value="2"></label>
+    <label>Walking speed (km/h) <input id="speed" type="number" min="0.5" step="0.5" value="2"></label>
+    <label>Time at science stop (min) <input id="stop" type="number" min="0" step="10" value="60"></label>
+    <label>Surface stay (days) <input id="days" type="number" min="1" value="30"></label>
+    <p class="muted">Speed, stop time and the tilt thresholds are planning assumptions you can change, not NASA limits.</p>
+  </aside>
+</section>
+<section class="panel">
+  <div class="bar" id="tabs">
+    <button data-tab="plan" class="on">Route profile &amp; resources</button><button data-tab="hazards">Hazards</button>
+    <button data-tab="isru">Living off the land</button><button data-tab="emergency">Emergencies</button>
+    <button data-tab="data">Data &amp; references</button>
+  </div>
+  <div id="plan" class="tab on">
+    {{PROFILE}}
+    <div class="two">
+      <div><h3>Why this route</h3>
+      <p>Three Forks is the flat spot at the base of the delta where Perseverance built its sample depot. The walk follows the
+      rover's own wheel tracks up to the delta front, layered rock laid down when a river fed a lake here. Ground that carried a
+      one-tonne rover is the best-verified path available, and its tilt record shows where the slope steepens.</p>
+      <p class="muted">Elevations in the profile were measured by the rover. The 3D terrain uses a 200 m orbital model, so
+      the two differ by a few tens of metres.</p></div>
+      <div><h3>Resources for the stay</h3><ul id="resources"></ul>
+      <p class="muted">Per astronaut per day: 0.84 kg oxygen and about 1 gallon (3.8 L) of water (NASA). MOXIE's best rate
+      on Mars was 12 g of oxygen per hour. Food is left out because we have no verified NASA figure for it yet.</p></div>
+    </div>
+  </div>
+  <div id="hazards" class="tab two">
+    <div><h3>Atmosphere and pressure</h3><p>About 95% carbon dioxide at roughly 6 mbar, under 1% of Earth's pressure. Nothing to
+    breathe, and water boils near body temperature, so a suit breach is an immediate emergency.</p>
+    <h3>Temperature and dust</h3><p>NASA gives a median of −65 °C with a range from about 20 °C down to −153 °C. Dust can stay
+    aloft for months after a storm and gets into seals, filters and solar panels.</p>
+    <h3>Reading the thermal layers</h3><p>In the THEMIS night image, bright ground stayed warm after sunset: rock or
+    cemented soil. Dark ground cooled fast: loose dust or sand, which is harder to walk on.</p></div>
+    <div><h3>Radiation</h3><p>Mars has no global magnetic field and a thin atmosphere. Curiosity's RAD measured an average
+    galactic cosmic ray dose equivalent of 0.67 mSv per day at Gale Crater (August 2012 to June 2013), about 210 µGy per day
+    absorbed. Solar particle events add to this without warning, so every EVA needs a shelter plan.</p>
+    <h3>Gravity</h3><p>3.71 m/s², 38% of Earth's. Loads feel lighter but keep their inertia, and long missions bring bone loss,
+    muscle atrophy and vision changes (SANS).</p>
+    <h3>Distance</h3><p>A radio signal takes 4 to 24 minutes each way. The crew must be able to decide alone.</p></div>
+  </div>
+  <div id="isru" class="tab two">
+    <div><h3>Water</h3><p>MRO's SHARAD radar has mapped buried ice-rich deposits, including one in Utopia Planitia. Mining it
+    is an option to prove, not a capability that exists.</p>
+    <h3>Oxygen</h3><p>MOXIE, on Perseverance, made 122 g of oxygen from Martian CO₂ across 16 runs. A crewed mission needs a
+    plant hundreds of times larger.</p></div>
+    <div><h3>Habitat and life support</h3><p>Shelter must stop radiation and dust and hold pressure. The ISS now recovers about
+    98% of its water, a benchmark for a Mars habitat, not a guarantee.</p>
+    <h3>Crew autonomy</h3><p>NASA's CHAPEA missions put four people in a 1,700 ft² habitat for a year with limited supplies and
+    delayed communications to study how crews cope.</p></div>
+  </div>
+  <div id="emergency" class="tab">
+    <p class="warn">Conceptual checklists for the interface. They are not certified flight procedures.</p>
+    <div class="two">
+      <div><h3>Dust storm</h3><label><input type="checkbox"> Check visibility back to the last waypoint</label>
+      <label><input type="checkbox"> Return along the marked route, do not shortcut</label>
+      <label><input type="checkbox"> Confirm power margin and filter status</label>
+      <h3>Solar particle event</h3><label><input type="checkbox"> Stop work and head for the designated shelter</label>
+      <label><input type="checkbox"> Log exposure time for each astronaut</label></div>
+      <div><h3>Suit pressure loss</h3><label><input type="checkbox"> Buddy check of seals and connectors</label>
+      <label><input type="checkbox"> Abort the EVA and take the shortest green segment back</label>
+      <h3>Lost link with Earth</h3><label><input type="checkbox"> Follow the pre-agreed autonomous plan</label>
+      <label><input type="checkbox"> Do not wait for a reply: a round trip takes 8 to 48 minutes</label></div>
+    </div>
+  </div>
+  <div id="data" class="tab">
+    <p>Data flow: NASA waypoint and elevation data are saved as small CSV files in <code>data/</code>, Python (Folium and
+    Plotly) turns them into this page, and your browser loads the map tiles live from NASA Mars Trek.</p>
+    <p class="warn">Limits: the route is a planning sketch on rover-driven ground, not an approved traverse. Tilt is the
+    rover's attitude at each stop, a proxy for slope. The 45 km traverse is thinned to one waypoint about every 200 m. The 3D terrain is 200 m per pixel, too coarse to show boulders.</p>
+    <ol id="refs"></ol>
+  </div>
+</section>
+</main>
+<script>{{MAP_SCRIPT}}</script>
+<script>
+const DATA = {{DATA}}, map = window[DATA.map], $ = id => document.getElementById(id), eva = DATA.eva;
+
+function show3d(on) {
+  $("view3d").hidden = !on; $("view2d").hidden = on;
+  $("b3d").classList.toggle("on", on); $("b2d").classList.toggle("on", !on);
+  $("relief").hidden = !on; $("fade").hidden = on;
+  on ? Plotly.Plots.resize("plot3d") : map.invalidateSize();
+}
+$("b2d").onclick = () => show3d(false); $("b3d").onclick = () => show3d(true);
+
+$("site").innerHTML = DATA.sites.map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
+$("site").onchange = () => {
+  const s = DATA.sites[$("site").value];
+  show3d(false); map.setView([s.lat, s.lon], s.zoom);
+  $("siteinfo").innerHTML = `${s.info} <a href="${s.source}" target="_blank" rel="noreferrer">NASA source</a>`;
+};
+$("site").onchange();
+$("relief").onchange = e => Plotly.relayout("plot3d", {"scene.aspectratio": DATA.relief[e.target.value]});
+$("opacity").oninput = e => DATA.overlays.forEach(name => window[name].setOpacity(+e.target.value));
+
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#tabs button, .tab").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); $(b.dataset.tab).classList.add("on");
+  if (b.dataset.tab === "plan") Plotly.Plots.resize("profile");
+});
+
+function plan() {
+  const n = id => Math.max(+$(id).value || 0, 0), crew = n("crew") || 1, days = n("days") || 1;
+  const hours = 2 * eva.distance_m / 1000 / (n("speed") || 2) + n("stop") / 60;
+  $("sDist").textContent = `${eva.distance_m} m`; $("sClimb").textContent = `${eva.climb_m} m`;
+  $("sTilt").textContent = `${eva.max_tilt}°`; $("sTime").textContent = `${hours.toFixed(1)} h`;
+  $("sDose").textContent = `${(0.67 * hours / 24).toFixed(3)} mSv`;
+  const o2 = 0.84 * crew * days, water = 3.785 * crew * days;
+  $("resources").innerHTML = [
+    `Oxygen to breathe: <b>${o2.toFixed(1)} kg</b> for ${crew} astronauts over ${days} days`,
+    `That equals <b>${Math.ceil(0.84 * crew / (0.012 * 24))}</b> MOXIE-size units running non-stop`,
+    `Water used: <b>${water.toFixed(0)} L</b>; with 98% recycling only <b>${(water * 0.02).toFixed(1)} L</b> must be replaced`,
+    `Surface GCR dose over the stay: <b>${(0.67 * days).toFixed(1)} mSv</b> per astronaut, unshielded`,
+  ].map(t => `<li>${t}</li>`).join("");
+}
+document.querySelectorAll("aside input").forEach(i => i.oninput = plan); plan();
+$("refs").innerHTML = DATA.references.map(([t, u]) => `<li>${t}<br><a href="${u}" target="_blank" rel="noreferrer">${u}</a></li>`).join("");
+</script>
+</body>
+</html>
