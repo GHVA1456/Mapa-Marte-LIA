@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Perseverance",
+    "description": "Aterrizó en Jezero Crater el 18 de febrero de 2021. NASA publica su ubicación y recorrido en un mapa interactivo.",
+    "source": "https://science.nasa.gov/mission/mars-2020-perseverance/location-map/"
+  },
+  {
+    "name": "Curiosity",
+    "description": "Aterrizó en Gale Crater el 5 de agosto de 2012.",
+    "source": "https://science.nasa.gov/mission/msl-curiosity/"
+  },
+  {
+    "name": "NASA Mars Trek",
+    "description": "Portal NASA para explorar capas topográficas, imágenes y formaciones de Marte.",
+    "source": "https://trek.nasa.gov/marsbeta/"
+  }
+]
