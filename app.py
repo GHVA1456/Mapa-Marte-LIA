@@ -6,13 +6,20 @@ locally, or `python app.py --build` to only regenerate the static page.
 """
 
 import csv
+import importlib.util
 import json
 import math
+import subprocess
 import sys
 import webbrowser
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+if not all(importlib.util.find_spec(name) for name in ("folium", "plotly")):
+    print("Installing folium and plotly (first run only)...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(Path(__file__).parent / "requirements.txt")])
+    importlib.invalidate_caches()
 
 import folium
 import plotly.graph_objects as go
@@ -198,7 +205,12 @@ def build():
 if __name__ == "__main__":
     build()
     if "--build" not in sys.argv:
-        url = "http://127.0.0.1:8000"
+        handler = partial(SimpleHTTPRequestHandler, directory=str(OUT))
+        try:
+            server = ThreadingHTTPServer(("127.0.0.1", 8000), handler)
+        except OSError:  # port 8000 is busy: let the system pick a free one
+            server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        url = f"http://127.0.0.1:{server.server_port}"
         print(f"Mars EVA Map running at {url} (Ctrl+C to stop)")
         webbrowser.open(url)
-        ThreadingHTTPServer(("127.0.0.1", 8000), partial(SimpleHTTPRequestHandler, directory=OUT)).serve_forever()
+        server.serve_forever()
