@@ -51,7 +51,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
 <section class="top">
   <div class="panel">
     <div class="bar">
-      <button data-layer="hazards" class="on">HAZARDS</button><button id="minerals">MINERALS</button><button data-layer="weather">WEATHER</button>
+      <button data-layer="hazards" class="on">HAZARDS</button><button id="minerals">MINERALS</button><button data-layer="weather" class="on">WEATHER</button>
       <button data-layer="thermal">THERMAL</button><button id="b3d">3D</button>
       <span class="gap"></span>
       <span id="go2d" class="bar"><button data-go="0">A</button><button data-go="-1">B</button><button data-go="all">ROUTE</button></span>
@@ -152,7 +152,7 @@ const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.floor
 const bounds = L.latLngBounds(eva.map(p => [p.lat, p.lon])).pad(0.1);
 const ring = L.circleMarker([0, 0], {radius: 20, color: "#fff", weight: 5, fill: false, interactive: false}).addTo(map);
 
-const shown = {hazards: true, thermal: false, clays: false, carbonates: false, weather: false};
+const shown = {hazards: true, thermal: false, clays: false, carbonates: false, weather: true};
 function draw() {
   for (const [group, ids] of Object.entries(DATA.groups)) if (group in shown) ids.forEach(id => shown[group] ? window[id].addTo(map) : window[id].remove());
   all("[data-layer]").forEach(b => b.classList.toggle("on", shown[b.dataset.layer]));

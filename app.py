@@ -76,7 +76,9 @@ def add_distance(points):
 
 def build_2d(route, eva, extra):
     """Leaflet map in Mars equirectangular coordinates with NASA Trek layers."""
-    m = folium.Map(crs="EPSG4326", tiles=None, min_zoom=8, max_zoom=18)
+    pad = 0.01  # the map cannot leave the A-to-B area covered by the elevation model
+    m = folium.Map(crs="EPSG4326", tiles=None, min_zoom=12, max_zoom=18, max_bounds=True, min_lat=SOUTH - pad,
+                   max_lat=DEM["north"] + pad, min_lon=DEM["west"] - pad, max_lon=EAST + pad)
     m.default_css = [("leaflet_css", LEAFLET + ".css")]  # skip Bootstrap and icon fonts we do not use
     m.default_js = [("leaflet", LEAFLET + ".js"), ("jquery", "https://code.jquery.com/jquery-3.7.1.min.js")]
     m.fit_bounds([[min(p["lat"] for p in eva), min(p["lon"] for p in eva)], [max(p["lat"] for p in eva), max(p["lon"] for p in eva)]])
@@ -147,6 +149,12 @@ def build_3d(route, eva, extra):
     relief_km = (max(map(max, GRID)) - min(map(min, GRID))) / 1000
     aspect = {k: {"x": 2, "y": 2 * height_km / width_km, "z": 2 * relief_km * k / width_km} for k in (1, 3, 5)}
 
+    cell, steep = CFG["hazard"]["cell_deg"], []
+    for run in table("slope_hazard.csv"):  # centre of every 40 m cell steeper than the limit
+        steep += [{"lat": DEM["north"] - (run["row"] + 0.5) * cell, "lon": DEM["west"] + (c + 0.5) * cell}
+                  for c in range(int(run["col_start"]), int(run["col_end"]) + 1)]
+    sx, sy = zip(*map(xy_km, steep))
+
     fig = go.Figure([
         go.Surface(x=[(c + 0.5) * DEM["cell_deg"] * KM_PER_DEG_LON for c in range(COLS)],
                    y=[(ROWS - r - 0.5) * DEM["cell_deg"] * KM_PER_DEG for r in range(ROWS)], z=GRID, name="Terrain",
@@ -154,6 +162,8 @@ def build_3d(route, eva, extra):
                    colorbar={"title": "Elevation (m)", "len": 0.6, "thickness": 14},
                    contours={"z": {"show": True, "start": -2700, "end": -2400, "size": 10, "color": "rgba(0,0,0,0.25)"}},
                    hovertemplate="Elevation %{z:.0f} m<extra></extra>"),
+        go.Scatter3d(x=sx, y=sy, z=[ground(p) + 2 for p in steep], mode="markers", hoverinfo="name",
+                     name=f"RED ZONE: slope over {CFG['hazard']['min_slope_deg']}°", marker={"size": 4, "color": "#f85149", "symbol": "square"}),
         line(inside, "Perseverance traverse", "#ffffff", 3),
         line([eva[0], eva[-1]], "NO-GO direct line (Séítah sand)", "#f85149", 8, "dash"),
         line(extra, "Optional leg: delta front", "#39d0ff", 8, "dot"),
