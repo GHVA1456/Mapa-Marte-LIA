@@ -28,6 +28,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
+The first run installs Folium and Plotly by itself if they are missing, so the `pip` line is optional.
 This builds `docs/index.html` and opens <http://127.0.0.1:8000>. Use
 `python app.py --build` to only regenerate the page. An internet connection
 is needed because map tiles load live from NASA Mars Trek.
