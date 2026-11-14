@@ -12,6 +12,19 @@ python3 app.py
 
 Abre <http://127.0.0.1:8000>.
 
+### Ejecutar desde VS Code
+
+1. Instala la extensión oficial **Python** de Microsoft.
+2. Abre esta carpeta en VS Code.
+3. Pulsa `Ctrl+Shift+P`, busca **Python: Select Interpreter** y selecciona
+   Python 3.
+4. Abre `app.py` y pulsa el botón de ejecución, o presiona `F5`.
+5. Si usas `F5`, selecciona **Ejecutar mapa de Marte**.
+
+La configuración de `.vscode/launch.json` deja preparado el arranque y
+mantiene el servidor en la terminal integrada. Después abre
+<http://127.0.0.1:8000>.
+
 ## Contenido
 
 - `app.py`: servidor HTTP y página interactiva.
