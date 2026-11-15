@@ -72,6 +72,7 @@ input[type=range]::-moz-range-thumb{width:52px;height:52px;border-radius:50%;bac
 .warn{border-left:4px solid #e3b341;background:#241f13;padding:.5rem .8rem;margin:.6rem 0}
 table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.5rem;border-bottom:1px solid var(--line)}tr.best td{color:var(--go);font-weight:700}
 .tag{white-space:nowrap;background:#0e1117;color:#fff;border:2px solid #fff;border-radius:.4rem;padding:.2rem .5rem;font:800 15px system-ui;width:max-content}
+#scale{border:3px solid #fff;border-top:0;color:#fff;font:800 15px system-ui;text-align:center;padding:0 0 2px;background:#0e111799;white-space:nowrap}
 .pop{font:17px/1.4 system-ui}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171d27;color:#fff}
 .leaflet-container a.leaflet-popup-close-button{font-size:34px;width:56px;height:56px;line-height:56px;color:#fff}
 .leaflet-touch .leaflet-bar a,.leaflet-bar a{width:64px;height:64px;line-height:64px;font-size:34px}
@@ -115,7 +116,6 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
           <select id="camera-mode">
             <option value="free" data-es="Vista libre">Free view</option>
             <option value="track" data-es="Seguimiento">Follow explorer</option>
-            <option value="ground" data-es="Primera persona">First person</option>
           </select>
         </label>
         <span id="camera-presets" class="bar"><button data-cam="0,0,2.2"><span data-es="CENITAL">TOP</span></button><button data-cam="0,-1.5,1.1"><span data-es="SUR">SOUTH</span></button><button data-cam="1.6,0,1"><span data-es="ESTE">EAST</span></button><button id="relief">RELIEF ×3</button></span>
@@ -125,6 +125,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
     <div class="bar map-tools" role="group" aria-label="Navigation tools" data-aria-es="Herramientas de navegación">
       <button id="return" type="button" aria-pressed="false"><span data-es="VOLVER AL HÁBITAT">RETURN TO HABITAT</span></button>
       <button id="measure" type="button" aria-pressed="false"><span data-es="MEDIR DOS PUNTOS">MEASURE TWO POINTS</span></button>
+      <button id="landing" type="button" aria-pressed="false"><span data-es="AGREGAR ATERRIZAJE">ADD LANDING SITE</span></button>
       <button id="coverage" type="button" aria-pressed="true" class="on"><span data-es="COBERTURA CTX">CTX COVERAGE</span></button>
       <span class="muted" data-es="Avanza en la caminata para activar el regreso.">Advance the walk to enable the return.</span>
     </div>
@@ -239,7 +240,6 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
 </section>
 </main>
 <script>{{MAP_SCRIPT}}</script>
-<script>{{GROUND_RENDERER}}</script>
 <script>
 const DATA = {{DATA}}, map = window[DATA.map], $ = id => document.getElementById(id), all = s => document.querySelectorAll(s);
 let wx = DATA.weather.at(-1);
@@ -305,6 +305,7 @@ function select(id, preservePosition = false) {
   }).addTo(detail));
   pts.forEach((p, i) => L.circleMarker(ll(p), {radius: p.notes.length ? 14 : 9, color: "#0e1117", weight: 3, fillColor: colour(p), fillOpacity: 1, bubblingMouseEvents: false}).on("click", e => {
     if (state.measuring) { measurePoint(e.latlng); return; }
+  if (state.landing) { addLanding(e.latlng); return; }
     goto(i, false);
     inspectSegment(Math.min(i, pts.length - 2));
   }).addTo(detail));
@@ -629,8 +630,43 @@ $("measure").onclick = () => {
   renderMeasure();
 };
 
+// ---- Landing sites added by the user: every figure is read from the USGS grid at the tapped spot ----------------------
+const landings = L.layerGroup().addTo(map);
+function addLanding({lat, lng}) {
+  if (!withinDEM([lat, lng])) return;
+  const here = [lat, lng], a = DATA.routes[0].points[0], b = DATA.routes[0].points.at(-1), slope = slopeAt(lat, lng);
+  const red = Math.min(...DATA.steep.map(s => metres(s, here))), n = landings.getLayers().length + 1;
+  const site = L.marker(here, {icon: L.divIcon({html: `<div class="tag" style="border-color:#39d0ff">▼ ${t("LANDING", "ATERRIZAJE")} ${n}</div>`, className: "", iconAnchor: [10, 36]})}).addTo(landings);
+  const remove = document.createElement("button"); remove.textContent = t("REMOVE", "QUITAR"); remove.onclick = () => landings.removeLayer(site);
+  const box = document.createElement("div"); box.className = "pop";
+  box.innerHTML = `<b>${t("Landing site", "Sitio de aterrizaje")} ${n}</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
+    ${t("Elevation", "Elevación")} ${elevAt(lat, lng).toFixed(0)} m · ${t("slope", "pendiente")} ${slope.toFixed(1)}° (USGS, 80 m)<br>
+    ${t("Nearest red-zone cell centre", "Centro de celda roja más cercano")} · ${Math.round(red)} m<br>
+    ${t("Straight line to A", "Línea recta a A")} ${(metres(ll(a), here) / 1000).toFixed(2)} km · ${t("to B", "a B")} ${(metres(ll(b), here) / 1000).toFixed(2)} km<br>
+    <span class="muted">${t("Proposed by the user. No rover has measured this spot unless it lies on the white traverse.", "Propuesto por el usuario. Ningún rover midió este punto, salvo que esté sobre el recorrido blanco.")}</span><br>`;
+  box.append(remove); site.bindPopup(box, {maxWidth: 340}).openPopup();
+  $("landing").onclick();
+}
+$("landing").onclick = () => {
+  if (!state.landing && state.measuring) $("measure").onclick();
+  state.landing = !state.landing; $("landing").classList.toggle("on", state.landing); $("landing").setAttribute("aria-pressed", state.landing);
+  if (state.landing && !$("view3d").hidden) show3d(false);
+};
+
+// ---- Scale bar: Leaflet's own assumes Earth's radius, so this one uses Mars metres per degree -------------------------
+const scaleBar = L.control({position: "bottomleft"});
+scaleBar.onAdd = () => Object.assign(L.DomUtil.create("div"), {id: "scale"});
+scaleBar.addTo(map);
+function drawScale() {
+  const mPerPx = 360 / (512 * 2 ** map.getZoom()) * mLon, length = [5000, 2000, 1000, 500, 200, 100, 50, 20, 10, 5].find(m => m / mPerPx <= 180) || 5;
+  Object.assign($("scale").style, {width: `${length / mPerPx}px`});
+  $("scale").textContent = length >= 1000 ? `${length / 1000} km` : `${length} m`;
+}
+map.on("zoomend", drawScale); drawScale();
+
 map.on("click", e => {  // terrain inspector: any spot inside the elevation model
   if (state.measuring) { measurePoint(e.latlng); return; }
+  if (state.landing) { addLanding(e.latlng); return; }
   const {lat, lng} = e.latlng;
   if (!withinDEM([lat, lng])) return;
   const red = Math.min(...DATA.steep.map(s => metres(s, [lat, lng]))), near = Math.min(...pts.map(p => metres(ll(p), [lat, lng])));
