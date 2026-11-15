@@ -17,7 +17,7 @@
   function translate(root) {  // swap each known text for its translation, or back; unknown text stays as written
     const other = marsnavLang() !== NATIVE, walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     for (let node; (node = walker.nextNode());) {
-      if (!node.parentElement || node.parentElement.closest("script,style,#mnav,nav[aria-label=Sections]")) continue;
+      if (!node.parentElement || node.parentElement.closest("script,style,#mnav,.robot-container,nav[aria-label=Sections]")) continue;
       if (node.original === undefined) {
         let found = WORDS[node.nodeValue.replace(/\s+/g, " ").trim()];
         if (!found && PHRASES.length) {  // text built by the page's own scripts: translate the known pieces inside it

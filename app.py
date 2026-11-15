@@ -10,6 +10,7 @@ and installs Folium and Plotly there; nothing is installed system-wide.
 import csv
 import base64
 import importlib
+import importlib.util
 import json
 import math
 import os
@@ -40,6 +41,10 @@ try:
 except ModuleNotFoundError as error:
     if __name__ != "__main__" or error.name not in {"folium", "plotly"}:
         raise
+    if importlib.util.find_spec("pip") is None:
+        print("Installing pip in the active virtual environment...", flush=True)
+        if subprocess.call([sys.executable, "-m", "ensurepip", "--upgrade"]) != 0:
+            sys.exit("Could not install pip. Recreate the environment with a Python installation that includes ensurepip.")
     print("Installing the map dependencies in the active virtual environment...", flush=True)
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(ROOT / "requirements.txt")])
     # pip ran in another process, so clear the import cache before retrying.
@@ -214,7 +219,8 @@ def build_3d(traverse, routes):
                    contours={"z": {"show": True, "start": -2700, "end": -2400, "size": 10, "color": "rgba(0,0,0,0.25)"}},
                    hovertemplate="Elevation %{z:.0f} m<extra></extra>"),
         trace(STEEP, f"Red zone: slope over {HAZARD['min_slope_deg']}°", None, mode="markers", marker={"size": 4, "color": "#f85149", "symbol": "square"}),
-        trace(inside, "Perseverance traverse", "#ffffff", mode="lines", opacity=0.6),
+        trace(inside, "Perseverance traverse", "#ffffff", mode="lines", opacity=0.6,
+              customdata=[[p["sol"], p["lat"], p["lon"], p["elev_m"], p["tilt_deg"]] for p in inside]),
         *[trace(r["points"], r["name"], r["colour"], mode="lines") for r in routes],
         trace(ends, "A / B", None, mode="markers+text", text=["A · Habitat", "B · Three Forks"], textposition="top center",
               textfont={"size": 16}, marker={"size": 7, "color": "#ffffff", "line": {"color": "#0e1117", "width": 2}}),

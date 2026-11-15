@@ -483,7 +483,7 @@
   function translate(root) {  // swap each known text for its translation, or back; unknown text stays as written
     const other = marsnavLang() !== NATIVE, walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     for (let node; (node = walker.nextNode());) {
-      if (!node.parentElement || node.parentElement.closest("script,style,#mnav,nav[aria-label=Sections]")) continue;
+      if (!node.parentElement || node.parentElement.closest("script,style,#mnav,.robot-container,nav[aria-label=Sections]")) continue;
       if (node.original === undefined) {
         let found = WORDS[node.nodeValue.replace(/\s+/g, " ").trim()];
         if (!found && PHRASES.length) {  // text built by the page's own scripts: translate the known pieces inside it
@@ -987,7 +987,7 @@
         <main>
             <section class="panel">
                 <h2>
-                    Landing zone
+                    Texto
                 </h2>
                 <h3>
                     <div text-align="justify">
@@ -1022,43 +1022,6 @@
                 </section>
             </main>
         </div>
-
-        <div class="contenedor">
-            <main>
-                <section class="panel">
-                    <h2>
-                        Life Support Systems and Habitat Engineering
-                    </h2>
-                    <h3></h3>
-                    <p style="text-align: justify;"></p>
-                </section>
-            </main>
-        </div>
-
-        <div class="contenedor">
-            <main>
-                <section class="panel">
-                    <h2>
-                        Life Support Systems and Habitat Engineering
-                    </h2>
-                    <h3></h3>
-                    <p style="text-align: justify;"></p>
-                </section>
-            </main>
-        </div>
-
-        <div class="contenedor">
-            <main>
-                <section class="panel">
-                    <h2>
-                        Life Support Systems and Habitat Engineering
-                    </h2>
-                    <h3></h3>
-                    <p style="text-align: justify;"></p>
-                </section>
-            </main>
-        </div>
-
     </div>
 
     <div class="robot-container">
@@ -1152,6 +1115,17 @@
             `Welcome, astronaut! Your mission starts here!`
         ];
 
+            const robotMessagesEs = [
+                "En Marte, la atmósfera tenue y la falta de un campo magnético global dejan la superficie más expuesta a la radiación ultravioleta. La misión MAVEN de la NASA estudia el clima espacial marciano.",
+                "En Marte, las puestas de Sol pueden verse azules. El polvo fino de la atmósfera dispersa la luz de modo que el cielo cerca del Sol se ve azulado al atardecer. Perseverance ha fotografiado este fenómeno.",
+                "En el cráter Jezero el viento puede ser difícil de oír. Cuando el suelo se calienta, se pueden formar remolinos de polvo. Las cámaras y los micrófonos de la NASA los han registrado.",
+                "Fobos, una de las dos lunas de Marte, se acerca al planeta unos dos centímetros por año. Dentro de decenas de millones de años podría desintegrarse y formar un anillo de escombros.",
+                "Los micrófonos de Perseverance permitieron descubrir que los sonidos graves y agudos viajan a distintas velocidades en la tenue atmósfera marciana, compuesta principalmente de dióxido de carbono.",
+                "Hace más de 3 500 millones de años, Marte tenía mucha más agua. Las estimaciones sugieren que habría bastado para cubrir el planeta con una capa de unos 140 metros, aunque probablemente se concentraba en el hemisferio norte.",
+                "Al analizar meteoritos marcianos como el ALH 84001, investigadores encontraron compuestos orgánicos y rastros de interacciones antiguas entre agua y roca. El estudio describe mecanismos no biológicos que podrían formar esos compuestos.",
+                "¡Te damos la bienvenida, astronauta! Tu misión empieza aquí.",
+            ];
+
             const robotButton = document.getElementById("robotButton");
             const robotArm = document.getElementById("robotArm");
             const robotDialog = document.getElementById("robotDialog");
@@ -1180,11 +1154,31 @@
 
                 lastMessageIndex = index;
 
-                return robotMessages[index];
             }
 
+            function renderRobotMessage() {
+                const spanish = (window.marsnavLang?.() ?? document.documentElement.lang).startsWith("es");
+                robotButton.setAttribute("aria-label", spanish ? "Hablar con el robot" : "Talk to the robot");
+                robotClose.setAttribute("aria-label", spanish ? "Cerrar diálogo" : "Close dialog");
+                if (lastMessageIndex < 0) {
+                    robotMessage.textContent = spanish
+                        ? "¡Hola! Te damos la bienvenida a nuestra guía de supervivencia en Marte."
+                        : "Hello! Welcome to our Mars survival guide!";
+                    return;
+                }
+                const original = robotMessages[lastMessageIndex];
+                const reference = original.split("Reference:")[1]?.trim();
+                robotMessage.textContent = spanish
+                    ? (reference ? `¿SABÍAS QUE…?\n\n${robotMessagesEs[lastMessageIndex]}\n\nReferencia: ${reference}` : robotMessagesEs[lastMessageIndex])
+                    : original;
+            }
+
+            window.addEventListener("marsnav-lang", renderRobotMessage);
+            renderRobotMessage();
+
             robotButton.addEventListener("click", function () {
-                robotMessage.textContent = getRandomMessage();
+                getRandomMessage();
+                renderRobotMessage();
                 robotDialog.classList.add("show");
                 robotArm.classList.remove("wave");
                 void robotArm.getBoundingClientRect();

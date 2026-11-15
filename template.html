@@ -195,7 +195,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
     </div>
     <div id="day"><i id="sun"></i><i id="eva"></i></div>
     <p class="muted" id="wx"></p>
-    <label><span data-es="Sol de referencia (MEDA)">Reference sol (MEDA)</span>
+    <label><span data-es="Sol de referencia (MEDA)">Reference Sol (MEDA)</span>
       <select id="weather-sol"></select>
     </label>
     <p class="muted"><span data-es="MEDA muestra los extremos térmicos del sol seleccionado. La capa TÉRMICO muestra un mosaico infrarrojo nocturno del terreno.">MEDA shows the temperature extremes of the selected sol. The THERMAL layer shows a nighttime infrared mosaic of the terrain.</span></p>
@@ -251,6 +251,9 @@ const state = {speed: 2, stop: 60, depart: 8, wp: 0, relief: 3, t: 0, playing: f
   returnStart: null, segment: null, measuring: false, camera: "free"}, [tilt1, tilt2] = DATA.limits.tilt_bands_deg;
 let route, pts;
 const t = (en, es) => document.documentElement.lang === "es" ? es : en;
+const roverNumber = (value, digits = 0) => new Intl.NumberFormat(t("en-US", "es-MX"), {
+  minimumFractionDigits: digits, maximumFractionDigits: digits, useGrouping: false,
+}).format(value);
 const labels = [...all("[data-es]")].map(el => [el, el.textContent]);
 const accessibleLabels = [...all("[data-aria-es]")].map(el => [el, el.getAttribute("aria-label")]);
 const spanishRoutes = {
@@ -582,8 +585,8 @@ function renderCustomEta() {
   const margin = clock(wx.sunset) - back;
   const time = `${hhmm(back % 24)}${back >= 24 ? ` (+${Math.floor(back / 24)} sol)` : ""}`;
   summary.textContent = t(
-    `P1 → P2: ${Math.round(oneWay * 60)} min · Return to P1: ${time} local solar time, including ${state.stop} min at P2 · Sunset margin: ${margin.toFixed(1)} Mars h (historical sol ${wx.sol}).`,
-    `P1 → P2: ${Math.round(oneWay * 60)} min · Regreso a P1: ${time} hora solar local, con ${state.stop} min en P2 · Margen hasta el atardecer: ${margin.toFixed(1)} h marcianas (sol histórico ${wx.sol}).`
+    `P1 → P2: ${Math.round(oneWay * 60)} min · Return to P1: ${time} local solar time, including ${state.stop} min at P2 · Sunset margin: ${margin.toFixed(1)} Mars h (historical Sol ${wx.sol}).`,
+    `P1 → P2: ${Math.round(oneWay * 60)} min · Regreso a P1: ${time} hora solar local, con ${state.stop} min en P2 · Margen hasta el atardecer: ${margin.toFixed(1)} h marcianas (Sol histórico ${wx.sol}).`
   );
 }
 
@@ -665,7 +668,7 @@ function addLanding({lat, lng}) {
   const paint = () => {
     const day = hour >= clock(wx.sunrise) && hour <= clock(wx.sunset);
     when.innerHTML = `<b>${t("Landing time", "Hora de aterrizaje")} ${hhmm(hour)}</b> ${t("local solar time", "hora solar local")}<br>
-      ${day ? t("In daylight", "Con luz de día") : t("In darkness", "De noche")} · ${t("sun", "sol")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)} (MEDA sol ${wx.sol})`;
+      ${day ? t("In daylight", "Con luz de día") : t("In darkness", "De noche")} · ${t("Daylight", "Luz de día")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)} (MEDA · Sol ${wx.sol})`;
     site.setIcon(icon());
   };
   const isMission = () => { const m = mission(); return m && m.landing.lat === lat && m.landing.lon === lng; };
@@ -889,8 +892,8 @@ function goto(i, pan = true) {
   }
   $("wp").innerHTML = `<b>${t("Point ", "Punto ")}${state.wp + 1} / ${pts.length}</b><span>${line}</span>
     ${p.notes.length ? `<ul>${t(p.notes, p.notes_es).map(n => `<li>${n}</li>`).join("")}</ul>` : ""}
-    <div class="facts"><span><b>${Math.round(p.elev_m)} m</b>${t("elevation · ", "elevación · ")}${p.verified ? "rover" : t("USGS model", "modelo USGS")}</span>
-    <span><b>${p.verified ? p.tilt_deg + "°" : t("no data", "sin datos")}</b>${p.verified ? `${t("rover tilt · sol ", "inclinación del rover · sol ")}${p.sol}` : t("never driven by a rover", "sin recorrido del rover")}</span>
+    <div class="facts"><span><b>${roverNumber(p.elev_m, 1)} m</b>${t("Elevation", "Elevación")} · ${p.verified ? "Perseverance" : t("USGS model", "modelo USGS")}</span>
+    <span><b>${p.verified ? roverNumber(p.tilt_deg, 1) + "°" : t("no data", "sin datos")}</b>${p.verified ? `${t("Perseverance tilt", "Inclinación de Perseverance")} · Sol ${roverNumber(p.sol)}` : t("never driven by a rover", "sin recorrido del rover")}</span>
     <span><b>${p.slope_deg}°</b>${t("terrain slope · 80 m grid", "pendiente · cuadrícula de 80 m")}</span><span><b>${p.red_m} m</b>${t("to nearest red zone", "al centro de celda roja más cercano")}</span>
     <span><b>${km(p.dist_m)} km</b>${t("walked", "recorridos")}</span><span><b>${km(route.length_m - p.dist_m)} km</b>${t("to B", "hasta B")}</span></div>`;
   if (!state.playing) setT(p.dist_m / route.length_m);
@@ -957,8 +960,8 @@ function renderLighting(solar) {
   $("solar-dot").style.top = `${82 - Math.sin(Math.PI * progress) * 65}%`;
   $("solar-dot").style.opacity = elevation >= 0 ? "1" : ".25";
   $("solar-readout").textContent = t(
-    `${hhmm(hours)} local · Estimated sun: azimuth ${Math.round(azimuth) % 360}°, elevation ${Math.round(elevation)}° · MEDA sol ${wx.sol}`,
-    `${hhmm(hours)} local · Sol estimado: rumbo ${Math.round(azimuth) % 360}°, altura ${Math.round(elevation)}° · sol MEDA ${wx.sol}`
+    `${hhmm(hours)} local · Estimated Sun: azimuth ${Math.round(azimuth) % 360}°, elevation ${Math.round(elevation)}° · MEDA · Sol ${wx.sol}`,
+    `${hhmm(hours)} local · Sol estimado: azimut ${Math.round(azimuth) % 360}°, altura ${Math.round(elevation)}° · MEDA · Sol ${wx.sol}`
   );
 }
 
@@ -1356,8 +1359,8 @@ function renderReturn(returning, distance, arrival) {
   const margin = clock(wx.sunset) - eta;
   const time = `${hhmm(eta % 24)}${eta >= 24 ? ` (+${Math.floor(eta / 24)} sol)` : ""}`;
   $("return-summary").textContent = t(
-    `Estimated return to A: ${time} local solar time · ${km(distance)} km remaining · Sunset margin ${margin.toFixed(1)} Mars h (MEDA sol ${wx.sol}).`,
-    `Regreso estimado a A: ${time} hora solar local · Faltan ${km(distance)} km · Margen hasta el atardecer ${margin.toFixed(1)} h marcianas (MEDA sol ${wx.sol}).`
+    `Estimated return to A: ${time} local solar time · ${km(distance)} km remaining · Sunset margin ${margin.toFixed(1)} Mars h (MEDA · Sol ${wx.sol}).`,
+    `Regreso estimado a A: ${time} hora solar local · Faltan ${km(distance)} km · Margen hasta el atardecer ${margin.toFixed(1)} h marcianas (MEDA · Sol ${wx.sol}).`
   );
 }
 
@@ -1423,8 +1426,8 @@ function plan() {
   const pos = h => `${Math.min(Math.max((h - 4) / 16, 0), 1) * 100}%`;  // the bar spans 04:00 to 20:00
   Object.assign($("sun").style, {left: pos(rise), right: `calc(100% - ${pos(set)})`}); Object.assign($("eva").style, {left: pos(state.depart), right: `calc(100% - ${pos(back)})`});
   $("wx").textContent = t(
-    `Historical scenario · MEDA sol ${wx.sol} (${wx.earth_date}). Daylight ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA in blue.`,
-    `Escenario histórico · MEDA sol ${wx.sol} (${wx.earth_date}). Luz ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA en azul.`
+    `Historical scenario · MEDA · Sol ${wx.sol} (${wx.earth_date}). Daylight ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA in blue.`,
+    `Escenario histórico · MEDA · Sol ${wx.sol} (${wx.earth_date}). Luz de día ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA en azul.`
   );
   setT(state.t);
 }
@@ -1442,7 +1445,32 @@ $("weather-sol").onchange = e => {
 };
 
 function renderWeather() {
-  $("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} ${t("to", "a")} ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>${t("Daylight", "Luz")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}`;
+  $("weatherbox").innerHTML = `<b>MEDA · Sol ${wx.sol}</b><br>${wx.min_temp_c} ${t("to", "a")} ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>${t("Daylight", "Luz de día")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}`;
+}
+function renderPlotLanguage() {
+  const names = [
+    t("Terrain", "Terreno"), t("Red zone", "Zona roja"),
+    t("Perseverance traverse", "Recorrido de Perseverance"), ...DATA.routes.map(routeName), "A / B",
+    t("Astronaut", "Astronauta"), t("Theoretical route", "Ruta teórica"), "P1 / P2",
+    t("Hazard cells", "Celdas de riesgo"), t("Direct line", "Línea directa"),
+    t("CTX coverage", "Cobertura CTX"), t("Selected segment", "Tramo elegido"),
+  ];
+  Plotly.restyle("plot3d", {name: names}, names.map((_, index) => index));
+  const roverDetails = $("plot3d").data[2].customdata.map(([sol, lat, lon, elevation, tilt]) =>
+    `<b>Perseverance · Sol ${roverNumber(sol)}</b><br>${t("Coordinates", "Coordenadas")} · ${roverNumber(lat, 5)}° N, ${roverNumber(lon, 5)}° E<br>${t("Elevation", "Elevación")} · ${roverNumber(elevation, 1)} m<br>${t("Rover tilt", "Inclinación del rover")} · ${roverNumber(tilt, 1)}°`
+  );
+  Plotly.restyle("plot3d", {text: [roverDetails], hovertemplate: "%{text}<extra></extra>"}, [2]);
+  Plotly.restyle("plot3d", {
+    "colorbar.title.text": t("Elevation (m)", "Elevación (m)"),
+    hovertemplate: `${t("Elevation", "Elevación")} %{z:.0f} m<extra></extra>`,
+  }, [0]);
+  Plotly.restyle("plot3d", {text: [[t("A · Habitat", "A · Hábitat"), "B · Three Forks"]]}, [3 + DATA.routes.length]);
+  Plotly.relayout("plot3d", {
+    "scene.xaxis.title.text": t("East of habitat A (km)", "Este del hábitat A (km)"),
+    "scene.yaxis.title.text": t("North of habitat A (km)", "Norte del hábitat A (km)"),
+    "scene.zaxis.title.text": t("Elevation (m)", "Elevación (m)"),
+  });
+  $("layers").lastElementChild.textContent = t("Routes: Perseverance waypoints (NASA/JPL)", "Rutas: puntos registrados por Perseverance (NASA/JPL)");
 }
 function renderRoutes() {
   $("routes").innerHTML = DATA.routes.map(r => `<button class="route" data-route="${r.id}">${badge(r)}<b>${routeName(r)}</b><span>${km(r.length_m)} km ${t("one way", "de ida")} · ${r.verified_pct}% ${t("rover-driven", "recorrido por el rover")}</span></button>`).join("");
@@ -1475,6 +1503,7 @@ $("language").onclick = () => {
   select(route.id, true);
   renderCustomProfile();
   renderGroundReference();
+  renderPlotLanguage();
 };
 // The EN / ES button in the top bar drives this page too, and the choice is shared with the guides.
 $("language").hidden = true;
@@ -1482,6 +1511,7 @@ const syncLanguage = () => { if ((document.documentElement.lang === "es") !== (m
 addEventListener("marsnav-lang", syncLanguage);
 
 renderRoutes(); draw(); drawCoverage(); select(DATA.routes.find(r => r.best).id); map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
+renderPlotLanguage();
 $("plot3d").on("plotly_click", e => {
   if (!state.measuring) return;
   const hazard = e.points.find(p => p.curveNumber === terrainTrace + 2);
