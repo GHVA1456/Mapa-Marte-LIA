@@ -21,7 +21,7 @@
             background:
                 linear-gradient(rgba(8, 12, 22, 0.65),
                     rgba(8, 12, 22, 0.85)),
-                url("https://okdiario.com/img/2026/02/23/marte-crater.jpg") no-repeat center center fixed;
+                url("./assets/survival-guide/mars.jpg") no-repeat center center fixed;
 
             background-size: cover;
             min-height: 100vh;
@@ -330,18 +330,18 @@
             user-select: none;
         }
 
-        .robot-arm {
-            transform-box: view-box;
-            transform-origin: 901px 773px;
+        .robot-image {
+            transform-origin: center bottom;
         }
 
         @media (prefers-reduced-motion: no-preference) {
-            .robot-arm.wave {
-                animation: robotWave 2.6s ease-in-out .2s both;
+            .robot-image.wave {
+                animation: robotWave 0.65s ease-in-out;
             }
         }
 
         @keyframes robotWave {
+<<<<<<< HEAD
 
             0%,
             100% {
@@ -358,6 +358,11 @@
             59% {
                 transform: rotate(-113deg);
             }
+=======
+            0%, 100% { transform: rotate(0); }
+            30% { transform: rotate(-5deg); }
+            65% { transform: rotate(4deg); }
+>>>>>>> 36bb13fe0ad16db67b90d71b40209dcb5b3be034
         }
 
         .robot-dialog {
@@ -810,16 +815,7 @@
 
                     </div>
 
-                    <figure>
-                        <img src="https://miro.medium.com/v2/format:webp/1*-yP97WJayWLu268UaVrVdQ.jpeg" width="450"
-                            alt="Extravehicular mobility unit astronaut suit">
-
-                        <figcaption>
-                            (Reference:Diodati, M. (2015, 30 de noviembre). Tutti i pezzi della ISS (9/22):
-                            Extravehicular Mobility
-                            Unit (EMU). Medium.)
-                        </figcaption>
-                    </figure>
+                    <figure><img src="./assets/survival-guide/helmet-diagram.svg" width="450" alt="Spacesuit helmet / Casco de traje espacial"><figcaption><span class="science-guide-en">Spacesuit helmet schematic. Project illustration.</span><span class="science-guide-es">Esquema de un casco de traje espacial. Ilustración del proyecto.</span></figcaption></figure>
 
                 </div>
 
@@ -919,6 +915,7 @@
                     }
                 </style>
                 <div class="science-guide-es" lang="es">
+<<<<<<< HEAD
                     <h2 lang="es">Guía científica de supervivencia y exploración humana en Marte</h2>
                     <div lang="es">
                         <p style="text-align: justify;"><strong>Objetivo de la investigación:</strong> desarrollar una
@@ -2914,6 +2911,848 @@
                             </tr>
                         </tbody>
                     </table>
+=======
+                <h2 lang="es">Guía científica de supervivencia y exploración humana en Marte</h2>
+                <div lang="es">
+                <p style="text-align: justify;"><strong>Objetivo de la investigación:</strong> desarrollar una descripción científica integral de las condiciones ambientales de Marte, sus fenómenos naturales, los riesgos que representan para la vida humana y las tecnologías que actualmente se investigan para hacer posible una presencia humana prolongada en el planeta.</p>
+                <p style="text-align: justify;">El contenido estará organizado para que puedas incorporar cada apartado directamente a tu página web, manteniendo una redacción técnica, explicativa y profesional.</p>
+                <h3>1. Características generales y parámetros planetarios de Marte</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/mars.jpg" alt="Marte: vista global del planeta."><figcaption>Marte: vista global del planeta.<br>Créditos: NASA/JPL-Caltech. <a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>1.1. Identificación y características físicas</h4>
+                <p style="text-align: justify;">Marte es el cuarto planeta del Sistema Solar, ubicado después de la Tierra y antes de Júpiter. Es un planeta rocoso perteneciente al grupo de los planetas terrestres, caracterizado por una superficie sólida, una atmósfera extremadamente tenue y un entorno ambiental muy diferente al terrestre. Su distintivo color rojizo se debe principalmente a la presencia de óxidos de hierro en los minerales que componen su superficie y su regolito.</p>
+                <p style="text-align: justify;">Su tamaño es aproximadamente la mitad del terrestre, aunque presenta una superficie extensa y una diversidad geológica considerable. En su territorio existen enormes volcanes, profundos cañones, cráteres de impacto, antiguas cuencas fluviales, depósitos sedimentarios y regiones polares cubiertas por hielo de agua y dióxido de carbono congelado.</p>
+                <p style="text-align: justify;">Marte posee una importancia científica extraordinaria porque conserva evidencias de un pasado en el que pudo existir agua líquida de manera más abundante y estable. Sus antiguos deltas, minerales hidratados y estructuras sedimentarias indican que algunas regiones experimentaron condiciones potencialmente habitables hace miles de millones de años. Sin embargo, las condiciones actuales de la superficie son extremadamente hostiles para los organismos humanos y para la mayoría de las formas de vida terrestres.</p>
+                <h4>1.2. Parámetros físicos y orbitales</h4>
+                <p style="text-align: justify;">Las características físicas y orbitales de Marte determinan su comportamiento climático, la duración de sus ciclos estacionales y las condiciones gravitatorias que experimentarían los seres humanos.</p>
+                <table border="1">
+                <thead><tr><th>Parámetro</th><th>Valor aproximado</th></tr></thead>
+                <tbody>
+                <tr><td>Distancia media al Sol</td><td>227.9 millones de km</td></tr>
+                <tr><td>Distancia orbital</td><td>1.52 unidades astronómicas (UA)</td></tr>
+                <tr><td>Radio ecuatorial</td><td>3,396.2 km</td></tr>
+                <tr><td>Diámetro ecuatorial</td><td>6,792.4 km</td></tr>
+                <tr><td>Masa</td><td>6.42 &#215; 10<sup>23</sup> kg</td></tr>
+                <tr><td>Gravedad superficial</td><td>3.721 m/s²</td></tr>
+                <tr><td>Velocidad de escape</td><td>5.03 km/s</td></tr>
+                <tr><td>Duración del día solar</td><td>24 h, 39 min y 35 s</td></tr>
+                <tr><td>Duración del año</td><td>687 días terrestres</td></tr>
+                <tr><td>Inclinación axial</td><td>25.19°</td></tr>
+                <tr><td>Número de lunas</td><td>2</td></tr>
+                </tbody>
+                </table>
+                <p style="text-align: justify;">La rotación de Marte es relativamente parecida a la terrestre. Un día marciano, denominado <em>sol</em>, dura aproximadamente 39 minutos y 35 segundos más que un día terrestre. Esta similitud facilita la organización de ciclos diarios de actividad, descanso e iluminación en futuras instalaciones habitadas.</p>
+                <p style="text-align: justify;">En cambio, su año dura aproximadamente 687 días terrestres, debido a que necesita más tiempo para completar una revolución alrededor del Sol. Su inclinación axial de 25.19° provoca la existencia de cuatro estaciones, de forma semejante a la Tierra. No obstante, estas estaciones son considerablemente más largas y presentan diferencias de duración debido a la forma elíptica de su órbita.</p>
+                <p style="text-align: justify;">Marte también tiene dos satélites naturales: <strong>Fobos y Deimos</strong>. Fobos es el más grande y cercano al planeta, mientras que Deimos es más pequeño y distante. Fobos presenta una órbita que está disminuyendo gradualmente de altitud, por lo que se espera que, dentro de millones de años, termine fragmentándose por las fuerzas de marea o impactando contra Marte.</p>
+                <h4>1.3. Gravedad marciana y sus consecuencias fisiológicas</h4>
+                <p style="text-align: justify;">La gravedad superficial de Marte es de aproximadamente 3.721 m/s², equivalente al 38 % de la gravedad terrestre. Esta diferencia modifica considerablemente la interacción entre el cuerpo humano y su entorno físico.</p>
+                <p style="text-align: justify;">Por ejemplo, una persona cuya masa sea de 70 kg tendría una fuerza de peso equivalente a aproximadamente 26.6 kg-fuerza en Marte. Es importante distinguir que su masa continuaría siendo de 70 kg; lo que disminuiría sería su peso debido a la menor aceleración gravitatoria.</p>
+                <p style="text-align: justify;">La exposición prolongada a una gravedad reducida representa un desafío fisiológico importante. Los huesos y músculos humanos están adaptados a soportar las cargas gravitatorias terrestres. Cuando estas cargas disminuyen, se modifica el equilibrio de formación y degradación del tejido óseo, además de reducirse la exigencia mecánica sobre los músculos.</p>
+                <p style="text-align: justify;">Entre las principales alteraciones que se estudian se encuentran:</p>
+                <ul>
+                <li><strong>Pérdida de densidad mineral ósea:</strong> disminución de la cantidad de minerales presentes en los huesos, lo que puede incrementar su fragilidad.</li>
+                <li><strong>Atrofia muscular:</strong> reducción de la masa y capacidad funcional de determinados grupos musculares.</li>
+                <li><strong>Alteraciones cardiovasculares:</strong> cambios en la distribución de los líquidos corporales y en la capacidad del sistema circulatorio para adaptarse a diferentes campos gravitatorios.</li>
+                <li><strong>Alteraciones del equilibrio:</strong> modificaciones en la orientación espacial, la coordinación y la percepción del movimiento.</li>
+                <li><strong>Síndrome neuro-ocular asociado a los vuelos espaciales (SANS):</strong> conjunto de alteraciones que pueden afectar la estructura ocular y la función visual durante misiones espaciales prolongadas.</li>
+                </ul>
+                <p style="text-align: justify;">Un aspecto importante es que todavía no existen estudios longitudinales suficientes sobre seres humanos que hayan vivido durante años bajo la gravedad marciana. Por tanto, no se puede afirmar con certeza que el 38 % de gravedad terrestre produzca exactamente los mismos efectos que la microgravedad experimentada en órbita. Sin embargo, constituye un riesgo fisiológico que requiere investigación específica.</p>
+                <h3>2. Composición atmosférica y condiciones climáticas</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/dust.jpg" alt="La atmósfera de Marte antes y durante una tormenta de polvo."><figcaption>La atmósfera de Marte antes y durante una tormenta de polvo.<br>Créditos: NASA, James Bell (Cornell Univ.), Michael Wolff (Space Science Inst.), Hubble Heritage Team (STScI/AURA). <a href="https://science.nasa.gov/asset/hubble/a-global-dust-storm-on-mars/" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>2.1. Composición química de la atmósfera</h4>
+                <p style="text-align: justify;">La atmósfera marciana está constituida principalmente por dióxido de carbono (CO₂), que representa aproximadamente el 95 % de su composición. A diferencia de la atmósfera terrestre, rica en nitrógeno y oxígeno, Marte posee cantidades extremadamente pequeñas de oxígeno molecular, lo que impide la respiración humana directa.</p>
+                <p style="text-align: justify;">Su composición aproximada por volumen es la siguiente:</p>
+                <table border="1">
+                <thead><tr><th>Componente</th><th>Concentración</th></tr></thead>
+                <tbody>
+                <tr><td>Dióxido de carbono (CO₂)</td><td>95.32 %</td></tr>
+                <tr><td>Nitrógeno (N₂)</td><td>2.70 %</td></tr>
+                <tr><td>Argón (Ar)</td><td>1.60 %</td></tr>
+                <tr><td>Oxígeno (O₂)</td><td>0.13 %</td></tr>
+                <tr><td>Monóxido de carbono (CO)</td><td>0.08 %</td></tr>
+                <tr><td>Otros componentes y gases traza</td><td>Cantidades pequeñas</td></tr>
+                </tbody>
+                </table>
+                <p style="text-align: justify;">La predominancia del dióxido de carbono está relacionada con la evolución geológica y atmosférica del planeta. Aunque este gas es fundamental para determinados procesos biológicos y químicos, su concentración en Marte no significa que pueda utilizarse directamente para respirar.</p>
+                <p style="text-align: justify;">Además, la atmósfera contiene vapor de agua en cantidades reducidas, así como trazas de otros compuestos. Estas sustancias participan en ciclos atmosféricos relacionados con la formación de nubes, escarcha, hielo y transporte de humedad.</p>
+                <h4>2.2. Presión atmosférica y exposición al vacío parcial</h4>
+                <p style="text-align: justify;">Uno de los factores ambientales más peligrosos de Marte es su presión atmosférica extremadamente baja.</p>
+                <p style="text-align: justify;">La presión superficial media se encuentra alrededor de los 610 pascales (Pa), equivalentes a 6.1 milibares (mbar). En comparación, la presión atmosférica media terrestre es de aproximadamente 101,325 Pa o 1,013.25 mbar.</p>
+                <p style="text-align: justify;">Esto significa que Marte posee una presión superficial cercana al 0.6 % de la terrestre. Dependiendo de la estación, la altitud y la ubicación geográfica, esta presión puede variar aproximadamente entre 4.0 y 8.7 mbar.</p>
+                <p style="text-align: justify;">La baja presión produce condiciones incompatibles con la exposición directa del cuerpo humano. Uno de los fenómenos asociados es el <strong>ebullismo</strong>, que consiste en la formación de vapor dentro de los líquidos corporales cuando la presión ambiental desciende por debajo de sus condiciones normales de estabilidad.</p>
+                <p style="text-align: justify;">Este fenómeno no significa que toda la sangre del organismo hierva instantáneamente, ya que la presión interna de los tejidos y los mecanismos fisiológicos modifican el comportamiento de los fluidos. Sin embargo, la exposición al entorno marciano sin protección presurizada produciría una emergencia médica extrema, acompañada de hipoxia, inflamación de tejidos y pérdida progresiva de las funciones vitales.</p>
+                <p style="text-align: justify;">También es importante precisar que la presión marciana está muy por debajo del denominado límite de Armstrong, situado aproximadamente en 6.3 kPa. Este límite representa la presión a la que el agua comienza a hervir a la temperatura corporal normal. La presión de Marte es aproximadamente diez veces menor.</p>
+                <p style="text-align: justify;">Por esta razón, la presión atmosférica no constituye simplemente una dificultad respiratoria: representa una incompatibilidad física fundamental entre el ambiente exterior y la fisiología humana.</p>
+                <h4>2.3. Temperaturas extremas y variaciones térmicas</h4>
+                <p style="text-align: justify;">Marte presenta temperaturas considerablemente inferiores a las de la Tierra debido a su mayor distancia del Sol, su atmósfera tenue y sus características superficiales.</p>
+                <p style="text-align: justify;">Su temperatura media global se encuentra alrededor de los -63 °C, aunque existen variaciones importantes dependiendo de la latitud, la estación y el momento del día.</p>
+                <p style="text-align: justify;">Entre los valores extremos se encuentran:</p>
+                <ul>
+                <li><strong>Temperaturas mínimas:</strong> aproximadamente -140 °C o inferiores en determinadas condiciones de las regiones polares.</li>
+                <li><strong>Temperaturas medias:</strong> alrededor de -63 °C.</li>
+                <li><strong>Temperaturas máximas:</strong> cercanas a +20 °C en determinadas zonas ecuatoriales y condiciones de iluminación.</li>
+                </ul>
+                <p style="text-align: justify;">La superficie puede calentarse considerablemente durante el día, mientras que el aire situado a cierta altura permanece mucho más frío. Esta diferencia se debe, entre otros factores, a que el suelo absorbe directamente la radiación solar y transfiere parte de su energía térmica al entorno.</p>
+                <p style="text-align: justify;">La atmósfera marciana posee una capacidad limitada para almacenar y distribuir calor, por lo que se producen variaciones térmicas pronunciadas entre el día y la noche.</p>
+                <p style="text-align: justify;">Estas condiciones generan importantes tensiones térmicas sobre los materiales. Los componentes electrónicos, polímeros, juntas, lubricantes y sistemas mecánicos pueden experimentar cambios en sus propiedades físicas, contracciones y expansiones repetidas.</p>
+                <p style="text-align: justify;">En una instalación habitada, las condiciones térmicas exteriores también representarían una carga considerable para los sistemas de control ambiental.</p>
+                <h4>2.4. Nubes, escarcha y fenómenos atmosféricos</h4>
+                <p style="text-align: justify;">Aunque Marte no presenta un ciclo hidrológico comparable al terrestre, sí existen procesos atmosféricos relacionados con el agua y el dióxido de carbono.</p>
+                <p style="text-align: justify;">Entre los fenómenos observados se encuentran:</p>
+                <ul>
+                <li><strong>Nubes de hielo de agua:</strong> formaciones atmosféricas constituidas por diminutos cristales congelados.</li>
+                <li><strong>Nubes de dióxido de carbono:</strong> estructuras que pueden formarse en las regiones superiores de la atmósfera.</li>
+                <li><strong>Escarcha superficial:</strong> depósitos de hielo que aparecen cuando las condiciones de temperatura y presión permiten la condensación o deposición de determinados compuestos.</li>
+                <li><strong>Niebla y brumas atmosféricas:</strong> acumulaciones de partículas suspendidas que modifican la transparencia de la atmósfera.</li>
+                <li><strong>Nubes noctilucentes:</strong> estructuras de gran altitud formadas por partículas de hielo.</li>
+                </ul>
+                <p style="text-align: justify;">Estos fenómenos tienen importancia meteorológica porque intervienen en el transporte de agua, la distribución de energía y los ciclos estacionales del planeta.</p>
+                <h4>2.5. Vientos y circulación atmosférica</h4>
+                <p style="text-align: justify;">La atmósfera marciana permanece en movimiento debido a las diferencias de temperatura, presión y radiación entre distintas regiones del planeta.</p>
+                <p style="text-align: justify;">Los vientos transportan partículas de polvo y arena, modifican la superficie y participan en la formación de dunas y estructuras sedimentarias.</p>
+                <p style="text-align: justify;">Se han registrado vientos habituales de varios metros por segundo y velocidades considerablemente superiores durante determinados eventos meteorológicos. Sin embargo, la velocidad del viento no debe interpretarse de la misma manera que en la Tierra.</p>
+                <p style="text-align: justify;">La densidad atmosférica de Marte es extremadamente baja, por lo que la presión dinámica ejercida por el viento es mucho menor que la que produciría una corriente de aire terrestre a la misma velocidad.</p>
+                <p style="text-align: justify;">En consecuencia, el principal peligro de los vientos marcianos no consiste necesariamente en su capacidad de derribar estructuras, sino en el transporte continuo de partículas abrasivas, la acumulación de polvo y la alteración de las condiciones ambientales.</p>
+                <h3>3. Tormentas de polvo y fenómenos meteorológicos extremos</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/dust.jpg" alt="Comparación de Hubble que muestra el alcance de una tormenta global de polvo."><figcaption>Comparación de Hubble que muestra el alcance de una tormenta global de polvo.<br>Créditos: NASA, James Bell (Cornell Univ.), Michael Wolff (Space Science Inst.), Hubble Heritage Team (STScI/AURA). <a href="https://science.nasa.gov/asset/hubble/a-global-dust-storm-on-mars/" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>3.1. Formación de tormentas de polvo</h4>
+                <p style="text-align: justify;">Las tormentas de polvo constituyen uno de los fenómenos meteorológicos más característicos de Marte.</p>
+                <p style="text-align: justify;">Se originan cuando las corrientes de aire levantan partículas finas de la superficie y las mantienen suspendidas en la atmósfera. Su desarrollo está relacionado con la radiación solar, las diferencias térmicas, la circulación atmosférica y las características del terreno.</p>
+                <p style="text-align: justify;">El polvo marciano puede permanecer suspendido durante periodos prolongados debido a su pequeño tamaño y a las condiciones particulares de la atmósfera.</p>
+                <p style="text-align: justify;">Estas tormentas pueden modificar significativamente la transparencia atmosférica, la temperatura del aire y la cantidad de radiación solar que alcanza el suelo.</p>
+                <h4>3.2. Tipos de tormentas marcianas</h4>
+                <p style="text-align: justify;"><strong>Tormentas locales</strong></p>
+                <p style="text-align: justify;">Son fenómenos relativamente pequeños que afectan regiones limitadas. Pueden desarrollarse rápidamente y desaparecer en cuestión de horas o días.</p>
+                <p style="text-align: justify;"><strong>Tormentas regionales</strong></p>
+                <p style="text-align: justify;">Afectan extensiones territoriales mucho mayores y pueden cubrir una parte considerable del planeta. Su duración puede alcanzar varias semanas.</p>
+                <p style="text-align: justify;"><strong>Tormentas globales o planetarias</strong></p>
+                <p style="text-align: justify;">Son los eventos de mayor extensión. Se producen cuando diferentes sistemas de tormentas se expanden y se combinan hasta generar una cubierta de polvo que puede envolver prácticamente todo Marte.</p>
+                <p style="text-align: justify;">Estos acontecimientos pueden durar semanas o meses y alterar considerablemente la circulación atmosférica.</p>
+                <p style="text-align: justify;">De acuerdo con los registros de la NASA, las grandes tormentas globales se presentan de forma irregular, aproximadamente cada tres o cuatro años marcianos, equivalentes a unos seis u ocho años terrestres. Por ello, la cifra de 5.5 años debe considerarse una aproximación y no una periodicidad fija.</p>
+                <h4>3.3. Consecuencias ambientales de las tormentas globales</h4>
+                <p style="text-align: justify;">Las tormentas de polvo tienen efectos que van mucho más allá de la reducción de la visibilidad.</p>
+                <p style="text-align: justify;">Entre sus principales consecuencias se encuentran:</p>
+                <ul>
+                <li><strong>Reducción de la radiación solar superficial:</strong> las partículas suspendidas absorben y dispersan la luz, disminuyendo la energía que alcanza los paneles solares y el terreno.</li>
+                <li><strong>Alteración del balance térmico:</strong> el polvo absorbe radiación solar y modifica la distribución de temperatura en la atmósfera.</li>
+                <li><strong>Disminución de la visibilidad:</strong> la acumulación de partículas dificulta la observación del terreno y la identificación de estructuras geológicas.</li>
+                <li><strong>Acumulación de partículas abrasivas:</strong> el polvo puede depositarse sobre superficies mecánicas, lentes, filtros y sistemas de ventilación.</li>
+                <li><strong>Modificación de los ciclos atmosféricos:</strong> las tormentas pueden alterar la circulación del vapor de agua y su distribución en las capas superiores de la atmósfera.</li>
+                <li><strong>Interferencia en las operaciones robóticas:</strong> la acumulación de polvo puede afectar los sensores, mecanismos y sistemas energéticos de los vehículos de exploración.</li>
+                </ul>
+                <p style="text-align: justify;">Un ejemplo extraordinario ocurrió durante la tormenta global de 2018, cuando el instrumento RAD de Curiosity y otros sistemas científicos registraron modificaciones importantes en las condiciones atmosféricas y superficiales de Marte.</p>
+                <h4>3.4. Remolinos de polvo o <em>Dust Devils</em></h4>
+                <p style="text-align: justify;">Los <em>dust devils</em> son remolinos atmosféricos que se forman cuando el suelo absorbe energía solar y calienta el aire que se encuentra directamente sobre él.</p>
+                <p style="text-align: justify;">El aire caliente asciende, mientras que el aire circundante se desplaza hacia el centro de la corriente, generando una estructura giratoria capaz de levantar partículas de polvo.</p>
+                <p style="text-align: justify;">Estos fenómenos pueden alcanzar dimensiones de varios metros o incluso cientos de metros de diámetro, y algunos desarrollan columnas de polvo de gran altura.</p>
+                <p style="text-align: justify;">A diferencia de las tormentas globales, los remolinos de polvo son fenómenos localizados y generalmente tienen una duración mucho menor.</p>
+                <p style="text-align: justify;">Su importancia científica radica en que permiten estudiar la circulación atmosférica, el intercambio de energía entre el suelo y la atmósfera y los procesos de transporte de partículas.</p>
+                <p style="text-align: justify;">Los rovers Spirit, Opportunity, Curiosity y Perseverance han registrado diferentes remolinos de polvo mediante sus cámaras y sensores ambientales.</p>
+                <h4>3.5. Fenómenos eléctricos y descargas atmosféricas</h4>
+                <p style="text-align: justify;">Uno de los aspectos más interesantes de la meteorología marciana es la posible presencia de actividad eléctrica relacionada con el movimiento de partículas de polvo.</p>
+                <p style="text-align: justify;">Cuando los granos de polvo chocan y rozan entre sí, pueden intercambiar cargas eléctricas mediante un proceso conocido como <strong>electrificación triboeléctrica</strong>.</p>
+                <p style="text-align: justify;">Este fenómeno también ocurre en ambientes terrestres, donde la fricción entre partículas puede producir acumulaciones de carga eléctrica y descargas electrostáticas.</p>
+                <p style="text-align: justify;">En Marte, las condiciones de baja presión atmosférica y la presencia de grandes cantidades de partículas suspendidas generan un entorno particular para estos procesos.</p>
+                <p style="text-align: justify;">Un avance importante se produjo con el estudio publicado en 2025 en la revista <em>Nature</em>, que documentó señales eléctricas y acústicas compatibles con descargas triboeléctricas durante eventos de polvo marciano. Las señales fueron captadas por el micrófono del instrumento SuperCam, instalado en el rover Perseverance.</p>
+                <p style="text-align: justify;">Es importante distinguir tres fenómenos:</p>
+                <ol>
+                <li><strong>Electrificación de partículas:</strong> acumulación e intercambio de cargas durante las colisiones entre granos de polvo.</li>
+                <li><strong>Descargas electrostáticas:</strong> liberaciones localizadas de energía eléctrica generadas por diferencias de potencial.</li>
+                <li><strong>Rayos atmosféricos:</strong> descargas eléctricas de gran escala semejantes a los relámpagos terrestres.</li>
+                </ol>
+                <p style="text-align: justify;">La evidencia de descargas triboeléctricas en Marte constituye un avance científico relevante. Sin embargo, no debe confundirse con la demostración de tormentas eléctricas convencionales con rayos y relámpagos como los que ocurren en la Tierra.</p>
+                <p style="text-align: justify;">Estas descargas representan un área de investigación importante debido a sus posibles efectos sobre los materiales, los sensores electrónicos, los instrumentos científicos y la química atmosférica.</p>
+                <h4>3.6. Tormentas de hielo seco y fenómenos estacionales de los polos</h4>
+                <p style="text-align: justify;">Las regiones polares de Marte experimentan cambios estacionales extremos relacionados con la congelación y sublimación del dióxido de carbono atmosférico.</p>
+                <p style="text-align: justify;">Durante el invierno, parte del CO₂ atmosférico se deposita sobre la superficie en forma de hielo seco. Cuando llega la primavera y aumenta la radiación solar, este material comienza a sublimarse, pasando directamente del estado sólido al gaseoso.</p>
+                <p style="text-align: justify;">Este proceso modifica la presión atmosférica global, debido a que una cantidad importante de dióxido de carbono se desplaza entre la atmósfera y los depósitos polares.</p>
+                <p style="text-align: justify;">También se han identificado estructuras superficiales relacionadas con la sublimación del hielo seco, como canales, abanicos de material expulsado y patrones conocidos como arañas marcianas.</p>
+                <p style="text-align: justify;">Estos patrones se producen cuando el gas atrapado bajo capas de hielo encuentra una vía de escape y transporta partículas del terreno hacia la superficie.</p>
+                <p style="text-align: justify;">Aunque estos fenómenos no son equivalentes a tormentas terrestres, constituyen procesos geológicos y estacionales importantes para comprender la dinámica ambiental de Marte.</p>
+                <h3>4. Radiación espacial y exposición a partículas energéticas</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/radiation.jpg" alt="Registro de Curiosity asociado a la tormenta solar de 2024; no es un mapa de dosis para astronautas."><figcaption>Registro de Curiosity asociado a la tormenta solar de 2024; no es un mapa de dosis para astronautas.<br>Créditos: NASA/JPL-Caltech. <a href="https://science.nasa.gov/photojournal/curiosity-sees-specks-caused-by-2024-solar-storm-while-recording-a-wind-gust-on-mars/" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>4.1. Ausencia de un campo magnético global</h4>
+                <p style="text-align: justify;">La Tierra posee un campo magnético global generado principalmente por los movimientos del material conductor de su núcleo externo. Este campo contribuye a desviar numerosas partículas cargadas procedentes del Sol y del espacio interestelar.</p>
+                <p style="text-align: justify;">Marte, en cambio, perdió gran parte de su campo magnético global hace miles de millones de años. Aunque conserva regiones de magnetismo remanente en determinadas zonas de su corteza, no dispone de una protección magnética planetaria comparable a la terrestre.</p>
+                <p style="text-align: justify;">Esta característica, combinada con su atmósfera delgada, permite que una mayor cantidad de radiación energética alcance la superficie.</p>
+                <h4>4.2. Tipos de radiación presentes en Marte</h4>
+                <p style="text-align: justify;"><strong>Radiación cósmica galáctica (GCR)</strong></p>
+                <p style="text-align: justify;">Está formada por partículas de alta energía procedentes del exterior del Sistema Solar, incluyendo protones, núcleos de helio y núcleos atómicos más pesados.</p>
+                <p style="text-align: justify;">Su elevada energía les permite atravesar materiales y generar partículas secundarias cuando interactúan con la atmósfera o las estructuras de protección.</p>
+                <p style="text-align: justify;"><strong>Eventos de partículas solares (SPE)</strong></p>
+                <p style="text-align: justify;">Son episodios en los que el Sol expulsa grandes cantidades de partículas energéticas, principalmente protones, durante determinadas erupciones y procesos asociados a la actividad solar.</p>
+                <p style="text-align: justify;">Estos acontecimientos pueden producir incrementos temporales importantes en la exposición a radiación.</p>
+                <p style="text-align: justify;"><strong>Radiación ultravioleta (UV)</strong></p>
+                <p style="text-align: justify;">La radiación ultravioleta solar alcanza la superficie marciana con una intensidad y composición diferentes a las terrestres, debido a la ausencia de una capa de ozono comparable a la de nuestro planeta y a las características de la atmósfera.</p>
+                <p style="text-align: justify;">Esta radiación puede provocar alteraciones químicas en los materiales y afectar a los organismos biológicos expuestos.</p>
+                <h4>4.3. Mediciones del instrumento RAD de Curiosity</h4>
+                <p style="text-align: justify;">La NASA instaló el instrumento RAD (<em>Radiation Assessment Detector</em>) en el rover Curiosity para estudiar el entorno de radiación durante su viaje y permanencia en Marte.</p>
+                <p style="text-align: justify;">Las mediciones realizadas sobre la superficie han mostrado tasas de dosis equivalente del orden de 0.4 a 0.9 milisieverts por día, dependiendo de las condiciones de actividad solar y del periodo de observación. Una cifra representativa de las mediciones iniciales fue aproximadamente 0.64 mSv diarios.</p>
+                <p style="text-align: justify;">Estas cifras no deben interpretarse como un valor constante para todas las regiones y todos los años marcianos. La actividad solar, el espesor atmosférico y las condiciones de protección modifican la exposición.</p>
+                <p style="text-align: justify;"><strong>Radiación superficial: referencia cuantitativa</strong></p>
+                <p style="text-align: justify;"><strong>0.64 mSv/día</strong></p>
+                <p style="text-align: justify;">Valor representativo de dosis equivalente medido por RAD durante sus observaciones iniciales de la superficie marciana.</p>
+                <p style="text-align: justify;">Exposición teórica acumulada en 365 días a esa misma tasa:</p>
+                <p style="text-align: justify;"><strong>233.6 mSv</strong></p>
+                <p style="text-align: justify;">Cálculo ilustrativo, no predicción de dosis real: la radiación varía con el ciclo solar y las condiciones ambientales.</p>
+                <h4>4.4. Efectos biológicos de la radiación</h4>
+                <p style="text-align: justify;">La radiación ionizante tiene suficiente energía para modificar la estructura electrónica de los átomos y producir alteraciones en moléculas biológicas.</p>
+                <p style="text-align: justify;">En los seres humanos, la exposición prolongada puede provocar:</p>
+                <ul>
+                <li>Daños en el ADN.</li>
+                <li>Aumento del riesgo de desarrollar determinados tipos de cáncer.</li>
+                <li>Alteraciones celulares y moleculares.</li>
+                <li>Posibles efectos sobre el sistema nervioso central.</li>
+                <li>Cambios en la función cognitiva y motora.</li>
+                <li>Alteraciones en tejidos y órganos sensibles a la radiación.</li>
+                </ul>
+                <p style="text-align: justify;">La magnitud de estos efectos depende de la dosis acumulada, el tipo de partículas, la energía de la radiación, el tiempo de exposición y las características biológicas de cada individuo.</p>
+                <h3>5. Polvo marciano, regolito y contaminación química</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/geology.jpg" alt="Rocas y sedimentos del delta de Jezero; la imagen no mide percloratos."><figcaption>Rocas y sedimentos del delta de Jezero; la imagen no mide percloratos.<br>Créditos: RMI: NASA/JPL-Caltech/LANL/CNES/CNRS/ASU/MSSS; Mastcam-Z: NASA/JPL-Caltech/ASU/MSSS. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24684" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>5.1. Composición del suelo marciano</h4>
+                <p style="text-align: justify;">El material superficial de Marte está constituido por regolito, una mezcla de fragmentos minerales, polvo, arena y partículas procedentes de procesos geológicos y meteoríticos.</p>
+                <p style="text-align: justify;">Su composición varía de una región a otra, aunque suele contener minerales ricos en hierro, silicatos, óxidos y otros compuestos inorgánicos.</p>
+                <p style="text-align: justify;">El regolito no es equivalente a un suelo agrícola terrestre, ya que carece de las características biológicas y químicas necesarias para mantener directamente cultivos convencionales.</p>
+                <p style="text-align: justify;">Además, contiene sustancias que pueden representar riesgos químicos para los organismos terrestres.</p>
+                <h4>5.2. Percloratos y toxicidad</h4>
+                <p style="text-align: justify;">Uno de los componentes de mayor interés para la investigación es el grupo de los percloratos, compuestos que contienen el ion perclorato (ClO<sub>4</sub>^-).</p>
+                <p style="text-align: justify;">Estos compuestos han sido identificados en diferentes regiones de Marte mediante instrumentos de exploración robótica.</p>
+                <p style="text-align: justify;">Los percloratos son relevantes desde el punto de vista toxicológico porque determinadas formas y niveles de exposición pueden interferir con el funcionamiento de la glándula tiroides.</p>
+                <p style="text-align: justify;">La tiroides participa en la regulación del metabolismo, el desarrollo y diversas funciones fisiológicas mediante la producción de hormonas.</p>
+                <p style="text-align: justify;">Por ello, la presencia de percloratos constituye una consideración importante para evaluar la seguridad química del regolito y de los recursos extraídos del subsuelo.</p>
+                <h4>5.3. Riesgos físicos del polvo</h4>
+                <p style="text-align: justify;">Las partículas marcianas pueden presentar tamaños microscópicos y características abrasivas.</p>
+                <p style="text-align: justify;">Su presencia en suspensión y su capacidad de depositarse sobre superficies generan distintos problemas:</p>
+                <ul>
+                <li>Irritación y contaminación de sistemas respiratorios si las partículas ingresan a un ambiente habitable.</li>
+                <li>Desgaste de componentes mecánicos.</li>
+                <li>Contaminación de instrumentos ópticos y cámaras.</li>
+                <li>Acumulación sobre superficies energéticas.</li>
+                <li>Deterioro de juntas y materiales de sellado.</li>
+                <li>Interferencia en sensores y sistemas de medición.</li>
+                </ul>
+                <p style="text-align: justify;">El polvo también presenta propiedades electrostáticas relacionadas con la fricción y las colisiones entre partículas, lo que incrementa su interés desde el punto de vista de la ingeniería de materiales y la electrónica.</p>
+                <p style="text-align: justify;">En conjunto, el regolito marciano debe considerarse un material geológico que requiere caracterización física, química y toxicológica antes de cualquier aplicación humana.</p>
+                <h3>6. Peligros geológicos y desastres naturales de Marte</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/hazards.jpg" alt="Mapa de peligros de aterrizaje de Jezero. No representa una ruta EVA certificada."><figcaption>Mapa de peligros de aterrizaje de Jezero. No representa una ruta EVA certificada.<br>Créditos: NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24167" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <p style="text-align: justify;">Marte no solamente presenta condiciones atmosféricas extremas. Su superficie también conserva evidencias de una actividad geológica intensa, procesos erosivos, impactos extraterrestres y fenómenos relacionados con la dinámica interna del planeta.</p>
+                <p style="text-align: justify;">Aunque actualmente su actividad geológica es menor que la terrestre, existen procesos naturales capaces de modificar el terreno y generar condiciones peligrosas para futuras instalaciones humanas.</p>
+                <h4>6.1. Actividad sísmica: terremotos marcianos o <em>Marsquakes</em></h4>
+                <p style="text-align: justify;">Los terremotos marcianos son movimientos sísmicos producidos por la liberación de energía acumulada en el interior del planeta.</p>
+                <p style="text-align: justify;">A diferencia de la Tierra, donde una parte importante de los terremotos está relacionada con el movimiento de placas tectónicas, Marte no presenta un sistema global de placas tectónicas activas comparable al terrestre.</p>
+                <p style="text-align: justify;">Sus movimientos sísmicos pueden originarse por:</p>
+                <ul>
+                <li>Contracciones y expansiones de la corteza.</li>
+                <li>Tensiones acumuladas en fallas geológicas.</li>
+                <li>Enfriamiento y evolución térmica del interior planetario.</li>
+                <li>Actividad tectónica localizada.</li>
+                <li>Impactos de meteoritos sobre la superficie.</li>
+                </ul>
+                <p style="text-align: justify;">La misión InSight de la NASA permitió estudiar directamente la actividad sísmica marciana mediante el instrumento SEIS (<em>Seismic Experiment for Interior Structure</em>).</p>
+                <p style="text-align: justify;">Gracias a sus mediciones fue posible investigar la estructura interna del planeta, incluyendo las características de su corteza, manto y núcleo.</p>
+                <p style="text-align: justify;">Los movimientos sísmicos representan un factor de interés para la ingeniería de estructuras, debido a que las vibraciones pueden afectar las instalaciones, los equipos científicos y los sistemas mecánicos.</p>
+                <h4>6.2. Actividad volcánica y volcanes gigantes</h4>
+                <p style="text-align: justify;">Marte contiene algunas de las estructuras volcánicas más grandes conocidas del Sistema Solar.</p>
+                <p style="text-align: justify;">El ejemplo más destacado es <strong>Olympus Mons</strong>, un volcán en escudo que alcanza aproximadamente 22 kilómetros de altura respecto al nivel de referencia marciano.</p>
+                <p style="text-align: justify;">Su enorme dimensión se relaciona con la historia volcánica del planeta y con la ausencia de un desplazamiento de placas tectónicas comparable al terrestre.</p>
+                <p style="text-align: justify;">Aunque no existe evidencia de una erupción volcánica marciana observada directamente en tiempos modernos, las investigaciones geológicas indican que Marte tuvo actividad volcánica durante periodos muy prolongados.</p>
+                <p style="text-align: justify;">Los principales fenómenos asociados a esta actividad incluyen:</p>
+                <ul>
+                <li>Erupciones volcánicas antiguas.</li>
+                <li>Emisión de gases volcánicos.</li>
+                <li>Flujos de lava solidificada.</li>
+                <li>Formación de grandes estructuras volcánicas.</li>
+                <li>Fracturas y deformaciones de la corteza.</li>
+                <li>Depósitos de materiales volcánicos.</li>
+                </ul>
+                <p style="text-align: justify;">La actividad volcánica actual no está establecida como un peligro inmediato para las futuras expediciones. Sin embargo, la posibilidad de actividad geológica localizada y la presencia de terrenos volcánicos antiguos son factores importantes en la selección de regiones de exploración.</p>
+                <h4>6.3. Deslizamientos de tierra y desprendimientos de rocas</h4>
+                <p style="text-align: justify;">Los deslizamientos marcianos son desplazamientos de material geológico que ocurren cuando la gravedad supera la resistencia que mantiene estables las partículas y estructuras del terreno.</p>
+                <p style="text-align: justify;">Pueden involucrar fragmentos de roca, sedimentos, polvo y grandes masas de material superficial.</p>
+                <p style="text-align: justify;">Estos procesos se encuentran asociados a:</p>
+                <ul>
+                <li>Pendientes pronunciadas.</li>
+                <li>Fracturas en las estructuras rocosas.</li>
+                <li>Erosión progresiva.</li>
+                <li>Cambios térmicos.</li>
+                <li>Impactos de meteoritos.</li>
+                <li>Procesos de congelación y sublimación.</li>
+                </ul>
+                <p style="text-align: justify;">En lugares como Valles Marineris se han identificado enormes depósitos de deslizamientos y acumulaciones de material desprendido de las paredes de los cañones.</p>
+                <p style="text-align: justify;">Su importancia radica en que pueden transformar rápidamente el relieve y generar acumulaciones inestables de sedimentos y rocas.</p>
+                <h4>6.4. Avalanchas de hielo y desprendimientos polares</h4>
+                <p style="text-align: justify;">Las regiones polares de Marte presentan estructuras formadas por capas sucesivas de hielo y polvo.</p>
+                <p style="text-align: justify;">En determinadas zonas se han observado desprendimientos y avalanchas de material congelado, particularmente en los bordes de depósitos polares.</p>
+                <p style="text-align: justify;">Estos fenómenos pueden involucrar fragmentos de hielo, polvo y material rocoso que se desplazan por pendientes pronunciadas.</p>
+                <p style="text-align: justify;">Los cambios estacionales de temperatura, la radiación solar y las propiedades mecánicas de los depósitos congelados participan en su evolución.</p>
+                <p style="text-align: justify;">Aunque estos eventos se concentran en regiones específicas, constituyen un ejemplo de cómo las condiciones criogénicas pueden producir fenómenos geológicos dinámicos.</p>
+                <h4>6.5. Impactos de meteoritos y micrometeoritos</h4>
+                <p style="text-align: justify;">Marte recibe continuamente material procedente del espacio, incluyendo partículas diminutas, fragmentos rocosos y cuerpos de mayor tamaño.</p>
+                <p style="text-align: justify;">Cuando un objeto extraterrestre ingresa en la atmósfera y alcanza la superficie, puede generar un cráter de impacto.</p>
+                <p style="text-align: justify;">La magnitud de los efectos depende de la masa, velocidad, composición y ángulo de entrada del objeto.</p>
+                <p style="text-align: justify;">Los impactos pueden producir:</p>
+                <ul>
+                <li>Formación de cráteres.</li>
+                <li>Expulsión de fragmentos rocosos.</li>
+                <li>Ondas de choque locales.</li>
+                <li>Vibraciones sísmicas.</li>
+                <li>Alteraciones del terreno.</li>
+                <li>Exposición de materiales del subsuelo.</li>
+                </ul>
+                <p style="text-align: justify;">La atmósfera marciana es suficientemente tenue para ofrecer una protección limitada frente a determinados objetos pequeños, en comparación con la atmósfera terrestre.</p>
+                <p style="text-align: justify;">Por ello, los impactos representan un riesgo físico que debe considerarse en estudios de exposición superficial y diseño de instalaciones.</p>
+                <h4>6.6. Grietas, hundimientos y estructuras subterráneas</h4>
+                <p style="text-align: justify;">La actividad volcánica antigua dejó estructuras subterráneas conocidas como tubos de lava.</p>
+                <p style="text-align: justify;">Se forman cuando la parte superficial de un flujo de lava se enfría y solidifica, mientras que el material fundido continúa desplazándose por debajo. Cuando el flujo termina, puede quedar un conducto vacío.</p>
+                <p style="text-align: justify;">Con el paso del tiempo, algunas secciones del techo pueden colapsar y generar depresiones circulares conocidas como <em>skylights</em>.</p>
+                <p style="text-align: justify;">Estas estructuras presentan interés científico y de ingeniería porque podrían constituir espacios subterráneos de origen natural.</p>
+                <p style="text-align: justify;">Sin embargo, su estabilidad, profundidad, dimensiones y condiciones internas deben estudiarse individualmente. No todos los huecos superficiales indican la existencia de cavernas extensas ni todos los tubos de lava son estructuralmente estables.</p>
+                <h4>6.7. Cambios del terreno por erosión y transporte de sedimentos</h4>
+                <p style="text-align: justify;">El viento marciano modifica constantemente la superficie mediante procesos de erosión y deposición.</p>
+                <p style="text-align: justify;">La acumulación de arena puede generar dunas, ondulaciones y depósitos sedimentarios que cambian de posición con el tiempo.</p>
+                <p style="text-align: justify;">También existen procesos relacionados con la sublimación del hielo, la erosión de materiales blandos y la formación de canales.</p>
+                <p style="text-align: justify;">Estos cambios son importantes porque pueden modificar la transitabilidad del terreno y afectar la estabilidad de determinadas estructuras superficiales.</p>
+                <h3>7. El rover Perseverance: exploración científica y preparación para la presencia humana</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/jezero.jpg" alt="Elipse prevista para el aterrizaje de Perseverance en Jezero."><figcaption>Elipse prevista para el aterrizaje de Perseverance en Jezero.<br>Créditos: ESA/DLR/FU-Berlin/NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24350" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>7.1. Introducción a la misión Mars 2020</h4>
+                <p style="text-align: justify;">El rover <strong>Perseverance</strong> es uno de los vehículos de exploración científica más avanzados enviados a Marte.</p>
+                <p style="text-align: justify;">Forma parte de la misión Mars 2020 de la NASA y aterrizó el 18 de febrero de 2021 en el cráter Jezero, una región que presenta evidencias geológicas de haber albergado un antiguo sistema de lago y delta fluvial.</p>
+                <p style="text-align: justify;">Su misión principal consiste en investigar la geología marciana, estudiar las condiciones ambientales del pasado y buscar posibles indicios de vida microbiana antigua.</p>
+                <p style="text-align: justify;">Además, representa una plataforma tecnológica fundamental para evaluar instrumentos y procedimientos que podrían contribuir a futuras misiones humanas.</p>
+                <p style="text-align: justify;">Perseverance tiene una masa aproximada de 1,025 kg en la Tierra, seis ruedas y un sistema de navegación autónoma que le permite desplazarse por terrenos irregulares.</p>
+                <p style="text-align: justify;">Su diseño incorpora sistemas de perforación, análisis químico, observación microscópica, medición meteorológica y almacenamiento de muestras geológicas.</p>
+                <h4>7.2. Instrumentos científicos de Perseverance</h4>
+                <p style="text-align: justify;">El rover cuenta con diferentes instrumentos que trabajan de manera complementaria para estudiar el planeta.</p>
+                <table border="1">
+                <thead><tr><th>Instrumento</th><th>Función científica</th></tr></thead>
+                <tbody>
+                <tr><td>Mastcam-Z</td><td>Obtención de imágenes panorámicas y estereoscópicas con capacidad de acercamiento</td></tr>
+                <tr><td>SuperCam</td><td>Análisis de composición química y mineralógica mediante técnicas espectroscópicas y láser</td></tr>
+                <tr><td>PIXL</td><td>Análisis elemental de rocas y minerales mediante fluorescencia de rayos X</td></tr>
+                <tr><td>SHERLOC</td><td>Identificación de minerales y compuestos orgánicos mediante espectroscopia</td></tr>
+                <tr><td>WATSON</td><td>Obtención de imágenes microscópicas de superficies rocosas</td></tr>
+                <tr><td>MEDA</td><td>Medición de variables meteorológicas y partículas de polvo</td></tr>
+                <tr><td>RIMFAX</td><td>Investigación de estructuras geológicas del subsuelo mediante radar</td></tr>
+                <tr><td>MOXIE</td><td>Demostración experimental de producción de oxígeno a partir del CO₂ atmosférico</td></tr>
+                </tbody>
+                </table>
+                <h4>7.3. MEDA: estudio de la meteorología marciana</h4>
+                <p style="text-align: justify;">El instrumento MEDA (<em>Mars Environmental Dynamics Analyzer</em>) constituye una de las herramientas más importantes para comprender el comportamiento atmosférico de Marte.</p>
+                <p style="text-align: justify;">Su función consiste en registrar variables ambientales que permiten caracterizar las condiciones meteorológicas del cráter Jezero.</p>
+                <p style="text-align: justify;">Entre sus mediciones se encuentran:</p>
+                <ul>
+                <li>Temperatura atmosférica.</li>
+                <li>Velocidad y dirección del viento.</li>
+                <li>Presión atmosférica.</li>
+                <li>Humedad relativa.</li>
+                <li>Radiación solar e infrarroja.</li>
+                <li>Concentración y tamaño de partículas de polvo.</li>
+                </ul>
+                <p style="text-align: justify;">Estos datos permiten estudiar la interacción entre el terreno y la atmósfera, además de analizar la formación y evolución de fenómenos meteorológicos.</p>
+                <p style="text-align: justify;">Su importancia para futuras expediciones humanas es considerable porque proporciona información directa sobre las condiciones ambientales de una región concreta del planeta.</p>
+                <p style="text-align: justify;">NASA Science</p>
+                <h4>7.4. SuperCam: análisis de materiales y actividad eléctrica</h4>
+                <p style="text-align: justify;">SuperCam es un instrumento científico que combina diferentes técnicas para estudiar la composición de las rocas y los materiales superficiales.</p>
+                <p style="text-align: justify;">Puede utilizar un láser para analizar la composición química de objetivos a distancia, además de realizar observaciones espectroscópicas y registrar sonidos del entorno.</p>
+                <p style="text-align: justify;">Uno de sus componentes es un micrófono que ha permitido estudiar fenómenos acústicos de la atmósfera marciana.</p>
+                <p style="text-align: justify;">Este instrumento tuvo un papel fundamental en la detección de señales compatibles con descargas triboeléctricas durante eventos de polvo, un descubrimiento relevante para comprender la electricidad atmosférica de Marte.</p>
+                <h4>7.5. RIMFAX: exploración del subsuelo</h4>
+                <p style="text-align: justify;">RIMFAX (<em>Radar Imager for Mars&#x27; Subsurface Experiment</em>) es un radar diseñado para investigar estructuras geológicas que no pueden observarse directamente desde la superficie.</p>
+                <p style="text-align: justify;">Emite ondas electromagnéticas hacia el subsuelo y analiza las señales reflejadas por diferentes materiales.</p>
+                <p style="text-align: justify;">Este procedimiento permite identificar cambios en la composición y estructura de las capas subterráneas, así como posibles depósitos geológicos enterrados.</p>
+                <p style="text-align: justify;">La información obtenida contribuye a reconstruir la historia geológica del cráter Jezero y a comprender la distribución de materiales bajo la superficie.</p>
+                <h4>7.6. Recolección y almacenamiento de muestras</h4>
+                <p style="text-align: justify;">Una de las características más importantes de Perseverance es su capacidad para recolectar muestras de roca y regolito.</p>
+                <p style="text-align: justify;">El vehículo utiliza un sistema de perforación para extraer material del interior de determinadas rocas. Posteriormente, las muestras se introducen en tubos especiales que se sellan y almacenan.</p>
+                <p style="text-align: justify;">Este procedimiento permite conservar material marciano para su posible recuperación y análisis en laboratorios terrestres mediante futuras misiones.</p>
+                <p style="text-align: justify;">El programa se relaciona con la iniciativa <em>Mars Sample Return</em>, desarrollada originalmente mediante la cooperación entre la NASA y la Agencia Espacial Europea.</p>
+                <p style="text-align: justify;">Las muestras tienen un valor científico extraordinario porque permiten realizar análisis mucho más detallados que los que pueden llevarse a cabo con los instrumentos compactos de un rover.</p>
+                <h4>7.7. Ingenuity: demostración de vuelo en Marte</h4>
+                <p style="text-align: justify;">La misión Perseverance también transportó el helicóptero experimental Ingenuity, diseñado para demostrar la posibilidad de realizar vuelos controlados en la atmósfera marciana.</p>
+                <p style="text-align: justify;">Su primer vuelo tuvo lugar el 19 de abril de 2021 y representó el primer vuelo propulsado y controlado de una aeronave en otro planeta.</p>
+                <p style="text-align: justify;">La atmósfera marciana es extremadamente tenue, por lo que generar sustentación requiere un sistema de rotores especialmente diseñado para funcionar con una densidad atmosférica muy baja.</p>
+                <p style="text-align: justify;">Ingenuity completó 72 vuelos antes de finalizar su misión en enero de 2024, después de sufrir daños en una de sus palas del rotor durante su último vuelo.</p>
+                <p style="text-align: justify;">Su demostración tecnológica proporcionó información importante sobre la navegación aérea, la autonomía robótica y las posibilidades de utilizar aeronaves para explorar terrenos difíciles de alcanzar mediante vehículos terrestres.</p>
+                <h4>7.8. Importancia de Perseverance para la exploración humana</h4>
+                <p style="text-align: justify;">La contribución de Perseverance no se limita a la búsqueda de indicios de vida antigua.</p>
+                <p style="text-align: justify;">Sus instrumentos proporcionan información sobre el comportamiento del clima, la composición de los materiales, la estructura del subsuelo y las condiciones ambientales de Marte.</p>
+                <p style="text-align: justify;">Además, su experimento MOXIE demostró que es posible transformar recursos atmosféricos locales en productos útiles para futuras misiones.</p>
+                <p style="text-align: justify;">Por ello, Perseverance representa una de las principales fuentes de conocimiento experimental para el desarrollo de tecnologías de exploración humana.</p>
+                <h3>8. Recursos naturales de Marte y aprovechamiento ISRU</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/moxie.jpg" alt="Ilustración de los componentes de MOXIE, demostrador de producción de oxígeno."><figcaption>Ilustración de los componentes de MOXIE, demostrador de producción de oxígeno.<br>Créditos: NASA/JPL-Caltech. <a href="https://science.nasa.gov/photojournal/components-of-moxie-illustration/" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <h4>8.1. Concepto de utilización de recursos in situ</h4>
+                <p style="text-align: justify;">La utilización de recursos in situ, conocida como ISRU (<em>In-Situ Resource Utilization</em>), es una estrategia de ingeniería espacial que consiste en aprovechar los materiales disponibles en el lugar de exploración para producir recursos necesarios para una misión.</p>
+                <p style="text-align: justify;">Su importancia radica en que transportar todos los suministros desde la Tierra representa una limitación considerable en términos de masa, volumen, energía y costos de lanzamiento.</p>
+                <p style="text-align: justify;">Marte contiene diferentes recursos potencialmente aprovechables, como agua congelada, dióxido de carbono atmosférico, minerales y materiales rocosos.</p>
+                <p style="text-align: justify;">El aprovechamiento de estos recursos permitiría desarrollar sistemas de producción local y reducir la dependencia de suministros terrestres.</p>
+                <h4>8.2. Obtención y extracción de agua</h4>
+                <p style="text-align: justify;">El agua es uno de los recursos más importantes para la supervivencia humana.</p>
+                <p style="text-align: justify;">En Marte se han identificado depósitos de hielo en las regiones polares y en determinadas zonas de latitudes medias.</p>
+                <p style="text-align: justify;">La existencia de hielo subterráneo ha sido estudiada mediante diferentes instrumentos orbitales, incluyendo SHARAD (<em>Shallow Radar</em>), instalado en la sonda Mars Reconnaissance Orbiter.</p>
+                <p style="text-align: justify;">Este radar utiliza ondas electromagnéticas para investigar las propiedades del subsuelo y detectar estructuras compatibles con depósitos de hielo y diferentes capas geológicas.</p>
+                <p style="text-align: justify;">El análisis de estas regiones es fundamental porque permite identificar posibles fuentes naturales de agua para futuras instalaciones habitadas.</p>
+                <p style="text-align: justify;">El agua extraída podría tener diferentes aplicaciones:</p>
+                <ul>
+                <li>Consumo humano después de un tratamiento adecuado.</li>
+                <li>Producción de oxígeno mediante electrólisis.</li>
+                <li>Fabricación de combustible.</li>
+                <li>Agricultura en ambientes controlados.</li>
+                <li>Procesos industriales y limpieza de equipos.</li>
+                </ul>
+                <p style="text-align: justify;">Sin embargo, la presencia de hielo no garantiza automáticamente que el agua sea potable. Su composición química, concentración de sales y posibles contaminantes deben analizarse antes de cualquier utilización.</p>
+                <h4>8.3. Producción de oxígeno mediante MOXIE</h4>
+                <p style="text-align: justify;">MOXIE (<em>Mars Oxygen In-Situ Resource Utilization Experiment</em>) fue un experimento desarrollado para demostrar la posibilidad de producir oxígeno a partir del dióxido de carbono presente en la atmósfera marciana.</p>
+                <p style="text-align: justify;">El instrumento viajó a bordo del rover Perseverance y utilizó un proceso electroquímico de alta temperatura para separar el oxígeno del CO₂.</p>
+                <p style="text-align: justify;">La reacción global simplificada puede expresarse de la siguiente manera:</p>
+                <p style="text-align: justify;"> 2CO<sub>2</sub> &#8594; 2CO + O<sub>2</sub> </p>
+                <p style="text-align: justify;">Durante su funcionamiento, MOXIE generó un total de 122 gramos de oxígeno en 16 operaciones experimentales. Su tasa máxima de producción alcanzó aproximadamente 12 gramos por hora, con una pureza igual o superior al 98 %.</p>
+                <p style="text-align: justify;">Este resultado representa una demostración tecnológica histórica, aunque la cantidad producida fue pequeña en comparación con las necesidades de una tripulación.</p>
+                <p style="text-align: justify;">Una instalación humana requeriría sistemas de producción de oxígeno considerablemente mayores, capaces de operar de manera continua y bajo diferentes condiciones ambientales.</p>
+                <h4>8.4. Producción de metano mediante la reacción de Sabatier</h4>
+                <p style="text-align: justify;">La reacción de Sabatier es un proceso químico mediante el cual el dióxido de carbono reacciona con hidrógeno para producir metano y agua.</p>
+                <p style="text-align: justify;">Su ecuación química es:</p>
+                <p style="text-align: justify;"> CO<sub>2</sub> + 4H<sub>2</sub> &#8594; CH<sub>4</sub> + 2H<sub>2</sub>O </p>
+                <p style="text-align: justify;">El metano producido puede utilizarse como combustible en sistemas de propulsión diseñados para este tipo de propelente.</p>
+                <p style="text-align: justify;">En una arquitectura ISRU, el dióxido de carbono podría obtenerse directamente de la atmósfera marciana, mientras que el hidrógeno podría proceder del procesamiento de agua.</p>
+                <p style="text-align: justify;">Este procedimiento permitiría fabricar parte de los recursos necesarios para el funcionamiento de vehículos y sistemas de transporte.</p>
+                <p style="text-align: justify;">La producción de metano y oxígeno también podría formar parte de una cadena industrial destinada a generar propelentes para el ascenso desde la superficie marciana.</p>
+                <p style="text-align: justify;">Es importante señalar que la reacción de Sabatier requiere energía, hidrógeno y equipos especializados; no constituye un proceso que ocurra espontáneamente en las condiciones ambientales de Marte.</p>
+                <h4>8.5. Construcción de hábitats con materiales locales</h4>
+                <p style="text-align: justify;">La construcción de instalaciones habitables representa uno de los desafíos más importantes de la ingeniería interplanetaria.</p>
+                <p style="text-align: justify;">Una alternativa consiste en utilizar materiales locales para fabricar componentes estructurales mediante técnicas de manufactura aditiva, como la impresión tridimensional.</p>
+                <p style="text-align: justify;">El regolito marciano podría procesarse para producir materiales de construcción, agregados o componentes cerámicos, dependiendo de su composición y de las tecnologías disponibles.</p>
+                <p style="text-align: justify;">Entre los conceptos de diseño investigados se encuentran:</p>
+                <ul>
+                <li>Estructuras fabricadas mediante impresión 3D.</li>
+                <li>Hábitats parcialmente enterrados.</li>
+                <li>Construcciones cubiertas por capas de regolito.</li>
+                <li>Instalaciones modulares presurizadas.</li>
+                <li>Aprovechamiento de cavidades geológicas naturales.</li>
+                </ul>
+                <p style="text-align: justify;">El regolito también presenta interés como material de protección frente a determinados tipos de radiación, aunque la eficacia de un blindaje depende de su composición, espesor y de la naturaleza de las partículas energéticas.</p>
+                <p style="text-align: justify;">Los tubos de lava constituyen otra posibilidad de investigación debido a que pueden ofrecer espacios naturales subterráneos con características ambientales diferentes a las de la superficie.</p>
+                <h4>8.6. Agricultura y producción de alimentos</h4>
+                <p style="text-align: justify;">La producción de alimentos en Marte requeriría sistemas agrícolas independientes de las condiciones exteriores.</p>
+                <p style="text-align: justify;">La baja presión atmosférica, las temperaturas extremas, la composición del regolito y la radiación superficial hacen que la agricultura convencional al aire libre no sea viable.</p>
+                <p style="text-align: justify;">Por ello, se investigan diferentes sistemas de cultivo en ambientes controlados.</p>
+                <p style="text-align: justify;"><strong>Hidroponía:</strong> técnica agrícola en la que las plantas reciben agua y nutrientes mediante soluciones nutritivas, sin necesidad de utilizar suelo agrícola convencional.</p>
+                <p style="text-align: justify;"><strong>Aeroponía:</strong> sistema en el que las raíces permanecen suspendidas y reciben nutrientes mediante una niebla o pulverización controlada.</p>
+                <p style="text-align: justify;"><strong>Agricultura en ambientes cerrados:</strong> producción de alimentos dentro de instalaciones presurizadas con control de temperatura, humedad, iluminación y composición atmosférica.</p>
+                <p style="text-align: justify;">La biología sintética también constituye un área de investigación relacionada con la utilización de microorganismos para producir compuestos útiles, transformar residuos y participar en procesos biotecnológicos.</p>
+                <p style="text-align: justify;">Sin embargo, estos sistemas todavía requieren investigación para alcanzar una producción alimentaria estable y suficiente para misiones humanas prolongadas.</p>
+                <h3>9. Sistemas de soporte vital y habitabilidad: ECLSS</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/habitat-diagram.svg" alt="Esquema conceptual de un hábitat presurizado con módulos y esclusa."><figcaption>Esquema conceptual de un hábitat presurizado con módulos y esclusa.<br>Ilustración del proyecto.</figcaption></figure>
+                <h4>9.1. Concepto de ECLSS</h4>
+                <p style="text-align: justify;">ECLSS (<em>Environmental Control and Life Support System</em>) es el conjunto de tecnologías que permiten mantener condiciones ambientales compatibles con la vida humana dentro de una nave o instalación espacial.</p>
+                <p style="text-align: justify;">Su función es regular diferentes variables físicas y químicas, entre ellas la presión, la temperatura, la humedad, la concentración de oxígeno y la eliminación de contaminantes.</p>
+                <p style="text-align: justify;">Los sistemas ECLSS también participan en la recuperación de agua y el procesamiento de residuos.</p>
+                <p style="text-align: justify;">Entre sus componentes principales se encuentran:</p>
+                <ul>
+                <li>Sistemas de generación y distribución de oxígeno.</li>
+                <li>Sistemas de eliminación de dióxido de carbono.</li>
+                <li>Sistemas de control térmico.</li>
+                <li>Equipos de filtración y purificación del aire.</li>
+                <li>Sistemas de recuperación y tratamiento de agua.</li>
+                <li>Sistemas de gestión de residuos.</li>
+                </ul>
+                <h4>9.2. Reciclaje y recuperación de agua</h4>
+                <p style="text-align: justify;">El agua constituye un recurso limitado durante las misiones espaciales debido a las dificultades de transporte y reabastecimiento.</p>
+                <p style="text-align: justify;">La Estación Espacial Internacional ha desarrollado sistemas capaces de recuperar agua a partir de diferentes fuentes, incluyendo la humedad ambiental, el sudor y la orina.</p>
+                <p style="text-align: justify;">En 2023, la NASA informó que su sistema de soporte vital había alcanzado una recuperación global del 98 % del agua en determinadas condiciones de operación.</p>
+                <p style="text-align: justify;">Este porcentaje representa un avance importante para la ingeniería de sistemas cerrados, aunque no significa que el agua pueda reciclarse indefinidamente sin pérdidas, mantenimiento o incorporación de recursos adicionales.</p>
+                <p style="text-align: justify;">En una instalación marciana, una tecnología semejante sería fundamental para mantener la disponibilidad de agua durante periodos prolongados.</p>
+                <h4>9.3. Control de la atmósfera interior</h4>
+                <p style="text-align: justify;">El ambiente interior de una instalación marciana tendría que mantener condiciones compatibles con la fisiología humana.</p>
+                <p style="text-align: justify;">Esto requiere controlar cuidadosamente:</p>
+                <ul>
+                <li>Presión interna.</li>
+                <li>Concentración de oxígeno.</li>
+                <li>Concentración de dióxido de carbono.</li>
+                <li>Humedad relativa.</li>
+                <li>Temperatura.</li>
+                <li>Compuestos químicos contaminantes.</li>
+                <li>Presencia de partículas suspendidas.</li>
+                <li>Calidad microbiológica del ambiente.</li>
+                </ul>
+                <p style="text-align: justify;">El control de estas variables es indispensable porque una alteración importante puede comprometer la estabilidad del ambiente habitable.</p>
+                <p style="text-align: justify;">Además, el sistema debe contemplar el comportamiento de los materiales, la producción de gases residuales y la presencia de microorganismos dentro de los espacios cerrados.</p>
+                <h4>9.4. Gestión de residuos y sostenibilidad</h4>
+                <p style="text-align: justify;">La acumulación de residuos representa un problema relevante en misiones de larga duración.</p>
+                <p style="text-align: justify;">Los residuos orgánicos, materiales de embalaje, componentes industriales y desechos biológicos requieren procesos de clasificación, almacenamiento y tratamiento.</p>
+                <p style="text-align: justify;">Algunas tecnologías investigadas incluyen la recuperación de agua, el aprovechamiento de nutrientes y la transformación de residuos orgánicos mediante procesos biológicos o fisicoquímicos.</p>
+                <p style="text-align: justify;">La integración de estos sistemas podría contribuir al desarrollo de instalaciones parcialmente autosuficientes.</p>
+                <h3>10. Salud humana, psicología y aislamiento interplanetario</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/habitat-diagram.svg" alt="Esquema de un habitáculo aislado para ilustrar las condiciones de convivencia."><figcaption>Esquema de un habitáculo aislado para ilustrar las condiciones de convivencia.<br>Ilustración del proyecto.</figcaption></figure>
+                <h4>10.1. Los cinco peligros principales del vuelo espacial</h4>
+                <p style="text-align: justify;">La NASA clasifica los principales riesgos asociados con la exploración espacial humana en cinco categorías:</p>
+                <ol>
+                <li>Radiación espacial.</li>
+                <li>Aislamiento y confinamiento.</li>
+                <li>Distancia respecto a la Tierra.</li>
+                <li>Campos gravitatorios.</li>
+                <li>Ambientes hostiles y cerrados.</li>
+                </ol>
+                <p style="text-align: justify;">Estas categorías permiten comprender que la supervivencia espacial no depende exclusivamente de la tecnología de los vehículos, sino también de las condiciones fisiológicas, psicológicas y ambientales que experimentan los astronautas.</p>
+                <p style="text-align: justify;">NASA</p>
+                <h4>10.2. Aislamiento psicológico y confinamiento</h4>
+                <p style="text-align: justify;">Las misiones a Marte implicarían periodos prolongados de convivencia dentro de espacios relativamente reducidos.</p>
+                <p style="text-align: justify;">La separación de familiares, la ausencia de contacto físico con otras personas y la exposición constante a un ambiente artificial pueden modificar el comportamiento psicológico de los integrantes de una tripulación.</p>
+                <p style="text-align: justify;">Entre los posibles efectos se encuentran:</p>
+                <ul>
+                <li>Estrés psicológico.</li>
+                <li>Alteraciones del sueño.</li>
+                <li>Cambios en la motivación.</li>
+                <li>Fatiga emocional.</li>
+                <li>Dificultades de convivencia.</li>
+                <li>Conflictos interpersonales.</li>
+                <li>Sensación de aislamiento.</li>
+                <li>Alteraciones en la capacidad de concentración.</li>
+                </ul>
+                <p style="text-align: justify;">La interacción entre los integrantes de la tripulación constituye un factor importante porque las decisiones operativas, las tareas científicas y el mantenimiento de las instalaciones requieren coordinación constante.</p>
+                <h4>10.3. Comunicaciones y retraso de señal con la Tierra</h4>
+                <p style="text-align: justify;">La distancia entre Marte y la Tierra varía durante sus respectivas órbitas.</p>
+                <p style="text-align: justify;">Como consecuencia, las señales de radio pueden tardar aproximadamente entre 3 y 22 minutos en viajar en un solo sentido, dependiendo de la posición de ambos planetas. Para planificación de misiones también se utiliza un intervalo aproximado de 4 a 24 minutos.</p>
+                <p style="text-align: justify;">Esto significa que una comunicación de ida y vuelta puede requerir decenas de minutos.</p>
+                <p style="text-align: justify;">Por lo tanto, las comunicaciones interplanetarias no permiten mantener conversaciones convencionales en tiempo real, como las videollamadas terrestres.</p>
+                <p style="text-align: justify;">Además, existen periodos de interrupción de comunicaciones asociados con la conjunción solar, cuando el Sol se encuentra aproximadamente entre Marte y la Tierra desde la perspectiva de ambos planetas.</p>
+                <p style="text-align: justify;">Durante estos periodos, la interferencia de la radiación solar puede dificultar considerablemente la transmisión de información.</p>
+                <p style="text-align: justify;">La latencia de comunicación representa un desafío importante para la autonomía operativa de las futuras tripulaciones.</p>
+                <h4>10.4. Proyecto CHAPEA de la NASA</h4>
+                <p style="text-align: justify;">CHAPEA (<em>Crew Health and Performance Exploration Analog</em>) es un programa de investigación de la NASA diseñado para simular las condiciones de una misión humana prolongada en Marte.</p>
+                <p style="text-align: justify;">Las misiones se desarrollan dentro de un hábitat terrestre construido mediante impresión tridimensional, conocido como Mars Dune Alpha.</p>
+                <p style="text-align: justify;">El espacio simulado tiene aproximadamente 1,700 pies cuadrados y está diseñado para albergar a cuatro participantes.</p>
+                <p style="text-align: justify;">Durante las simulaciones se investigan factores como:</p>
+                <ul>
+                <li>Rendimiento físico.</li>
+                <li>Salud psicológica.</li>
+                <li>Convivencia.</li>
+                <li>Producción de alimentos.</li>
+                <li>Mantenimiento de instalaciones.</li>
+                <li>Actividades científicas.</li>
+                <li>Limitación de recursos.</li>
+                <li>Comunicaciones simuladas.</li>
+                <li>Operaciones extravehiculares simuladas.</li>
+                </ul>
+                <p style="text-align: justify;">La primera misión se desarrolló entre junio de 2023 y julio de 2024. La segunda comenzó en octubre de 2025 y concluyó el 31 de octubre de 2026, después de 378 días de aislamiento simulado.</p>
+                <p style="text-align: justify;">Este programa constituye una herramienta experimental para estudiar las condiciones humanas y operativas que podrían presentarse durante una futura expedición a Marte.</p>
+                <h3>11. Otros riesgos tecnológicos y operativos de una misión humana</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/helmet-diagram.svg" alt="Esquema de un casco con visor y proyección de datos."><figcaption>Esquema de un casco con visor y proyección de datos.<br>Ilustración del proyecto.</figcaption></figure>
+                <p style="text-align: justify;">Los peligros naturales no son los únicos factores que podrían comprometer una expedición. También existen riesgos derivados de la complejidad tecnológica de una instalación interplanetaria.</p>
+                <h4>11.1. Fallas de sistemas presurizados</h4>
+                <p style="text-align: justify;">Los hábitats humanos requieren estructuras capaces de mantener una presión interna muy superior a la del ambiente exterior.</p>
+                <p style="text-align: justify;">Una pérdida de hermeticidad puede ocasionar una disminución progresiva de la presión, alterando las condiciones de habitabilidad.</p>
+                <p style="text-align: justify;">Las fallas pueden originarse por:</p>
+                <ul>
+                <li>Daños estructurales.</li>
+                <li>Fatiga de materiales.</li>
+                <li>Defectos en las juntas.</li>
+                <li>Impactos de partículas.</li>
+                <li>Fallas en válvulas y conexiones.</li>
+                <li>Degradación de componentes.</li>
+                </ul>
+                <h4>11.2. Incendios en ambientes cerrados</h4>
+                <p style="text-align: justify;">El fuego representa un peligro especialmente importante en instalaciones espaciales porque los gases y partículas producidos durante la combustión pueden acumularse en espacios confinados.</p>
+                <p style="text-align: justify;">Los incendios pueden generar:</p>
+                <ul>
+                <li>Aumento de temperatura.</li>
+                <li>Producción de humo.</li>
+                <li>Liberación de gases tóxicos.</li>
+                <li>Consumo de oxígeno.</li>
+                <li>Alteraciones en los sistemas electrónicos.</li>
+                <li>Daños estructurales.</li>
+                </ul>
+                <p style="text-align: justify;">La composición atmosférica interior y los materiales utilizados en una instalación espacial modifican el comportamiento de la combustión.</p>
+                <h4>11.3. Fallas energéticas</h4>
+                <p style="text-align: justify;">Los sistemas eléctricos serían fundamentales para mantener los equipos de soporte vital, las comunicaciones, la iluminación, los sistemas de control térmico y los procesos industriales.</p>
+                <p style="text-align: justify;">Una interrupción prolongada del suministro energético podría afectar simultáneamente diferentes sistemas esenciales.</p>
+                <p style="text-align: justify;">Por esta razón, las futuras misiones consideran diferentes alternativas de generación eléctrica, incluyendo sistemas solares y reactores de fisión.</p>
+                <h4>11.4. Contaminación biológica y microbiológica</h4>
+                <p style="text-align: justify;">Los ambientes cerrados pueden favorecer la acumulación de microorganismos en superficies, filtros, conductos y sistemas de tratamiento de agua.</p>
+                <p style="text-align: justify;">La humedad, la temperatura y la disponibilidad de nutrientes pueden modificar la proliferación microbiana.</p>
+                <p style="text-align: justify;">Además, el intercambio de materiales biológicos entre la Tierra y Marte plantea cuestiones relacionadas con la protección planetaria.</p>
+                <p style="text-align: justify;">Esta disciplina busca evitar la contaminación biológica de otros cuerpos celestes y proteger la integridad de las investigaciones científicas destinadas a estudiar la posible existencia de vida extraterrestre.</p>
+                <h4>11.5. Fallas de navegación y desplazamiento</h4>
+                <p style="text-align: justify;">Los vehículos robóticos y los futuros sistemas de transporte humano tendrán que operar sobre terrenos irregulares, con pendientes, rocas, arena y depósitos de polvo.</p>
+                <p style="text-align: justify;">Entre los posibles problemas se encuentran:</p>
+                <ul>
+                <li>Atascamiento de ruedas.</li>
+                <li>Pérdida de tracción.</li>
+                <li>Daños en sistemas de suspensión.</li>
+                <li>Errores de navegación.</li>
+                <li>Deterioro de sensores.</li>
+                <li>Fallas mecánicas por desgaste.</li>
+                <li>Limitaciones de comunicación.</li>
+                </ul>
+                <p style="text-align: justify;">Estos factores pueden modificar la capacidad de desplazamiento y exploración de una misión.</p>
+                <h3>12. Evaluación integral de los peligros para una expedición humana</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/hazards.jpg" alt="Ejemplo de cartografía de peligros de aterrizaje; los riesgos humanos requieren evaluaciones adicionales."><figcaption>Ejemplo de cartografía de peligros de aterrizaje; los riesgos humanos requieren evaluaciones adicionales.<br>Créditos: NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24167" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <p style="text-align: justify;">La exploración de Marte requiere comprender que los peligros ambientales no actúan de manera independiente. Por el contrario, pueden combinarse y generar condiciones mucho más complejas que las producidas por un único fenómeno.</p>
+                <p style="text-align: justify;">Por ejemplo, una tormenta global de polvo puede reducir la radiación solar disponible, modificar las temperaturas atmosféricas, incrementar la acumulación de partículas y alterar las condiciones de operación de los equipos científicos.</p>
+                <p style="text-align: justify;">De forma semejante, una falla energética puede afectar simultáneamente los sistemas de control térmico, producción de oxígeno, tratamiento de agua y comunicaciones.</p>
+                <p style="text-align: justify;">La siguiente clasificación permite visualizar los principales factores de riesgo identificados en esta investigación.</p>
+                <table border="1">
+                <thead><tr><th>Categoría</th><th>Fenómeno o peligro</th><th>Principal consecuencia</th></tr></thead>
+                <tbody>
+                <tr><td>Atmosférico</td><td>Presión extremadamente baja</td><td>Incompatibilidad con la fisiología humana</td></tr>
+                <tr><td>Atmosférico</td><td>Atmósfera rica en CO₂</td><td>Ausencia de aire respirable</td></tr>
+                <tr><td>Térmico</td><td>Frío extremo</td><td>Congelación y deterioro de materiales</td></tr>
+                <tr><td>Meteorológico</td><td>Tormentas globales de polvo</td><td>Reducción de luz solar y acumulación de partículas</td></tr>
+                <tr><td>Meteorológico</td><td>Remolinos de polvo</td><td>Transporte de partículas y electrificación</td></tr>
+                <tr><td>Eléctrico</td><td>Descargas triboeléctricas</td><td>Posibles interferencias y alteraciones químicas</td></tr>
+                <tr><td>Espacial</td><td>Radiación cósmica galáctica</td><td>Daño celular y exposición acumulativa</td></tr>
+                <tr><td>Espacial</td><td>Eventos de partículas solares</td><td>Incrementos de radiación</td></tr>
+                <tr><td>Geológico</td><td>Marsquakes</td><td>Vibraciones y movimientos del terreno</td></tr>
+                <tr><td>Geológico</td><td>Deslizamientos y avalanchas</td><td>Inestabilidad superficial</td></tr>
+                <tr><td>Geológico</td><td>Impactos meteoríticos</td><td>Daños físicos y alteraciones del terreno</td></tr>
+                <tr><td>Químico</td><td>Percloratos</td><td>Toxicidad y alteraciones tiroideas</td></tr>
+                <tr><td>Biológico</td><td>Contaminación microbiológica</td><td>Alteración de ambientes habitables</td></tr>
+                <tr><td>Fisiológico</td><td>Gravedad reducida</td><td>Cambios musculares, óseos y cardiovasculares</td></tr>
+                <tr><td>Tecnológico</td><td>Fallas de soporte vital</td><td>Pérdida de condiciones habitables</td></tr>
+                <tr><td>Operativo</td><td>Retraso de comunicaciones</td><td>Limitación de coordinación con la Tierra</td></tr>
+                </tbody>
+                </table>
+                <h4>12.1. Tecnologías que representan avances para la exploración humana</h4>
+                <p style="text-align: justify;">El desarrollo de una misión humana a Marte depende de la integración de diferentes tecnologías científicas y de ingeniería.</p>
+                <p style="text-align: justify;">Entre las más importantes se encuentran:</p>
+                <ul>
+                <li><strong>ISRU:</strong> aprovechamiento de recursos locales para producir agua, oxígeno, combustible y materiales.</li>
+                <li><strong>MOXIE:</strong> demostración experimental de producción de oxígeno a partir de la atmósfera marciana.</li>
+                <li><strong>ECLSS:</strong> regulación y mantenimiento de las condiciones ambientales dentro de instalaciones habitables.</li>
+                <li><strong>SHARAD:</strong> investigación de depósitos de hielo y estructuras geológicas subterráneas.</li>
+                <li><strong>RAD:</strong> medición de radiación espacial y caracterización del ambiente radiológico.</li>
+                <li><strong>MEDA:</strong> monitoreo meteorológico y caracterización del polvo.</li>
+                <li><strong>RIMFAX:</strong> investigación de estructuras geológicas bajo la superficie.</li>
+                <li><strong>CHAPEA:</strong> simulación de misiones prolongadas para estudiar la salud y el comportamiento humano.</li>
+                <li><strong>Manufactura aditiva:</strong> investigación de estructuras construidas con materiales disponibles localmente.</li>
+                <li><strong>Energía nuclear espacial:</strong> desarrollo de sistemas energéticos capaces de suministrar electricidad de manera independiente de la iluminación solar.</li>
+                </ul>
+                <p style="text-align: justify;">Estas tecnologías todavía presentan diferentes niveles de desarrollo. Algunas ya han sido demostradas en Marte, mientras que otras permanecen en fases de investigación, experimentación o diseño conceptual.</p>
+                <h3>13. Conclusión general</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/jezero.jpg" alt="Jezero como contexto geográfico de la exploración y planificación científica."><figcaption>Jezero como contexto geográfico de la exploración y planificación científica.<br>Créditos: ESA/DLR/FU-Berlin/NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24350" target="_blank" rel="noopener noreferrer">Referencia: ficha oficial de NASA</a>.</figcaption></figure>
+                <p style="text-align: justify;">Marte representa uno de los entornos más complejos y desafiantes para la exploración humana dentro del Sistema Solar. Aunque presenta características que recuerdan parcialmente a la Tierra, como la duración relativamente similar de sus días, la existencia de estaciones y la presencia de agua congelada, sus condiciones ambientales actuales son extremadamente diferentes y resultan incompatibles con la supervivencia humana sin sistemas tecnológicos especializados.</p>
+                <p style="text-align: justify;">Su atmósfera, compuesta principalmente por dióxido de carbono y caracterizada por una presión superficial muy reducida, impide la respiración directa y genera condiciones físicas que pueden provocar daños fisiológicos graves. A esto se suman las temperaturas extremas, la exposición a radiación ionizante, la gravedad reducida y la presencia de materiales superficiales potencialmente tóxicos.</p>
+                <p style="text-align: justify;">Asimismo, Marte presenta fenómenos naturales que incrementan la complejidad de su exploración. Las tormentas globales de polvo, los remolinos atmosféricos, las descargas eléctricas triboeléctricas, los movimientos sísmicos, los deslizamientos geológicos y los impactos meteoríticos demuestran que su superficie no es un entorno estático, sino un sistema planetario dinámico que continúa experimentando transformaciones físicas y químicas.</p>
+                <p style="text-align: justify;">Sin embargo, los avances de la exploración robótica han permitido comprender cada vez mejor estas condiciones. Misiones como Curiosity, Perseverance e InSight han proporcionado información fundamental sobre la atmósfera, la geología, la radiación y las propiedades internas del planeta. Particularmente, Perseverance ha demostrado que es posible producir oxígeno utilizando dióxido de carbono marciano mediante MOXIE, mientras que sus instrumentos meteorológicos y acústicos han permitido identificar fenómenos ambientales que anteriormente solo podían estudiarse mediante modelos teóricos.</p>
+                <p style="text-align: justify;">Por otra parte, las investigaciones relacionadas con ISRU, los sistemas ECLSS, la extracción de agua subterránea, la producción de combustible y la construcción de hábitats representan avances importantes hacia una futura presencia humana.</p>
+                <p style="text-align: justify;">En consecuencia, la posibilidad de establecer una instalación humana en Marte no depende de una única tecnología, sino de la integración de numerosos sistemas científicos, médicos, industriales y ambientales capaces de funcionar de manera coordinada durante periodos prolongados.</p>
+                <p style="text-align: justify;"><strong>Marte no constituye simplemente un destino de exploración: representa un entorno planetario completamente diferente que exige ampliar los límites actuales de la ingeniería, la biología, la química, la medicina y la tecnología espacial.</strong> Comprender sus peligros y estudiar sus recursos es el primer paso para transformar la exploración interplanetaria en una posibilidad científica y tecnológica.</p>
+                <h4>16. Precisiones científicas importantes para tu proyecto</h4>
+                <table border="1">
+                <thead><tr><th>Dato</th><th>Precisión</th></tr></thead>
+                <tbody>
+                <tr><td>Temperatura máxima</td><td>+20 °C es una referencia habitual; algunos registros superficiales pueden variar según el instrumento y la ubicación.</td></tr>
+                <tr><td>Presión</td><td>610 Pa es aproximadamente 0.6 % de la presión terrestre, pero está muy por debajo del límite de Armstrong.</td></tr>
+                <tr><td>Tormentas globales</td><td>No ocurren con periodicidad exacta; los intervalos de 3–4 años marcianos son promedios aproximados.</td></tr>
+                <tr><td>Radiación</td><td>0.64 mSv/día es una referencia medida, no una constante planetaria.</td></tr>
+                <tr><td>Electricidad</td><td>Las descargas triboeléctricas ya cuentan con detección directa; no debe afirmarse que existen rayos terrestres convencionales demostrados.</td></tr>
+                <tr><td>MOXIE</td><td>Produjo 122 gramos de oxígeno en total; no es una planta industrial de abastecimiento humano.</td></tr>
+                <tr><td>Gravedad</td><td>El efecto de vivir durante años al 38 % de gravedad terrestre todavía no está completamente caracterizado.</td></tr>
+                <tr><td>Agua</td><td>La presencia de hielo subterráneo no significa que toda región marciana tenga reservas accesibles.</td></tr>
+                </tbody>
+                </table>
+                </div>
+                </div>
+                <div class="science-guide-en" lang="en">
+                <h2>Scientific guide to survival and human exploration on Mars</h2>
+                <p style="text-align: justify;">This guide examines Mars’s environmental conditions, the risks for human expeditions, and the technologies being studied for a sustained human presence.</p>
+                <h3>1. Planetary characteristics</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/mars.jpg" alt="Mars: a global view."><figcaption>Mars: a global view.<br>Credits: NASA/JPL-Caltech. <a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>1.1. Physical characteristics</h4>
+                <p style="text-align: justify;">Mars is the fourth planet from the Sun and is roughly half Earth’s size. It is a rocky world with a thin atmosphere and iron oxides that give the ground its red color. Its landscape includes volcanoes, canyons, impact craters, polar ice, and ancient river and lake deposits. Deltas and hydrated minerals preserve evidence of past environments that may once have been habitable.</p>
+                <h4>1.2. Physical and orbital parameters</h4>
+                <table border="1">
+                <thead><tr><th>Parameter</th><th>Approximate value</th></tr></thead>
+                <tbody>
+                <tr><td>Mean distance from the Sun</td><td>227.9 million km (1.52 AU)</td></tr>
+                <tr><td>Equatorial radius / diameter</td><td>3,396.2 km / 6,792.4 km</td></tr>
+                <tr><td>Mass</td><td>6.42 × 10²³ kg</td></tr>
+                <tr><td>Surface gravity / escape velocity</td><td>3.721 m/s² / 5.03 km/s</td></tr>
+                <tr><td>Solar day / year</td><td>24 h 39 min 35 s / 687 Earth days</td></tr>
+                <tr><td>Axial tilt</td><td>25.19°</td></tr>
+                <tr><td>Moons</td><td>Phobos and Deimos</td></tr>
+                </tbody>
+                </table>
+                <p style="text-align: justify;">Mars has four seasons. Its elliptical orbit makes their lengths unequal. Phobos, the larger and closer moon, is gradually moving inward. It could eventually break up or collide with Mars.</p>
+                <h4>1.3. Reduced gravity and human physiology</h4>
+                <p style="text-align: justify;">Mars’s surface gravity is about 38% of Earth’s. A person with a mass of 70 kg would still have that mass but weigh about 261 N. Researchers study possible effects on bones and muscles, cardiovascular function, balance, and vision. Long-term effects at Mars gravity remain uncertain. Findings from microgravity cannot be transferred directly.</p>
+                <h3>2. Atmosphere and climate</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/dust.jpg" alt="The Martian atmosphere before and during a dust storm."><figcaption>The Martian atmosphere before and during a dust storm.<br>Credits: NASA, James Bell (Cornell Univ.), Michael Wolff (Space Science Inst.), Hubble Heritage Team (STScI/AURA). <a href="https://science.nasa.gov/asset/hubble/a-global-dust-storm-on-mars/" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>2.1. Atmospheric composition</h4>
+                <table border="1">
+                <thead><tr><th>Component</th><th>Approximate concentration by volume</th></tr></thead>
+                <tbody>
+                <tr><td>Carbon dioxide</td><td>95.32%</td></tr>
+                <tr><td>Nitrogen</td><td>2.70%</td></tr>
+                <tr><td>Argon</td><td>1.60%</td></tr>
+                <tr><td>Oxygen</td><td>0.13%</td></tr>
+                <tr><td>Carbon monoxide</td><td>0.08%</td></tr>
+                <tr><td>Other constituents</td><td>Trace amounts, including water vapor</td></tr>
+                </tbody>
+                </table>
+                <p style="text-align: justify;">This atmosphere cannot support unassisted human breathing. Trace water can take part in processes that form clouds, frost, and ice.</p>
+                <h4>2.2. Low pressure</h4>
+                <p style="text-align: justify;">Average surface pressure is about 610 Pa, or 6.1 mbar, around 0.6% of Earth’s. Values vary with season, altitude, and location. The pressure is well below the Armstrong limit of about 6.3 kPa. Exposure without pressurization creates an extreme emergency involving oxygen deprivation and the formation of vapor in exposed body fluids.</p>
+                <h4>2.3. Temperatures and thermal cycles</h4>
+                <p style="text-align: justify;">The global mean is about −63 °C. Polar conditions can fall to around −140 °C, while some equatorial surfaces may reach around +20 °C. Air and ground temperatures differ. Repeated heating and cooling strain seals, lubricants, electronics, and habitat thermal control systems.</p>
+                <h4>2.4. Clouds, frost, and haze</h4>
+                <p style="text-align: justify;">Mars has water-ice and carbon dioxide clouds, surface frost, haze, and high-altitude ice clouds. These phenomena affect volatile transport, seasonal changes, and the distribution of energy.</p>
+                <h4>2.5. Winds and circulation</h4>
+                <p style="text-align: justify;">Uneven heating, seasonal changes, and topography drive winds. The thin atmosphere produces less force than comparably fast winds on Earth, but wind still lifts dust, moves sediment, and affects equipment.</p>
+                <h3>3. Dust storms and extreme weather</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/dust.jpg" alt="Hubble comparison showing the extent of a global dust storm."><figcaption>Hubble comparison showing the extent of a global dust storm.<br>Credits: NASA, James Bell (Cornell Univ.), Michael Wolff (Space Science Inst.), Hubble Heritage Team (STScI/AURA). <a href="https://science.nasa.gov/asset/hubble/a-global-dust-storm-on-mars/" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>3.1. Storm formation</h4>
+                <p style="text-align: justify;">Sunlight warms the ground. Wind can lift fine dust, and airborne dust changes how the atmosphere absorbs radiation. Heating alters circulation, which can lift additional dust.</p>
+                <h4>3.2. Storm scales</h4>
+                <p style="text-align: justify;">Dust storms can be local, regional, or planet-encircling. Large events are more likely in certain seasons, but their timing is irregular.</p>
+                <h4>3.3. Effects of global storms</h4>
+                <p style="text-align: justify;">Airborne dust reduces visibility and available sunlight. Settled dust degrades solar panels and can foul optical instruments, joints, seals, and filters. Long events can interrupt travel and reduce power available for essential systems.</p>
+                <h4>3.4. Dust devils</h4>
+                <p style="text-align: justify;">Heated ground produces rising columns of air that may rotate and lift dust. Dust devils leave tracks on the ground and have been observed by Mars missions. They can redistribute dust around instruments and other equipment.</p>
+                <h4>3.5. Electrical discharges</h4>
+                <p style="text-align: justify;">Grain collisions can transfer electrical charge. Measurements by Perseverance provide evidence of small triboelectric discharges during dust events. Electrical charging, small local discharges, and large atmospheric lightning are distinct phenomena. The measurements do not establish that Earth-like lightning occurs on Mars.</p>
+                <h4>3.6. Polar dry-ice phenomena</h4>
+                <p style="text-align: justify;">Carbon dioxide freezes seasonally at the poles. When sunlight returns, gas released beneath ice can carry dust and leave dark deposits. Such processes reshape polar terrain.</p>
+                <h3>4. Radiation</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/radiation.jpg" alt="Curiosity observation associated with the 2024 solar storm; this is not an astronaut dose map."><figcaption>Curiosity observation associated with the 2024 solar storm; this is not an astronaut dose map.<br>Credits: NASA/JPL-Caltech. <a href="https://science.nasa.gov/photojournal/curiosity-sees-specks-caused-by-2024-solar-storm-while-recording-a-wind-gust-on-mars/" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>4.1. Magnetic shielding</h4>
+                <p style="text-align: justify;">Mars lacks a global magnetic field comparable to Earth’s. Local crustal magnetic fields exist, but the thin atmosphere and localized fields provide limited protection from energetic particles.</p>
+                <h4>4.2. Radiation sources</h4>
+                <p style="text-align: justify;">Galactic cosmic rays contribute to chronic exposure. Solar particle events can temporarily raise dose rates. Interactions in the atmosphere, soil, and shielding can produce secondary particles.</p>
+                <h4>4.3. Curiosity’s RAD measurements</h4>
+                <p style="text-align: justify;">Surface observations cited in the Spanish text range roughly from 0.4 to 0.9 mSv per day. At the representative rate of 0.64 mSv per day, a simple 365-day projection gives 233.6 mSv. Actual exposure depends on solar activity, location, and protection.</p>
+                <h4>4.4. Health effects</h4>
+                <p style="text-align: justify;">Ionizing radiation can damage cells and DNA. Research considers cancer, tissue injury, and long-term effects on several organ systems. Shielding and designated shelters are among the protection measures under study.</p>
+                <h3>5. Dust, regolith, and chemical hazards</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/geology.jpg" alt="Rocks and sediments in the Jezero delta; the image does not measure perchlorates."><figcaption>Rocks and sediments in the Jezero delta; the image does not measure perchlorates.<br>Credits: RMI: NASA/JPL-Caltech/LANL/CNES/CNRS/ASU/MSSS; Mastcam-Z: NASA/JPL-Caltech/ASU/MSSS. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24684" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>5.1. Composition</h4>
+                <p style="text-align: justify;">Martian regolith contains fragments of rock, fine dust, iron oxides, and salts. It varies across the planet and can affect equipment, construction, and resource processing.</p>
+                <h4>5.2. Perchlorates</h4>
+                <p style="text-align: justify;">Perchlorate salts in some Martian soils raise contamination concerns, including possible effects on thyroid function. Soil intended for use inside a habitat or to grow food would require evaluation and treatment.</p>
+                <h4>5.3. Physical risks</h4>
+                <p style="text-align: justify;">Fine particles may irritate the respiratory system and eyes, abrade surfaces, and enter equipment. Filtration, suit cleaning, and control of dust transfer at entrances are relevant design measures.</p>
+                <h3>6. Geological hazards</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/hazards.jpg" alt="Jezero landing hazard map. It does not represent a certified EVA route."><figcaption>Jezero landing hazard map. It does not represent a certified EVA route.<br>Credits: NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24167" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>6.1. Marsquakes</h4>
+                <p style="text-align: justify;">InSight recorded seismic events. Seismic data help characterize the interior and show that Martian ground is not entirely inactive.</p>
+                <h4>6.2. Volcanic activity</h4>
+                <p style="text-align: justify;">Mars contains large volcanic provinces, including Olympus Mons and Tharsis. Their history matters for geology and site selection. Evidence of relatively recent geological activity does not establish a current eruption.</p>
+                <h4>6.3. Landslides and rockfalls</h4>
+                <p style="text-align: justify;">Steep slopes, cliffs, crater walls, and loose material can produce falling rock or unstable ground. Remote mapping and local observations help characterize routes and construction sites.</p>
+                <h4>6.4. Polar avalanches</h4>
+                <p style="text-align: justify;">Ice, dust, and sediment can fall from polar scarps. Seasonal heating and sublimation contribute to changes on these slopes.</p>
+                <h4>6.5. Impacts</h4>
+                <p style="text-align: justify;">Meteoroids can create fresh craters, because the thin atmosphere offers limited protection. Impacts and smaller particles pose risks to structures and equipment.</p>
+                <h4>6.6. Subsurface voids</h4>
+                <p style="text-align: justify;">Fractures, pits, or possible lava tubes create collapse risks. Subsurface cavities could offer shelter if surveyed and shown to be structurally suitable.</p>
+                <h4>6.7. Erosion</h4>
+                <p style="text-align: justify;">Wind moves sand and dust, reshapes dunes, and obscures tracks. Mission maps may need updating as surface conditions evolve.</p>
+                <h3>7. Perseverance and robotic exploration</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/jezero.jpg" alt="Planned Perseverance landing ellipse in Jezero."><figcaption>Planned Perseverance landing ellipse in Jezero.<br>Credits: ESA/DLR/FU-Berlin/NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24350" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>7.1. Mars 2020</h4>
+                <p style="text-align: justify;">Perseverance landed in Jezero Crater in 2021. Its mission includes studying geological history and past habitability, collecting samples, and demonstrating technology.</p>
+                <h4>7.2. Instruments</h4>
+                <table border="1">
+                <thead><tr><th>Instrument</th><th>Role</th></tr></thead>
+                <tbody>
+                <tr><td>Mastcam-Z</td><td>Color and stereo imaging</td></tr>
+                <tr><td>SuperCam</td><td>Remote imaging, spectroscopy, and acoustics</td></tr>
+                <tr><td>PIXL</td><td>Elemental mapping using X-rays</td></tr>
+                <tr><td>SHERLOC</td><td>Mineral and organic compound investigation using ultraviolet spectroscopy</td></tr>
+                <tr><td>RIMFAX</td><td>Subsurface imaging with radar</td></tr>
+                <tr><td>MEDA</td><td>Local meteorology and dust</td></tr>
+                <tr><td>MOXIE</td><td>Experimental oxygen production</td></tr>
+                </tbody>
+                </table>
+                <h4>7.3. MEDA</h4>
+                <p style="text-align: justify;">MEDA observes pressure, temperature, wind, humidity, radiation, and dust-related conditions. These data support studies of weather, daily cycles, and surface operations.</p>
+                <h4>7.4. SuperCam</h4>
+                <p style="text-align: justify;">SuperCam analyzes rocks and soil from a distance. Its microphone also provides data on wind, laser shots, and electrical activity associated with dust.</p>
+                <h4>7.5. RIMFAX</h4>
+                <p style="text-align: justify;">Ground-penetrating radar reveals subsurface layers, including structures that can help interpret how terrain formed.</p>
+                <h4>7.6. Sample collection</h4>
+                <p style="text-align: justify;">Perseverance collects and seals samples in tubes. The Three Forks depot holds samples for possible retrieval. Sample documentation connects laboratory analysis to the geological setting.</p>
+                <h4>7.7. Ingenuity</h4>
+                <p style="text-align: justify;">Ingenuity demonstrated powered, controlled flight in the thin Martian atmosphere and also performed aerial scouting.</p>
+                <h4>7.8. Relevance for human exploration</h4>
+                <p style="text-align: justify;">Robotic observations inform site selection and risk assessment. Instruments and experiments test techniques that could support later missions.</p>
+                <h3>8. Local resources</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/moxie.jpg" alt="Illustration of MOXIE components, an oxygen-production demonstrator."><figcaption>Illustration of MOXIE components, an oxygen-production demonstrator.<br>Credits: NASA/JPL-Caltech. <a href="https://science.nasa.gov/photojournal/components-of-moxie-illustration/" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <h4>8.1. In situ resource utilization (ISRU)</h4>
+                <p style="text-align: justify;">ISRU explores using local water, atmosphere, and soil to produce supplies. This can reduce launch mass, but equipment must work reliably at the destination.</p>
+                <h4>8.2. Water</h4>
+                <p style="text-align: justify;">Orbital radar and surface observations help identify ice. Assessing a deposit requires information about depth, concentration, terrain, and access. Water extracted from ice could support drinking, oxygen production, and propellant after suitable processing.</p>
+                <h4>8.3. MOXIE</h4>
+                <p style="text-align: justify;">MOXIE converted atmospheric carbon dioxide into oxygen as a technology demonstration aboard Perseverance. The experiment produced about 122 g in total. A human mission would require a larger system with storage and operational safeguards.</p>
+                <h4>8.4. Methane and the Sabatier reaction</h4>
+                <p style="text-align: justify;">The Sabatier reaction combines carbon dioxide and hydrogen to produce methane and water: CO₂ + 4H₂ → CH₄ + 2H₂O. A mission would need a hydrogen source, power, processing equipment, and storage.</p>
+                <h4>8.5. Construction</h4>
+                <p style="text-align: justify;">Regolith could shield a habitat or serve as a building material after processing. Candidate techniques require testing for strength, sealing, durability, and environmental performance.</p>
+                <h4>8.6. Food production</h4>
+                <p style="text-align: justify;">Controlled growing systems would need light, water, nutrients, pressure, and careful management. Untreated regolith is not equivalent to fertile Earth soil.</p>
+                <h3>9. Life support and habitability</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/habitat-diagram.svg" alt="Concept diagram of a pressurized habitat with modules and an airlock."><figcaption>Concept diagram of a pressurized habitat with modules and an airlock.<br>Project illustration.</figcaption></figure>
+                <h4>9.1. Environmental Control and Life Support System (ECLSS)</h4>
+                <p style="text-align: justify;">An ECLSS supplies oxygen, removes carbon dioxide, controls pressure, temperature and humidity, treats water, and manages contaminants and waste.</p>
+                <h4>9.2. Water recovery</h4>
+                <p style="text-align: justify;">Recovery systems can treat wastewater and humidity condensate. Space-station experience is relevant to Mars habitats, whose systems must account for maintenance, energy, and losses.</p>
+                <h4>9.3. Indoor atmosphere</h4>
+                <p style="text-align: justify;">Sensors track pressure and gases. Maintaining a controlled atmosphere also requires ventilation, contaminant removal, oxygen supply, and backup capacity.</p>
+                <h4>9.4. Waste</h4>
+                <p style="text-align: justify;">Waste handling minimizes contamination and may recover water, materials, and nutrients. Any recycling loop must fit the habitat’s hygiene and resource limits.</p>
+                <h3>10. Health, psychology, and isolation</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/habitat-diagram.svg" alt="Diagram of an isolated habitat illustrating shared living conditions."><figcaption>Diagram of an isolated habitat illustrating shared living conditions.<br>Project illustration.</figcaption></figure>
+                <h4>10.1. Main spaceflight hazards</h4>
+                <p style="text-align: justify;">The guide identifies radiation, isolation and confinement, distance from Earth, changing gravity, and hostile or closed environments.</p>
+                <h4>10.2. Confinement</h4>
+                <p style="text-align: justify;">Isolation, crowding, monotony, and demanding work can affect sleep, mood, communication, and group performance. Privacy, rest, exercise, meaningful tasks, and support can help.</p>
+                <h4>10.3. Communications delay</h4>
+                <p style="text-align: justify;">Signals take minutes to travel between Earth and Mars. Crew members need procedures and equipment that support decisions when immediate guidance is unavailable.</p>
+                <h4>10.4. CHAPEA</h4>
+                <p style="text-align: justify;">NASA’s CHAPEA habitat simulations study prolonged isolation, resource constraints, workload, and delays under conditions analogous to some aspects of Mars missions.</p>
+                <h3>11. Technological and operational hazards</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/helmet-diagram.svg" alt="Diagram of a helmet with a visor and data overlay."><figcaption>Diagram of a helmet with a visor and data overlay.<br>Project illustration.</figcaption></figure>
+                <h4>11.1. Pressure system failures</h4>
+                <p style="text-align: justify;">Risks include leaks and equipment or seal failure. Compartmentalization, monitoring, and redundant systems can reduce the effects of a loss of pressure.</p>
+                <h4>11.2. Fire in a confined space</h4>
+                <p style="text-align: justify;">Fire or smoke can rapidly compromise the atmosphere in a habitat. Detection, suppression, suitable materials, and emergency procedures are important design considerations.</p>
+                <h4>11.3. Power failures</h4>
+                <p style="text-align: justify;">Essential systems depend on reliable energy. Backup generation, storage, and load prioritization address failures and periods of reduced solar power.</p>
+                <h4>11.4. Microbial contamination</h4>
+                <p style="text-align: justify;">Habitats need hygiene and microbial monitoring. Planetary protection seeks to limit contamination of Mars and protect the integrity of returned samples.</p>
+                <h4>11.5. Navigation</h4>
+                <p style="text-align: justify;">Dust, changing terrain, equipment failure, and communications issues can complicate travel. Independent navigation references, route checks, and reserves support a return to shelter.</p>
+                <h3>12. Risk and technology assessment</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/hazards.jpg" alt="Example of landing hazard mapping; human risks require additional assessments."><figcaption>Example of landing hazard mapping; human risks require additional assessments.<br>Credits: NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24167" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <table border="1">
+                <thead><tr><th>Hazard</th><th>Consequence</th></tr></thead>
+                <tbody>
+                <tr><td>Low pressure, carbon dioxide, and extreme cold</td><td>Threats to human physiology and equipment</td></tr>
+                <tr><td>Dust storms, dust devils, and electrical discharge</td><td>Reduced visibility and power, particle transport, and possible interference</td></tr>
+                <tr><td>Cosmic rays and solar particle events</td><td>Chronic exposure and periods of increased dose</td></tr>
+                <tr><td>Marsquakes, rockfall, and impacts</td><td>Vibration, unstable terrain, and potential physical damage</td></tr>
+                <tr><td>Perchlorates and microbial contamination</td><td>Chemical and biological contamination</td></tr>
+                <tr><td>Reduced gravity</td><td>Potential effects on bones, muscles, and circulation</td></tr>
+                <tr><td>Life support failures and signal delays</td><td>Reduced habitability and limited coordination with Earth</td></tr>
+                </tbody>
+                </table>
+                <h4>12.1. Technologies under study</h4>
+                <p style="text-align: justify;">ISRU, MOXIE, and ECLSS address supply and habitability. SHARAD and RIMFAX study the subsurface. RAD and MEDA characterize hazards. CHAPEA studies crew performance. Additive manufacturing and nuclear power are among the approaches being explored for construction and energy.</p>
+                <h3>13. Conclusion</h3>
+<figure style="max-width:680px"><img loading="lazy" decoding="async" src="./assets/survival-guide/jezero.jpg" alt="Jezero as the geographic context for exploration and science planning."><figcaption>Jezero as the geographic context for exploration and science planning.<br>Credits: ESA/DLR/FU-Berlin/NASA/JPL-Caltech. <a href="https://photojournal.jpl.nasa.gov/catalog/PIA24350" target="_blank" rel="noopener noreferrer">Reference: official NASA page</a>.</figcaption></figure>
+                <p style="text-align: justify;">Mars’s low pressure, carbon dioxide atmosphere, extreme temperatures, radiation, reduced gravity, and dust make sustained habitation dependent on specialized systems. Geological and atmospheric processes continue to reshape the environment. Robotic missions and Earth-based research help characterize these hazards and test solutions. A future habitat would need scientific, medical, industrial, and environmental systems to work together.</p>
+                <h4>16. Scientific qualifications</h4>
+                <table border="1">
+                <thead><tr><th>Topic</th><th>Qualification</th></tr></thead>
+                <tbody>
+                <tr><td>Temperature and pressure</td><td>Extremes and averages vary by site, instrument, and season.</td></tr>
+                <tr><td>Global storms</td><td>The interval between large events is irregular.</td></tr>
+                <tr><td>Radiation</td><td>0.64 mSv per day is a measured reference, not a universal rate.</td></tr>
+                <tr><td>Electrical activity</td><td>Small discharges have been detected; large lightning remains unconfirmed.</td></tr>
+                <tr><td>Oxygen production</td><td>MOXIE produced around 122 g in total in a demonstration.</td></tr>
+                <tr><td>Gravity</td><td>Long-term human effects at 38% of Earth’s gravity are uncertain.</td></tr>
+                <tr><td>Water</td><td>Ice detected underground may be difficult to access or process.</td></tr>
+                </tbody>
+                </table>
+>>>>>>> 36bb13fe0ad16db67b90d71b40209dcb5b3be034
                 </div>
             </section>
         </main>
@@ -3251,6 +4090,7 @@
         <div class="contenedor">
             <main>
                 <section class="panel" id="guide-credits">
+<<<<<<< HEAD
                     <style>
                         html[lang|="es"] #guide-credits .credits-en,
                         html:not([lang|="es"]) #guide-credits .credits-es {
@@ -3288,11 +4128,16 @@
                     </style>
                     <!-- AI assistance disclosure: ChatGPT / Codex (OpenAI), Copilot, and Claude (Anthropic).
 The team estimates approximately 40% AI assistance across the project; this is a self-reported estimate, not a measured code attribution.
+=======
+<style>html[lang|="es"] #guide-credits .credits-en,html:not([lang|="es"]) #guide-credits .credits-es{display:none}#guide-credits details{margin:16px 0;padding:16px;border:1px solid #485466;border-radius:12px}#guide-credits summary{cursor:pointer;font-weight:bold}#guide-credits li{margin:14px 0;overflow-wrap:anywhere}#guide-credits a{overflow-wrap:anywhere}#guide-credits dt{font-weight:bold}#guide-credits dd{margin:0 0 12px}</style>
+<!-- AI assistance disclosure: ChatGPT / Codex (OpenAI) and Claude (Anthropic) assisted with code.
+>>>>>>> 36bb13fe0ad16db67b90d71b40209dcb5b3be034
 AI supported base-code development, debugging, content organization and bilingual presentation.
 Observed Codex contributions include HTML/CSS/JavaScript integration, model-viewer integration, reference formatting and packaging.
-Copilot and Claude are credited as tools reported by the team; no unverified per-tool task allocation is claimed.
+Copilot is credited for general project assistance.
 The project is not represented as entirely AI-generated. Scientific references remain separate from AI tool credits.
 -->
+<<<<<<< HEAD
                     <h2><span class="credits-es" lang="es">Referencias, créditos y colaboración</span><span
                             class="credits-en" lang="en">References, credits and collaboration</span></h2>
                     <details>
@@ -3638,11 +4483,21 @@ The project is not represented as entirely AI-generated. Scientific references r
                         </dl>
                     </details>
                 </section>
+=======
+<h2><span class="credits-es" lang="es">Referencias, créditos y colaboración</span><span class="credits-en" lang="en">References, credits and collaboration</span></h2>
+<details><summary><span class="credits-es" lang="es">Referencias institucionales, científicas y complementarias</span><span class="credits-en" lang="en">Institutional, scientific and supplementary references</span></summary><p><span class="credits-es" lang="es">Fuentes proporcionadas por el equipo. Se incluyen fuentes primarias y materiales de divulgación; los créditos de cada imagen también aparecen junto a ella.</span><span class="credits-en" lang="en">Sources supplied by the team. The list includes primary sources and science communication materials; image credits also appear alongside each image.</span></p><ol><li>National Aeronautics and Space Administration. (s. f.). Mars: Facts. NASA Science.<a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/mars/facts/</a></li><li>National Space Science Data Center. (s. f.). Mars fact sheet. NASA Goddard Space Flight Center.<a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html" target="_blank" rel="noopener noreferrer">https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html</a></li><li>National Aeronautics and Space Administration. (s. f.). The fact and fiction of Martian dust storms. NASA.<a href="https://www.nasa.gov/solar-system/the-fact-and-fiction-of-martian-dust-storms/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/solar-system/the-fact-and-fiction-of-martian-dust-storms/</a></li><li>National Aeronautics and Space Administration. (s. f.). Mars: Humans to Mars. NASA.<a href="https://www.nasa.gov/humans-in-space/humans-to-mars/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/humans-in-space/humans-to-mars/</a></li><li>National Aeronautics and Space Administration. (s. f.). Human spaceflight hazards. NASA.<a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/hrp/hazards/</a></li><li>National Aeronautics and Space Administration. (s. f.). Hazard: Space radiation. NASA.<a href="https://www.nasa.gov/hrp/hazard-space-radiation/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/hrp/hazard-space-radiation/</a></li><li>National Aeronautics and Space Administration. (2013, 9 de diciembre). Radiation measurements on Mars. NASA Science.<a href="https://science.nasa.gov/resource/radiation-measurements-on-mars/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/resource/radiation-measurements-on-mars/</a></li><li>National Aeronautics and Space Administration. (s. f.). The human body in space. NASA.<a href="https://www.nasa.gov/humans-in-space/the-human-body-in-space/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/humans-in-space/the-human-body-in-space/</a></li><li>National Aeronautics and Space Administration. (s. f.). Mars Perseverance rover. NASA Science.<a href="https://science.nasa.gov/mission/mars-2020-perseverance/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/mission/mars-2020-perseverance/</a></li><li>National Aeronautics and Space Administration. (s. f.). Perseverance science instruments. NASA Science.<a href="https://science.nasa.gov/mission/mars-2020-perseverance/science-instruments/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/mission/mars-2020-perseverance/science-instruments/</a></li><li>National Aeronautics and Space Administration. (s. f.). Mars oxygen in-situ resource utilization experiment (MOXIE). NASA.<a href="https://www.nasa.gov/space-technology-mission-directorate/tdm/mars-oxygen-in-situ-resource-utilization-experiment-moxie/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/space-technology-mission-directorate/tdm/mars-oxygen-in-situ-resource-utilization-experiment-moxie/</a></li><li>National Aeronautics and Space Administration. (2023, 6 de septiembre). NASA&#x27;s oxygen-generating experiment MOXIE completes Mars mission. NASA.<a href="https://www.nasa.gov/solar-system/nasas-oxygen-generating-experiment-moxie-completes-mars-mission/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/solar-system/nasas-oxygen-generating-experiment-moxie-completes-mars-mission/</a></li><li>National Aeronautics and Space Administration. (s. f.). MRO science instruments. NASA Science.<a href="https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/mission/mars-reconnaissance-orbiter/science-instruments/</a></li><li>National Aeronautics and Space Administration. (2019). NASA&#x27;s treasure map for water ice on Mars. NASA.<a href="https://www.nasa.gov/solar-system/nasas-treasure-map-for-water-ice-on-mars/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/solar-system/nasas-treasure-map-for-water-ice-on-mars/</a></li><li>National Aeronautics and Space Administration. (2023, 20 de junio). NASA achieves water recovery milestone on International Space Station. NASA.<a href="https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/</a></li><li>National Aeronautics and Space Administration. (s. f.). Environmental Control and Life Support System (ECLSS). NASA.<a href="https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/</a></li><li>National Aeronautics and Space Administration. (s. f.). About CHAPEA. NASA.<a href="https://www.nasa.gov/humans-in-space/chapea/about-chapea/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/humans-in-space/chapea/about-chapea/</a></li><li>National Aeronautics and Space Administration. (2026, 9 de noviembre). CHAPEA Mission 2 crew reflects after 378 days on simulated Mars. NASA.<a href="https://www.nasa.gov/centers-and-facilities/johnson/chapea-mission-2-crew-reflects-after-378-days-on-simulated-mars/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/centers-and-facilities/johnson/chapea-mission-2-crew-reflects-after-378-days-on-simulated-mars/</a></li><li>Chide, B., Lorenz, R. D., Montmessin, F., Maurice, S., Parot, Y., Hueso, R., Martínez, G., Vicente-Retortillo, A., Jacob, X., Lemmon, M., Dubois, B., Meslin, P.-Y., Newman, C., Bertrand, T., Deprez, G., Toledo, D., Sánchez-Lavega, A., Cousin, A., &amp; Wiens, R. C. (2025). Detection of triboelectric discharges during dust events on Mars. Nature, 647, 865–869.<a href="https://doi.org/10.1038/s41586-025-09736-y" target="_blank" rel="noopener noreferrer">https://doi.org/10.1038/s41586-025-09736-y</a></li><li>Agency for Toxic Substances and Disease Registry. (2015). Perchlorates: ToxFAQs. Centers for Disease Control and Prevention.<a href="https://wwwn.cdc.gov/TSP/ToxFAQs/ToxFAQsDetails.aspx?faqid=893&amp;toxid=181" target="_blank" rel="noopener noreferrer">https://wwwn.cdc.gov/TSP/ToxFAQs/ToxFAQsDetails.aspx?faqid=893&amp;toxid=181</a></li><li>NASA Goddard Space Flight Center. (2024). Mars Fact Sheet. National Aeronautics and Space Administration.<a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html" target="_blank" rel="noopener noreferrer">https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html</a></li><li>NASA Science. (s.f.). Mars: Facts &amp; Exploration. National Aeronautics and Space Administration.<a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/mars/facts/</a></li><li>NASA Solar System Exploration. (s.f.). Mars Trek: Interactive Mars Mapping Portal. National Aeronautics and Space Administration.<a href="https://trek.nasa.gov/mars/" target="_blank" rel="noopener noreferrer">https://trek.nasa.gov/mars/</a></li><li>Farley, K. A., Williford, K. H., Stack, K. M., Bhartia, R., Chen, A., de la Torre, M., Hand, K., Goreva, Y., Herd, C. D. K., Hueso, R., Liu, Y., Maki, J. N., Martinez, G., Moeller, R. C., Nelessen, A., Newman, C. E., Nunes, D., Ponce, A., Spanovich, N., ... Wiens, R. C. (2020). Mars 2020 Mission Overview. Space Science Reviews, 216(8), Artículo 142.<a href="https://doi.org/10.1007/s11214-020-00762-y" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/s11214-020-00762-y</a></li><li>Hecht, M., Hoffman, J., Rapp, D., McClean, J., SooHoo, J., Schaefer, R., Aboobaker, A., Mellstrom, J., Hartvigsen, J., Meyen, F., Hinterman, E., Voecks, G., Liu, A., Nasr, M., Lewis, J., Johnson, J., Guernsey, C., Swoboda, J., Eckert, C., ... Horn, M. (2021). Mars Oxygen ISRU Experiment (MOXIE). Space Science Reviews, 217(1), Artículo 9.<a href="https://doi.org/10.1007/s11214-020-00782-8" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/s11214-020-00782-8</a></li><li>NASA Jet Propulsion Laboratory. (s.f.). Mars 2020 Perseverance Rover. National Aeronautics and Space Administration.<a href="https://mars.nasa.gov/mars2020/" target="_blank" rel="noopener noreferrer">https://mars.nasa.gov/mars2020/</a></li><li>Hassler, D. M., Zeitlin, C., Wimmer-Schweingruber, R. F., Ehresmann, B., Rafkin, S., Eigenbrode, J. L., Brinza, D. E., Weigle, G., Böttcher, S., Böhm, E., Burmeister, S., Guo, J., Köhler, J., Martin, C., Reitz, G., Cucinotta, F. A., Kim, M.-H., Grinspoon, D., Bullock, M. A., ... MSL Science Team. (2014). Mars&#x27; surface radiation environment measured with the Mars Science Laboratory&#x27;s Curiosity rover. Science, 343(6169), Artículo 1244797.<a href="https://doi.org/10.1126/science.1244797" target="_blank" rel="noopener noreferrer">https://doi.org/10.1126/science.1244797</a></li><li>NASA Human Research Program. (s.f.). The Human Body in Space: 5 Hazards of Human Spaceflight. National Aeronautics and Space Administration.<a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/hrp/hazards/</a></li><li>NASA Johnson Space Center. (s.f.). NASA SUITS: Spacesuit User Interface Technologies for Students. National Aeronautics and Space Administration.<a href="https://www.nasa.gov/learning-resources/spacesuit-user-interface-technologies-for-students/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/learning-resources/spacesuit-user-interface-technologies-for-students/</a></li><li>NASA Space Communications and Navigation. (s.f.). Delay/Disruption Tolerant Networking (DTN). National Aeronautics and Space Administration.<a href="https://www.nasa.gov/directorates/somd/space-communications-navigation-program/delay-disruption-tolerant-networking/" target="_blank" rel="noopener noreferrer">https://www.nasa.gov/directorates/somd/space-communications-navigation-program/delay-disruption-tolerant-networking/</a></li><li>Ross, A., Rhodes, R., &amp; Graziosi, D. (2018). NASA&#x27;s Advanced Extra-Vehicular Activity Space Suit Requirements Document (Documento técnico NASA/TP-2018-219856). National Aeronautics and Space Administration.<a href="https://ntrs.nasa.gov/" target="_blank" rel="noopener noreferrer">https://ntrs.nasa.gov/</a></li><li>NASA. (s.f.). NASA Image and Video Library. National Aeronautics and Space Administration.<a href="https://images.nasa.gov/" target="_blank" rel="noopener noreferrer">https://images.nasa.gov/</a></li><li>NASA/JPL-Caltech. (2018, 25 de enero). InSight on the surface of Mars [Representación artística]. NASA Science. <a href="https://science.nasa.gov/photojournal/insight-on-the-surface-of-mars/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/photojournal/insight-on-the-surface-of-mars/</a></li><li>NASA/JPL/Arizona State University. (2002, 29 de mayo). Mars surface layers in infrared [Imagen infrarroja de Marte]. NASA Science. <a href="https://science.nasa.gov/photojournal/mars-surface-layers-in-infrared/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/photojournal/mars-surface-layers-in-infrared/</a></li><li>NASA/JPL/GSFC. (2000, 6 de octubre). MOLA global map of surface gradients on Mars [Mapa topográfico de Marte]. NASA Science. <a href="https://science.nasa.gov/photojournal/mola-global-map-of-surface-gradients-on-mars/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/photojournal/mola-global-map-of-surface-gradients-on-mars/</a></li><li>NASA/JPL-Caltech/University of Arizona. (2021, 29 de noviembre). The wrinkled surface of Mars [Imagen de la superficie de Marte]. NASA Science. <a href="https://science.nasa.gov/photojournal/the-wrinkled-surface-of-mars/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/photojournal/the-wrinkled-surface-of-mars/</a></li><li><a href="https://science.nasa.gov/resource/perseverance-exploring-the-front-of-the-delta/" target="_blank" rel="noopener noreferrer">https://science.nasa.gov/resource/perseverance-exploring-the-front-of-the-delta/</a></li><li><a href="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/PIA24483-MarsPerseveranceRover-OctaviaEButler-LandingSite-20210305.jpg/1280px-PIA24483-MarsPerseveranceRover-OctaviaEButler-LandingSite-20210305.jpg" target="_blank" rel="noopener noreferrer">https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/PIA24483-MarsPerseveranceRover-OctaviaEButler-LandingSite-20210305.jpg/1280px-PIA24483-MarsPerseveranceRover-OctaviaEButler-LandingSite-20210305.jpg?utm_source=en.wikipedia.org&amp;utm_campaign=imageinfo&amp;utm_content=thumbnail</a></li><li><a href="https://www.lavanguardia.com/ciencia/20251126/11301975/detectada-primera-vez-actividad-electrica-atmosfera-marte.html" target="_blank" rel="noopener noreferrer">https://www.lavanguardia.com/ciencia/20251126/11301975/detectada-primera-vez-actividad-electrica-atmosfera-marte.html</a></li><li><a href="https://www.seis-insight.eu/en/public-2/martian-science/internal-models-of-mars" target="_blank" rel="noopener noreferrer">seis-insight.eu</a></li><li><a href="https://ca.style.yahoo.com/why-mars-red-scientists-were-115500130.html" target="_blank" rel="noopener noreferrer">ca.style.yahoo.com</a></li><li><a href="https://www.seis-insight.eu/en/public-2/martian-science/internal-models-of-mars" target="_blank" rel="noopener noreferrer">https://www.seis-insight.eu/en/public-2/martian-science/internal-models-of-mars?utm_source=chatgpt.com</a></li><li><a href="https://ca.style.yahoo.com/why-mars-red-scientists-were-115500130.html" target="_blank" rel="noopener noreferrer">https://ca.style.yahoo.com/why-mars-red-scientists-were-115500130.html?utm_source=chatgpt.com</a></li><li><a href="https://www.nationalgeographicla.com/espacio/2025/09/realmente-hubo-vida-en-marte-el-hallazgo-cientifico-que-ofrece-nuevos-indicios-sobre-el-pasado-del-planeta-rojo" target="_blank" rel="noopener noreferrer">https://www.nationalgeographicla.com/espacio/2025/09/realmente-hubo-vida-en-marte-el-hallazgo-cientifico-que-ofrece-nuevos-indicios-sobre-el-pasado-del-planeta-rojo</a></li><li><a href="https://www.universetoday.com/articles/marss-funky-moon-deimos-was-shaped-by-an-impact" target="_blank" rel="noopener noreferrer">https://www.universetoday.com/articles/marss-funky-moon-deimos-was-shaped-by-an-impact</a></li><li><a href="https://danielmarin.naukas.com/2019/12/13/las-fases-de-fobos/" target="_blank" rel="noopener noreferrer">https://danielmarin.naukas.com/2019/12/13/las-fases-de-fobos/</a></li><li><a href="https://okdiario.com/img/2026/02/23/marte-crater.jpg" target="_blank" rel="noopener noreferrer">https://okdiario.com/img/2026/02/23/marte-crater.jpg</a></li><li><a href="https://www.space.com/mars-new-year-37-nasa-celebrates" target="_blank" rel="noopener noreferrer">https://www.space.com/mars-new-year-37-nasa-celebrates?utm_source=chatgpt.com</a></li></ol><h3><span class="credits-es" lang="es">Colaborador: Irving Adair Romero Espinosa</span><span class="credits-en" lang="en">Collaborator: Irving Adair Romero Espinosa</span></h3><dl data-no-translate><dt><span class="credits-es" lang="es">Nombre</span><span class="credits-en" lang="en">Name</span></dt><dd>Irving Adair Romero Espinosa</dd><dt><span class="credits-es" lang="es">Participación</span><span class="credits-en" lang="en">Role</span></dt><dd><span class="credits-es" lang="es">Colaborador</span><span class="credits-en" lang="en">Collaborator</span></dd><dt><span class="credits-es" lang="es">Teléfono</span><span class="credits-en" lang="en">Phone</span></dt><dd><a href="tel:7713517303">771 351 7303</a></dd><dt><span class="credits-es" lang="es">Fecha</span><span class="credits-en" lang="en">Date</span></dt><dd><time datetime="2026-11-14">14/11/2026</time></dd></dl></details>
+<details><summary><span class="credits-es" lang="es">Enlaces multimedia adicionales del documento</span><span class="credits-en" lang="en">Additional multimedia links from the document</span></summary><p><span class="credits-es" lang="es">Estos enlaces proceden del documento recibido y pueden ser temporales. No sustituyen la referencia a la publicación original.</span><span class="credits-en" lang="en">These links come from the supplied document and may be temporary. They do not replace a citation to the original publication.</span></p><ul><li><a href="https://images.openai.com/static-rsc-4/nwQfP4UK_SU3Q7utT1Cmv-3rduydLLKmdlasntuFihFQsxiOk2fm80XlRwsVQPY0vhPjyJRT2dVZGkOqRAfXXD7ecKUEXBq__wAbFfP1yAm4LEjYlw1GLVNHTuG1VDPDSnjjiCPdM7iIivjT84ZC_oZ4Gr2bd0fobfvsVnDi3Fs?purpose=inline" target="_blank" rel="noopener noreferrer">Does Mars have a moon? | Live Science</a></li><li><a href="https://images.openai.com/static-rsc-4/CvNrSCsUgyWtnuZrkrD7GXeouVvMZr5amon2bw8qGZcbTIbGnuLcasSKVY-OX9WK3apzvnQmBrcQPueG2BHedo5KZtlkbiJsnRCrDckvqvN6qlM-N2Od72Ac5VzYVRyjida1eeYmcYgixTflk284fasgG3O_xcyUcwRrwLm4mkY?purpose=inline" target="_blank" rel="noopener noreferrer">Perseverance&#x27;s 360-Degree View From &#x27;Airey Hill&#x27; – NASA Mars Exploration</a></li><li><a href="https://images.openai.com/static-rsc-4/jD6W_lX_IuUoCDs49g-YT6gBMqGkPB4uUaISq8OhtNjOaLfGohk9S9WbFHZzgulIFmNrvS_HytCEEiXugDiwkLdoab7q-UxOkrOjRoNydjs1Cg_IKm5wpfQOsa2pTjoka7jmGTOcakgacB6ElBl9_43VQeB5hIKhU3KLA7ZdnEw?purpose=inline" target="_blank" rel="noopener noreferrer">The 2001 Great Dust Storms - Hellas/Syrtis Major - NASA Science</a></li><li><a href="https://images.openai.com/static-rsc-4/fd6tiRVqW24jLo9Fk4tYxz2R6Jdvd3T7F7dRPdSnoktARH3lCeTyiBfTMI2Raa5kENgmzUc4WMcEAcgyMN37dvJGGRZQLPtFY08zBirGUmmNEAUZwJljwZ1vRclYzUnc9e6CvahvsMPMsPgHNG3LXiB1CZMS3T_a45Sg3cfiaU4?purpose=inline" target="_blank" rel="noopener noreferrer">La NASA eligió el sistema autosuficiente para producir comida en Marte: así funciona | TN</a></li><li><a href="https://images.openai.com/static-rsc-4/rtGxq0mkweBZkHQN-5yvxr7UiJ7OhKpWcSenU57oB79ricNfWFK9cqXSNvqu02_zZhsORyCzH2LWwHx_AeTNJ7xg0DYVs5fse2ubGkbozAOOJ7ktZ4P2-br5ad-gMTHe9amxQsdNfvuPnCXNMx2BIw9Q4DPVfnFDrkJL2NNUQ_A?purpose=inline" target="_blank" rel="noopener noreferrer">Swirling storm | The Planetary Society</a></li><li><a href="https://images.openai.com/static-rsc-4/MGJn5zxskmmP0z_UilRDdim9WEDcYCsHbSiN2fsZeuKRqL5cUvKQTOkxbTdxRlAqRIR0G81Q_Kwh--5JTMQ49WUBqW0pE0MiwtEtUz1xHb9y3jCSIth9TBhr0u4WwM6Bmq7a_G8L-Ss1WZW9B-ZUs9hmYraERlaWmtsUOv1oseE?purpose=inline" target="_blank" rel="noopener noreferrer">Could people breathe the air on Mars? | Space</a></li><li><a href="https://images.openai.com/static-rsc-4/tL4mbnTgSzgZyT-E50nZly3Iveu0PDZPeIm8wYIqKTYtpJurfxNxb7xhdyIYiYPeDBapEPBu0irwPTOcEFeSuN8HPaoqEWuFdwFgjOYqMSsB2x6jhK4kzIkhvZ4w8Huwki28LtE85c56ZoE9RKMnLYGyhWbbx2jRoPaIvFk1q48?purpose=inline" target="_blank" rel="noopener noreferrer">Literally Just 23 Incredible Pictures Of What Mars Looks Like</a></li><li><a href="https://images.openai.com/static-rsc-4/rwUvWIW-PaPSQCFBeE15Kj-sPJ3p7GsBgliTV-SDzhzl60Ums-LjFlsYvx2q2_2WGU5nT_53QkDDAvmIACHCsb9PcC7sp2AnMkIE-bM-6ojnxHlqCBKDm_SwAflqNNd3uTcduLJu6KYpVLC8Aws_wUJbugdRddiF8JJkkVQYKJQ?purpose=inline" target="_blank" rel="noopener noreferrer">Internal Models of Mars - SEIS / Mars InSight</a></li><li><a href="https://images.openai.com/static-rsc-4/73w7RKgyR-LCN4D-I2aly_TAKAaO1k_yOZVkZvTsmB-DvjKYtCZvpYbf5PEqH_f8HqdkQWq3CwPZMyh64SkVQuiBR9oR5BOyAqSA42oeS_dqEIDLl7RxNUdQeORJxUbePEEcIDsZD2SGzdWBzDk1_SYt5SXKqrQstqRkqm0AgI0?purpose=inline" target="_blank" rel="noopener noreferrer">Why is Mars red? Scientists say they were wrong – and now finally have the answer - Yahoo Style Canada</a></li><li><a href="https://images.openai.com/static-rsc-4/nDpnTcKih_3cHLZ6h1iebt0-4SlO8s4S1dl7AHiyb32ltdL-PiXvMzvd1wJnJkYueHNVznSIaWGv4xo6IUTzstPP0ugqh7Y657m8FwZyNEgWCsbe8Sp2_6t6yQVK5rydQG90Nq-4esTMKDFd9xZAtYQRahGWjKxb3uxPrNyjHDM?purpose=inline" target="_blank" rel="noopener noreferrer">Global Color Views of Mars - NASA Science</a></li><li><a href="https://images.openai.com/static-rsc-4/z66yXNYlQm24a3oAn1iS3nz-WLrARtlG8NIH5wvaG_O96pwXyaT8C9hfsCQtFA2k0SiVe9-L2FdYBOldkhOE7hTVxOeMwfsn3kKVbhRlMGdBOA6qd6GWMSc_rc4QY5YPDTedxB3IbyUucvEG4bQqQ6l3U3Ba_Anap72T1av4egI?purpose=inline" target="_blank" rel="noopener noreferrer">Esta es la mejor foto que existe de la superficie de Marte - Digital Trends Español</a></li><li><a href="https://images.openai.com/static-rsc-4/EhNcofiQNdhzJvqAMkkCWiWxIuAntFTtXn_al1KpXRXspFYgMQmJapRfJwDiCBaTWx46lFDA4oAePp2PYEhDKFzB3UTPsgRFy1qHSHOlS3ITB60TZOXAhtk2eNFiQnDbRnB7zPnu1PGeTNj23V1JPLGY2T-qzuBf_KrQfc70QOU?purpose=inline" target="_blank" rel="noopener noreferrer">Curiosity na Marsu po třech letech dosáhl hřebene hory | fZone.cz</a></li></ul></details>
+<details><summary><span class="credits-es" lang="es">Uso de inteligencia artificial y créditos de desarrollo</span><span class="credits-en" lang="en">AI use and development credits</span></summary>
+<p><span class="credits-es" lang="es">Se reconoce el uso de <strong>ChatGPT / Codex (OpenAI) y Claude (Anthropic)</strong> como herramientas de apoyo al desarrollo del código base y a la elaboración del proyecto. La asistencia incluyó programación, revisión y depuración, organización de contenidos y presentación bilingüe. La dirección, las decisiones y la revisión final corresponden al equipo.</span><span class="credits-en" lang="en">The team acknowledges <strong>ChatGPT / Codex (OpenAI) and Claude (Anthropic)</strong> as tools supporting base-code development and project preparation. Assistance included programming, review and debugging, content organization and bilingual presentation. Direction, decisions and final review remain the team’s responsibility.</span></p>
+<p><span class="credits-es" lang="es">En esta página, Codex apoyó la integración de HTML, CSS y JavaScript, el visor 3D del casco KM-1306, la presentación de referencias y el empaquetado de archivos. Copilot se acredita por su apoyo general al proyecto. Las herramientas de IA no sustituyen las fuentes científicas citadas.</span><span class="credits-en" lang="en">On this page, Codex assisted with HTML, CSS and JavaScript integration, the KM-1306 helmet viewer, reference presentation and file packaging. Copilot is credited for general project assistance. AI tools do not replace the cited scientific sources.</span></p></details>
+
+</section>
+>>>>>>> 36bb13fe0ad16db67b90d71b40209dcb5b3be034
             </main>
         </div>
     </div>
 
-    <div class="robot-container">
+    <div class="robot-container" data-no-translate>
 
         <div class="robot-dialog" id="robotDialog">
 
@@ -3657,6 +4512,7 @@ The project is not represented as entirely AI-generated. Scientific references r
 
         <button class="robot-button" id="robotButton" type="button" aria-label="Talk to the robot">
 
+<<<<<<< HEAD
             <svg class="robot-image" viewBox="45 0 1195 1536" width="1195" height="1536" aria-hidden="true"
                 focusable="false">
                 <defs>
@@ -3675,9 +4531,13 @@ The project is not represented as entirely AI-generated. Scientific references r
                 </g>
                 <use href="#guide-robot-art" clip-path="url(#guide-robot-body-clip)" />
             </svg>
+=======
+            <img class="robot-image wave" id="robotArt" src="./assets/robot2.png" alt="" draggable="false">
+>>>>>>> 36bb13fe0ad16db67b90d71b40209dcb5b3be034
         </button>
 
     </div>
+    <script src="./assets/robot-facts.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -3740,12 +4600,12 @@ The project is not represented as entirely AI-generated. Scientific references r
             ];
 
             const robotButton = document.getElementById("robotButton");
-            const robotArm = document.getElementById("robotArm");
+            const robotArt = document.getElementById("robotArt");
             const robotDialog = document.getElementById("robotDialog");
             const robotMessage = document.getElementById("robotMessage");
             const robotClose = document.getElementById("robotClose");
 
-            if (!robotButton || !robotArm ||
+            if (!robotButton || !robotArt ||
                 !robotDialog || !robotMessage || !robotClose) {
 
                 console.error("Error: No se encontraron todos los elementos del robot.");
@@ -3770,6 +4630,23 @@ The project is not represented as entirely AI-generated. Scientific references r
             }
 
             function renderRobotMessage() {
+                const locale = window.marsnavLocale?.() ?? document.documentElement.lang;
+                const translation = window.marsRobotFacts?.[locale];
+                if (translation) {
+                    robotButton.setAttribute("aria-label", translation.talk);
+                    robotClose.setAttribute("aria-label", translation.close);
+                    if (lastMessageIndex < 0) {
+                        robotMessage.textContent = translation.welcome;
+                        return;
+                    }
+                    const reference = robotMessages[lastMessageIndex].split("Reference:")[1]?.trim();
+                    const fact = translation.facts[lastMessageIndex];
+                    robotMessage.textContent = reference
+                        ? [translation.heading, fact, translation.reference + ": " + reference].join("\n\n")
+                        : fact;
+                    return;
+                }
+
                 const spanish = (window.marsnavLang?.() ?? document.documentElement.lang).startsWith("es");
                 robotButton.setAttribute("aria-label", spanish ? "Hablar con el robot" : "Talk to the robot");
                 robotClose.setAttribute("aria-label", spanish ? "Cerrar diálogo" : "Close dialog");
@@ -3793,9 +4670,9 @@ The project is not represented as entirely AI-generated. Scientific references r
                 getRandomMessage();
                 renderRobotMessage();
                 robotDialog.classList.add("show");
-                robotArm.classList.remove("wave");
-                void robotArm.getBoundingClientRect();
-                robotArm.classList.add("wave");
+                robotArt.classList.remove("wave");
+                void robotArt.getBoundingClientRect();
+                robotArt.classList.add("wave");
 
             });
 

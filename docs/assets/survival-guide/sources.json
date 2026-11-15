@@ -19,21 +19,6 @@
     "image": "https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia24/pia24177/PIA24177.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
     "file": "moxie.jpg"
   },
-  "habitat": {
-    "page": "https://www.nasa.gov/humans-in-space/chapea/habitat/",
-    "image": "https://www.nasa.gov/wp-content/uploads/2021/01/icon-nasa-chapea-mars-dune-alpha-extrudinglavacrete-from-vulcan-printer-highres.jpg",
-    "file": "habitat.jpg"
-  },
-  "crew": {
-    "page": "https://www.nasa.gov/image-article/nasas-chapea-crew-returns-to-earth/",
-    "image": "https://www.nasa.gov/wp-content/uploads/2026/11/jsc2026e424293orig.jpg",
-    "file": "crew.jpg"
-  },
-  "suits": {
-    "page": "https://www.nasa.gov/get-involved/spacesuit-user-interface-technologies-for-students-suits/",
-    "image": "https://www.nasa.gov/wp-content/uploads/2023/03/nasasuits.jpg",
-    "file": "suits.jpg"
-  },
   "geology": {
     "page": "https://photojournal.jpl.nasa.gov/catalog/PIA24684",
     "file": "geology.jpg"
