@@ -169,18 +169,21 @@
       "file": "index.html",
       "label": "SURVIVAL GUIDE",
       "label_es": "GUÍA DE SUPERVIVENCIA",
-      "source": "Proyecto Nasa Hackathon (pagina)/Nasa, Marte(guia de supervivencia).html"
+      "source": "Proyecto Nasa Hackathon (pagina)/Nasa, Marte(guia de supervivencia).html",
+      "lang": "en"
     },
     {
       "file": "mars-survival.html",
       "label": "MARS SURVIVAL",
       "label_es": "MARS SURVIVAL",
-      "source": "guia de supervivencia.html"
+      "source": "guia de supervivencia.html",
+      "lang": "es"
     }
   ],
   "map": {
     "file": "map.html",
     "label": "MAP · MARS-NAV",
-    "label_es": "MAPA · MARS-NAV"
+    "label_es": "MAPA · MARS-NAV",
+    "lang": "en"
   }
 }

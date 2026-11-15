@@ -230,13 +230,24 @@ def build_3d(traverse, routes):
     return aspect, html
 
 
-def nav(current):
-    """One bar on every page: the survival guide is the home page, the map and MARS SURVIVAL are the other sections."""
+def nav(current, native):
+    """One bar on every page: sections plus the EN / ES button, whose choice is remembered across the three pages."""
     style = ("font:700 17px system-ui;color:#fff;text-decoration:none;min-height:64px;padding:0 1.2rem;display:inline-flex;"
-             "align-items:center;border-radius:.7rem;border:2px solid ")
-    links = "".join(f'<a href="{page["file"]}" style="{style}{"#ff9d5c;background:#9b4e29" if page["file"] == current else "#46556b;background:#232c3a"}">'
-                    f'{page["label"]}</a>' for page in [CFG["guides"][0], CFG["map"], *CFG["guides"][1:]])
-    return f'<nav aria-label="Sections" style="display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;background:#0e1117">{links}</nav>'
+             "align-items:center;border-radius:.7rem;cursor:pointer;border:2px solid ")
+    links = "".join(f'<a href="{page["file"]}" data-label-en="{page["label"]}" data-label-es="{page["label_es"]}" style="{style}'
+                    f'{"#ff9d5c;background:#9b4e29" if page["file"] == current else "#46556b;background:#232c3a"}">{page["label"]}</a>'
+                    for page in [CFG["guides"][0], CFG["map"], *CFG["guides"][1:]])
+    script = """<script>(() => {
+  const KEY = "marsnav.lang"; let memory = "%s";
+  window.marsnavLang = () => { try { return localStorage.getItem(KEY) || memory; } catch { return memory; } };
+  const button = document.getElementById("site-lang");
+  const paint = () => { const es = marsnavLang() === "es"; button.textContent = es ? "ENGLISH" : "ESPAÑOL";
+    document.querySelectorAll("nav[aria-label=Sections] a").forEach(a => { a.textContent = es ? a.dataset.labelEs : a.dataset.labelEn; }); };
+  button.onclick = () => { memory = marsnavLang() === "es" ? "en" : "es"; try { localStorage.setItem(KEY, memory); } catch {} paint(); dispatchEvent(new Event("marsnav-lang")); };
+  paint();
+})();</script>""" % native
+    return (f'<nav aria-label="Sections" style="display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;background:#0e1117">{links}'
+            f'<span style="flex:1"></span><button id="site-lang" type="button" style="{style}#39d0ff;background:#232c3a"></button></nav>{script}')
 
 
 def build():
@@ -275,15 +286,17 @@ def build():
     for scene in CFG["minerals"]:
         image = OUT / "assets" / f"crism-{scene['group']}.png"
         data["mineral_images"][scene["group"]] = "data:image/png;base64," + base64.b64encode(image.read_bytes()).decode("ascii")
-    parts = {"NAV": nav(CFG["map"]["file"]), "MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
+    parts = {"NAV": nav(CFG["map"]["file"], CFG["map"]["lang"]), "MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
     page = (ROOT / "template.html").read_text(encoding="utf-8")
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)
     OUT.mkdir(exist_ok=True)
     logbook = (ROOT / "logbook.html").read_text(encoding="utf-8")
+    translations = json.loads((DATA / "translations.json").read_text(encoding="utf-8"))  # original text -> other language
     for guide in CFG["guides"]:  # copy each survival guide next to the map with the shared mission log on top
         source = (ROOT / guide["source"]).read_text(encoding="utf-8")
-        top = nav(guide["file"]) + logbook.replace("{{MAP}}", CFG["map"]["file"])
+        words = json.dumps(translations.get(guide["file"], {}), ensure_ascii=False)
+        top = nav(guide["file"], guide["lang"]) + logbook.replace("{{MAP}}", CFG["map"]["file"]).replace("{{NATIVE}}", guide["lang"]).replace("{{WORDS}}", words)
         (OUT / guide["file"]).write_text(re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + top, source, count=1), encoding="utf-8")
     (OUT / CFG["map"]["file"]).write_text(page, encoding="utf-8")
     print(f"Built {OUT / CFG['map']['file']} ({len(page) // 1024} KB). Best route: {best['name']}")
