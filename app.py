@@ -27,17 +27,22 @@ ROOT = Path(__file__).resolve().parent
 VENV = ROOT / ".venv"
 VENV_PYTHON = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
 
-if sys.prefix == sys.base_prefix:  # not inside a virtual environment yet: create it and restart inside it
+if __name__ == "__main__" and sys.prefix == sys.base_prefix:
     if not VENV_PYTHON.exists():
         print("Creating the virtual environment in .venv (first run only)...")
         venv.create(VENV, with_pip=True)
-    if subprocess.call([str(VENV_PYTHON), "-c", "import folium, plotly"], stderr=subprocess.DEVNULL):
-        print("Installing Folium and Plotly into .venv...")
-        subprocess.check_call([str(VENV_PYTHON), "-m", "pip", "install", "-q", "-r", str(ROOT / "requirements.txt")])
     sys.exit(subprocess.call([str(VENV_PYTHON), str(ROOT / "app.py"), *sys.argv[1:]]))
 
-import folium
-import plotly.graph_objects as go
+try:
+    import folium
+    import plotly.graph_objects as go
+except ModuleNotFoundError as error:
+    if __name__ != "__main__" or error.name not in {"folium", "plotly"}:
+        raise
+    print("Installing the map dependencies in the active virtual environment...", flush=True)
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(ROOT / "requirements.txt")])
+    import folium
+    import plotly.graph_objects as go
 
 DATA, OUT = ROOT / "data", ROOT / "docs"
 CFG = json.loads((DATA / "config.json").read_text(encoding="utf-8"))
