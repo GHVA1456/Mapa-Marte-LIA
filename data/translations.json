@@ -413,5 +413,180 @@
   "Alcance:": "Scope:",
   "esta sección es una base de análisis conceptual. No es un procedimiento certificado de vuelo, médico o de rescate; cada solución debe convertirse en una lista de verificación específica y validada para el hardware real.": "this section is a basis for conceptual analysis. It is not a certified flight, medical or rescue procedure; each solution must become a specific checklist validated for the real hardware.",
   "Referencias técnicas:": "Technical references:"
- }
+ },
+ "mars-survival.html#phrases": [
+  [
+   "Prioridad: proteger la vida. Abortar exploración y dirigirse al refugio presurizado accesible si la ruta es viable.",
+   "Priority: protect life. Abort exploration and head for the reachable pressurised shelter if the route is viable."
+  ],
+  [
+   "Aislar la falla, evaluar redundancias y suspender actividades no esenciales.",
+   "Isolate the failure, assess redundancy and suspend non-essential activities."
+  ],
+  [
+   "Comunicaciones degradadas: operar con autonomía local y registrar eventos.",
+   "Degraded communications: operate with local autonomy and record events."
+  ],
+  [
+   "Evento de radiación: suspender EVA y aplicar el protocolo radiológico.",
+   "Radiation event: suspend EVA and apply the radiation protocol."
+  ],
+  [
+   "Continuar dentro de los límites definidos y registrar telemetría.",
+   "Continue within the defined limits and record telemetry."
+  ],
+  [
+   "Robot no disponible: cancelar tareas que dependan de su apoyo.",
+   "Robot unavailable: cancel tasks that depend on its support."
+  ],
+  [
+   "Sin fallas seleccionadas en este escenario demostrativo.",
+   "No failures selected in this demonstration scenario."
+  ],
+  [
+   "Simulación reiniciada. Selecciona un sol para comenzar.",
+   "Simulation reset. Select a sol to begin."
+  ],
+  [
+   "Sistema reiniciado. La simulación aún no ha iniciado.",
+   "System reset. The simulation has not started yet."
+  ],
+  [
+   "Primero registra al menos un sol en el simulador.",
+   "Record at least one sol in the simulator first."
+  ],
+  [
+   "Selección de fallas limpiada.",
+   "Failure selection cleared."
+  ],
+  [
+   "Aún no hay soles registrados.",
+   "No sols recorded yet."
+  ],
+  [
+   "Pérdida de capacidad de baterías",
+   "Battery capacity loss"
+  ],
+  [
+   "Fuga de presión del hábitat",
+   "Habitat pressure leak"
+  ],
+  [
+   "Falla de batería del rover",
+   "Rover battery failure"
+  ],
+  [
+   "Falla del robot explorador",
+   "Explorer robot failure"
+  ],
+  [
+   "Pérdida de comunicaciones",
+   "Loss of communications"
+  ],
+  [
+   "Evento de radiación solar",
+   "Solar radiation event"
+  ],
+  [
+   "Sin fallas seleccionadas",
+   "No failures selected"
+  ],
+  [
+   "Falla de filtros de CO₂",
+   "CO₂ filter failure"
+  ],
+  [
+   "Daño en rueda del rover",
+   "Rover wheel damage"
+  ],
+  [
+   "Baja generación solar",
+   "Low solar generation"
+  ],
+  [
+   "Falla de navegación",
+   "Navigation failure"
+  ],
+  [
+   "Falla del traje EVA",
+   "EVA suit failure"
+  ],
+  [
+   "Emergencia crítica",
+   "Critical emergency"
+  ],
+  [
+   "Tormenta de polvo",
+   "Dust storm"
+  ],
+  [
+   "Falla de oxígeno",
+   "Oxygen failure"
+  ],
+  [
+   "Falla térmica",
+   "Thermal failure"
+  ],
+  [
+   "Falla de agua",
+   "Water failure"
+  ],
+  [
+   "estimación visual",
+   "visual estimate"
+  ],
+  [
+   " · Soporte vital: ",
+   " · Life support: "
+  ],
+  [
+   " · Movilidad: ",
+   " · Mobility: "
+  ],
+  [
+   " · Energía: ",
+   " · Power: "
+  ],
+  [
+   "Modo: ",
+   "Mode: "
+  ],
+  [
+   "Fallas: ",
+   "Failures: "
+  ],
+  [
+   "ninguna",
+   "none"
+  ],
+  [
+   "Degradado",
+   "Degraded"
+  ],
+  [
+   "degradado",
+   "degraded"
+  ],
+  [
+   "Emergencia",
+   "Emergency"
+  ],
+  [
+   "emergencia",
+   "emergency"
+  ],
+  [
+   "En espera",
+   "Standing by"
+  ],
+  [
+   "a. m.",
+   "a.m."
+  ],
+  [
+   "p. m.",
+   "p.m."
+  ]
+ ],
+ "index.html#phrases": []
 }
