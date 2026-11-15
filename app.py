@@ -39,7 +39,7 @@ import plotly.graph_objects as go
 
 DATA, OUT = ROOT / "data", ROOT / "docs"
 CFG = json.loads((DATA / "config.json").read_text(encoding="utf-8"))
-DEM = CFG["dem"]
+DEM, HAZARD = CFG["dem"], CFG["hazard"]
 with (DATA / "jezero_ctx_dem.csv").open() as file:  # decimetres above the lowest cell, north row first
     GRID = [[(int(v) + DEM["offset_dm"]) / 10 for v in line.split(",")] for line in file]
 ROWS, COLS = len(GRID), len(GRID[0])
@@ -47,8 +47,6 @@ SOUTH, EAST = DEM["north"] - ROWS * DEM["cell_deg"], DEM["west"] + COLS * DEM["c
 KM_PER_DEG = math.pi * 3389.5 / 180  # Mars mean radius 3389.5 km
 KM_PER_DEG_LON = KM_PER_DEG * math.cos(math.radians((SOUTH + DEM["north"]) / 2))
 LEAFLET = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet"
-# Planning assumption (not a NASA limit): rover tilt at each waypoint as a slope proxy.
-SLOPES = [(5, "#3fb950", "gentle"), (10, "#e3b341", "moderate"), (90, "#f85149", "steep")]
 
 
 def table(name):
@@ -62,38 +60,85 @@ def table(name):
         return [{k: value(v) for k, v in row.items()} for row in csv.DictReader(file)]
 
 
-def slope(tilt):
-    """Return (colour, label) for a tilt in degrees."""
-    return next((colour, label) for limit, colour, label in SLOPES if tilt < limit)
-
-
 def xy_km(p):
     """Kilometres east and north of the elevation grid's south-west corner."""
     return (p["lon"] - DEM["west"]) * KM_PER_DEG_LON, (p["lat"] - SOUTH) * KM_PER_DEG
 
 
-def latlon(points):
-    return [(p["lat"], p["lon"]) for p in points]
+def metres(a, b):
+    return math.dist(xy_km(a), xy_km(b)) * 1000
 
 
-def add_distance(points):
-    """Add cumulative walking distance in metres to each waypoint."""
-    total = 0.0
-    for prev, p in zip([points[0]] + points, points):
-        (x0, y0), (x1, y1) = xy_km(prev), xy_km(p)
-        total += math.hypot(x1 - x0, y1 - y0) * 1000
-        p["dist_m"] = round(total)
-    return points
+def ground(p):
+    """Bilinear elevation (m) from the USGS grid under a point."""
+    c = min(max((p["lon"] - DEM["west"]) / DEM["cell_deg"] - 0.5, 0), COLS - 1.001)
+    r = min(max((DEM["north"] - p["lat"]) / DEM["cell_deg"] - 0.5, 0), ROWS - 1.001)
+    c0, r0 = int(c), int(r)
+    top = GRID[r0][c0] + (GRID[r0][c0 + 1] - GRID[r0][c0]) * (c - c0)
+    bottom = GRID[r0 + 1][c0] + (GRID[r0 + 1][c0 + 1] - GRID[r0 + 1][c0]) * (c - c0)
+    return top + (bottom - top) * (r - r0)
 
 
-def build_2d(route, eva, extra):
-    """Leaflet map in Mars equirectangular coordinates with NASA Trek layers."""
+def terrain_slope(p):
+    """Slope in degrees of the 80 m USGS grid around a point."""
+    d, shift = DEM["cell_deg"], lambda dlat, dlon: ground({"lat": p["lat"] + dlat, "lon": p["lon"] + dlon})
+    east = (shift(0, d) - shift(0, -d)) / (2000 * d * KM_PER_DEG_LON)
+    north = (shift(d, 0) - shift(-d, 0)) / (2000 * d * KM_PER_DEG)
+    return math.degrees(math.atan(math.hypot(east, north)))
+
+
+# Centre of every 40 m cell where the 20 m USGS model is steeper than the hazard limit.
+STEEP = [{"lat": DEM["north"] - (run["row"] + 0.5) * HAZARD["cell_deg"], "lon": DEM["west"] + (c + 0.5) * HAZARD["cell_deg"]}
+         for run in table("slope_hazard.csv") for c in range(int(run["col_start"]), int(run["col_end"]) + 1)]
+
+
+def straight(a, b, step=100):
+    """Points every ~100 m on the straight line from a to b: ground no rover has measured."""
+    n = max(round(metres(a, b) / step), 1)
+    return [{"lat": a["lat"] + (b["lat"] - a["lat"]) * i / n, "lon": a["lon"] + (b["lon"] - a["lon"]) * i / n} for i in range(1, n + 1)]
+
+
+def make_route(spec, rover):
+    """Build one candidate route and measure it against the rover record and the USGS model."""
+    a, b = rover["north"][0], rover["north"][-1]
+    driven = {"north": rover["north"], "south": rover["south"], "direct": [a]}[spec["id"]]
+    points = [dict(p, verified=True) for p in driven] + ([] if spec["id"] == "north" else straight(driven[-1], b))
+    for i, p in enumerate(points):
+        if not p.setdefault("verified", False):
+            p.update(sol=None, tilt_deg=None, elev_m=round(ground(p), 1))
+        p["dist_m"] = round(points[i - 1]["dist_m"] + metres(points[i - 1], p)) if i else 0
+        p["slope_deg"] = round(terrain_slope(p), 1)
+        p["red_m"] = round(min(metres(p, cell) for cell in STEEP))
+        p["notes"] = []
+    points[0]["notes"].append(CFG["places"]["A"])
+    points[-1]["notes"].append(CFG["places"]["B"])
+    tilted = [p for p in points if p["verified"]]
+    notable = [(max(points, key=lambda p: p["elev_m"]), "Highest point of this route."),
+               (max(tilted, key=lambda p: p["tilt_deg"]), "Steepest rover tilt recorded on this route."),
+               (min(points, key=lambda p: p["red_m"]), "Closest this route comes to a red zone (slope over 20°).")]
+    if len(tilted) < len(points):
+        notable.append((tilted[-1], "Last point driven by the rover. Beyond here the ground is known only from orbit."))
+    for point, note in notable:
+        point["notes"].append(note)
+    for before, p, after in zip(points, points[1:], points[2:]):
+        (x0, y0), (x1, y1), (x2, y2) = xy_km(before), xy_km(p), xy_km(after)
+        turn = (math.degrees(math.atan2(x2 - x1, y2 - y1) - math.atan2(x1 - x0, y1 - y0)) + 180) % 360 - 180
+        if abs(turn) >= 40:
+            p["notes"].append(f"Turn {'right' if turn > 0 else 'left'} about {abs(turn):.0f}° here.")
+    verified_m = sum(q["dist_m"] - p["dist_m"] for p, q in zip(points, points[1:]) if q["verified"])
+    return dict(spec, points=points, length_m=points[-1]["dist_m"], verified_pct=round(100 * verified_m / points[-1]["dist_m"]),
+                climb_m=round(sum(max(q["elev_m"] - p["elev_m"], 0) for p, q in zip(points, points[1:]))),
+                max_tilt=max(p["tilt_deg"] for p in tilted), max_slope=max(p["slope_deg"] for p in points),
+                min_red_m=min(p["red_m"] for p in points))
+
+
+def build_2d():
+    """Leaflet map in Mars equirectangular coordinates: NASA imagery, CRISM images and red slope zones."""
     pad = 0.01  # the map cannot leave the A-to-B area covered by the elevation model
     m = folium.Map(crs="EPSG4326", tiles=None, min_zoom=12, max_zoom=18, max_bounds=True, min_lat=SOUTH - pad,
                    max_lat=DEM["north"] + pad, min_lon=DEM["west"] - pad, max_lon=EAST + pad)
     m.default_css = [("leaflet_css", LEAFLET + ".css")]  # skip Bootstrap and icon fonts we do not use
-    m.default_js = [("leaflet", LEAFLET + ".js"), ("jquery", "https://code.jquery.com/jquery-3.7.1.min.js")]
-    m.fit_bounds([[min(p["lat"] for p in eva), min(p["lon"] for p in eva)], [max(p["lat"] for p in eva), max(p["lon"] for p in eva)]])
+    m.default_js = [("leaflet", LEAFLET + ".js")]
     groups = {}
     for layer in CFG["layers"]:
         tiles = folium.TileLayer(
@@ -104,69 +149,28 @@ def build_2d(route, eva, extra):
     for scene in CFG["minerals"]:  # real CRISM mineral-indicator images, served by NASA's Planetary Data System
         image = folium.raster_layers.ImageOverlay(scene["url"], scene["bounds"], opacity=0.8, name=scene["name"]).add_to(m)
         groups[scene["group"]] = [image.get_name()]
-
-    big = lambda html: folium.Popup(f'<div class="pop">{html}</div>', max_width=320)
-    folium.PolyLine(latlon(route), color="#ffffff", weight=2, opacity=0.7, interactive=False).add_to(m)
-    hazards = folium.FeatureGroup("Hazards").add_to(m)
+    hazards, half = folium.FeatureGroup("Hazards").add_to(m), HAZARD["cell_deg"] / 2
     groups["hazards"] = [hazards.get_name()]
-    cell, steep = CFG["hazard"]["cell_deg"], f"<b>RED ZONE · steep slope</b><br>Over {CFG['hazard']['min_slope_deg']}° in the USGS elevation model."
-    for run in table("slope_hazard.csv"):
-        north, west = DEM["north"] - run["row"] * cell, DEM["west"] + run["col_start"] * cell
-        folium.Rectangle([(north - cell, west), (north, DEM["west"] + (run["col_end"] + 1) * cell)], stroke=False,
-                         fill_color="#f85149", fill_opacity=0.55, popup=big(steep)).add_to(hazards)
-    folium.PolyLine(latlon([eva[0], eva[-1]]), color="#f85149", weight=6, dash_array="4 16", popup=big(
-        f"<b>NO-GO · direct line</b><br>{math.dist(xy_km(eva[0]), xy_km(eva[-1])):.1f} km straight across the Séítah "
-        "sand ripples. Perseverance drove around their north side instead (JPL).")).add_to(hazards)
-    folium.PolyLine(latlon(extra), color="#39d0ff", weight=6, dash_array="2 12", popup=big(
-        f"<b>Optional leg · delta front</b><br>{extra[-1]['dist_m']} m climb onto the delta front, rover tilt up to "
-        f"{max(p['tilt_deg'] for p in extra):.1f}°.")).add_to(m)
-    folium.PolyLine(latlon(eva), color="#0e1117", weight=14, interactive=False).add_to(m)
-    for a, b in zip(eva, eva[1:]):
-        folium.PolyLine(latlon([a, b]), color=slope(b["tilt_deg"])[0], weight=8, interactive=False).add_to(m)
-    for i, p in enumerate(eva):
-        colour, label = slope(p["tilt_deg"])
-        folium.CircleMarker(
-            (p["lat"], p["lon"]), radius=11, color="#0e1117", weight=3, fill_color=colour, fill_opacity=1,
-            popup=big(f"<b>Waypoint {i + 1} of {len(eva)}</b><br>{p['dist_m'] / 1000:.2f} km walked · "
-                      f"{(eva[-1]['dist_m'] - p['dist_m']) / 1000:.2f} km to go<br>Elevation {p['elev_m']:.0f} m · "
-                      f"tilt {p['tilt_deg']:.1f}° ({label})<br>Rover drove here on sol {p['sol']:.0f}")).add_to(m)
-    for p, text in ((eva[0], "A · HABITAT · Octavia E. Butler Landing"), (eva[-1], "B · THREE FORKS · delta base")):
-        folium.Marker((p["lat"], p["lon"]), icon=folium.DivIcon(html=f'<div class="tag">{text}</div>', icon_anchor=(-16, 16))).add_to(m)
+    for cell in STEEP:
+        folium.Rectangle([(cell["lat"] - half, cell["lon"] - half), (cell["lat"] + half, cell["lon"] + half)], stroke=False,
+                         fill_color="#f85149", fill_opacity=0.55, interactive=False).add_to(hazards)
     root = m.get_root()
     root.render()
     return root.header.render(), root.html.render(), root.script.render(), {"map": m.get_name(), "groups": groups}
 
 
-def ground(p):
-    """Bilinear elevation (m) from the USGS grid under a waypoint."""
-    c = min(max((p["lon"] - DEM["west"]) / DEM["cell_deg"] - 0.5, 0), COLS - 1.001)
-    r = min(max((DEM["north"] - p["lat"]) / DEM["cell_deg"] - 0.5, 0), ROWS - 1.001)
-    c0, r0 = int(c), int(r)
-    top = GRID[r0][c0] + (GRID[r0][c0 + 1] - GRID[r0][c0]) * (c - c0)
-    bottom = GRID[r0 + 1][c0] + (GRID[r0 + 1][c0 + 1] - GRID[r0 + 1][c0]) * (c - c0)
-    return top + (bottom - top) * (r - r0)
-
-
-def build_3d(route, eva, extra):
-    """Plotly terrain from the USGS CTX elevation model with the routes draped on it."""
-    def line(points, name, colour, width, dash="solid"):
+def build_3d(traverse, routes):
+    """Plotly terrain from the USGS CTX elevation model with every route draped on it."""
+    def trace(points, name, colour, **style):
         xs, ys = zip(*map(xy_km, points))
-        return go.Scatter3d(x=xs, y=ys, z=[ground(p) + 3 for p in points], mode="lines", name=name,
-                            hoverinfo="name", line={"color": colour, "width": width, "dash": dash})
+        return go.Scatter3d(x=xs, y=ys, z=[ground(p) + 3 for p in points], name=name, hoverinfo="name", **style,
+                            **({"line": {"color": colour, "width": 4}} if style["mode"] == "lines" else {}))
 
-    inside = [p for p in route if DEM["west"] < p["lon"] < EAST and SOUTH < p["lat"] < DEM["north"]]
-    ends = [(eva[0], "A · Habitat"), (eva[-1], "B · Three Forks")]
-    lx, ly = zip(*(xy_km(p) for p, _ in ends))
+    inside = [p for p in traverse if DEM["west"] < p["lon"] < EAST and SOUTH < p["lat"] < DEM["north"]]
+    ends = routes[0]["points"][::len(routes[0]["points"]) - 1]
     width_km, height_km = COLS * DEM["cell_deg"] * KM_PER_DEG_LON, ROWS * DEM["cell_deg"] * KM_PER_DEG
     relief_km = (max(map(max, GRID)) - min(map(min, GRID))) / 1000
     aspect = {k: {"x": 2, "y": 2 * height_km / width_km, "z": 2 * relief_km * k / width_km} for k in (1, 3, 5)}
-
-    cell, steep = CFG["hazard"]["cell_deg"], []
-    for run in table("slope_hazard.csv"):  # centre of every 40 m cell steeper than the limit
-        steep += [{"lat": DEM["north"] - (run["row"] + 0.5) * cell, "lon": DEM["west"] + (c + 0.5) * cell}
-                  for c in range(int(run["col_start"]), int(run["col_end"]) + 1)]
-    sx, sy = zip(*map(xy_km, steep))
-
     fig = go.Figure([
         go.Surface(x=[(c + 0.5) * DEM["cell_deg"] * KM_PER_DEG_LON for c in range(COLS)],
                    y=[(ROWS - r - 0.5) * DEM["cell_deg"] * KM_PER_DEG for r in range(ROWS)], z=GRID, name="Terrain",
@@ -174,15 +178,12 @@ def build_3d(route, eva, extra):
                    colorbar={"title": "Elevation (m)", "len": 0.6, "thickness": 14},
                    contours={"z": {"show": True, "start": -2700, "end": -2400, "size": 10, "color": "rgba(0,0,0,0.25)"}},
                    hovertemplate="Elevation %{z:.0f} m<extra></extra>"),
-        go.Scatter3d(x=sx, y=sy, z=[ground(p) + 2 for p in steep], mode="markers", hoverinfo="name",
-                     name=f"RED ZONE: slope over {CFG['hazard']['min_slope_deg']}°", marker={"size": 4, "color": "#f85149", "symbol": "square"}),
-        line(inside, "Perseverance traverse", "#ffffff", 3),
-        line([eva[0], eva[-1]], "NO-GO direct line (Séítah sand)", "#f85149", 8, "dash"),
-        line(extra, "Optional leg: delta front", "#39d0ff", 8, "dot"),
-        line(eva, "EVA route", "#3fb950", 12),
-        go.Scatter3d(x=lx, y=ly, z=[ground(p) + 8 for p, _ in ends], mode="markers+text", name="A / B",
-                     text=[t for _, t in ends], textposition="top center", textfont={"size": 16}, hoverinfo="text",
-                     marker={"size": 7, "color": "#ffffff", "line": {"color": "#0e1117", "width": 2}}),
+        trace(STEEP, f"Red zone: slope over {HAZARD['min_slope_deg']}°", None, mode="markers", marker={"size": 4, "color": "#f85149", "symbol": "square"}),
+        trace(inside, "Perseverance traverse", "#ffffff", mode="lines", opacity=0.6),
+        *[trace(r["points"], r["name"], r["colour"], mode="lines") for r in routes],
+        trace(ends, "A / B", None, mode="markers+text", text=["A · Habitat", "B · Three Forks"], textposition="top center",
+              textfont={"size": 16}, marker={"size": 7, "color": "#ffffff", "line": {"color": "#0e1117", "width": 2}}),
+        trace(ends[:1], "Astronaut", None, mode="markers", marker={"size": 9, "color": "#39d0ff", "line": {"color": "#fff", "width": 2}}),
     ])
     fig.update_layout(
         template="plotly_dark", paper_bgcolor="#0e1117", margin={"l": 0, "r": 0, "t": 0, "b": 0},
@@ -194,36 +195,29 @@ def build_3d(route, eva, extra):
     return aspect, html
 
 
-def build_profile(eva):
-    """Elevation profile of the walk from rover-measured heights."""
-    colours, classes = zip(*(slope(p["tilt_deg"]) for p in eva))
-    fig = go.Figure(go.Scatter(
-        x=[p["dist_m"] / 1000 for p in eva], y=[p["elev_m"] for p in eva], mode="lines+markers",
-        line={"color": "#d98a52", "width": 3}, marker={"size": 14, "color": colours, "line": {"color": "#0e1117", "width": 2}},
-        customdata=[(p["tilt_deg"], c) for p, c in zip(eva, classes)],
-        hovertemplate="%{x:.2f} km<br>Elevation %{y:.0f} m<br>Tilt %{customdata[0]:.1f}° (%{customdata[1]})<extra></extra>"))
-    fig.update_layout(template="plotly_dark", paper_bgcolor="#171d27", plot_bgcolor="#171d27", height=320,
-                      font={"size": 15}, margin={"l": 70, "r": 20, "t": 10, "b": 55},
-                      xaxis_title="Distance from habitat (km)", yaxis_title="Elevation (m)")
-    return fig.to_html(full_html=False, include_plotlyjs=False, div_id="profile", config={"displayModeBar": False, "responsive": True})
-
-
 def build():
     """Write the static site to docs/index.html (the folder GitHub Pages serves)."""
-    route, eva = table("perseverance_route.csv"), add_distance(table("eva_route.csv"))
-    extra, weather = add_distance(table("delta_front_route.csv")), table("meda_weather.csv")
-    head, body, script, names = build_2d(route, eva, extra)
-    relief, plot3d = build_3d(route, eva, extra)
-    data = {**names, "relief": relief, "eva": eva, "weather": weather, "limits": CFG["limits"],
-            "layers": CFG["layers"] + CFG["minerals"], "references": CFG["references"]}
-    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d,
-             "PROFILE": build_profile(eva), "DATA": json.dumps(data)}
+    traverse = table("perseverance_route.csv")
+    rover = {"north": table("eva_route.csv"), "south": [p for p in traverse if p["sol"] <= CFG["south_until_sol"]]}
+    routes = [make_route(spec, rover) for spec in CFG["routes"]]
+    best = max(routes, key=lambda r: (r["verified_pct"], -r["length_m"]))  # most rover-proven ground, then shortest
+    for r in routes:
+        r["best"] = r is best
+    head, body, script, names = build_2d()
+    relief, plot3d = build_3d(traverse, routes)
+    data = {**names, "relief": relief, "routes": routes, "traverse": [(p["lat"], p["lon"]) for p in traverse],
+            "weather": table("meda_weather.csv"), "limits": CFG["limits"], "layers": CFG["layers"] + CFG["minerals"],
+            "references": CFG["references"], "steep": [(c["lat"], c["lon"]) for c in STEEP], "hazard": HAZARD,
+            "dem": {**DEM, "rows": ROWS, "cols": COLS, "grid": GRID, "m_per_deg": [KM_PER_DEG * 1000, KM_PER_DEG_LON * 1000]}}
+    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
     page = (ROOT / "template.html").read_text(encoding="utf-8")
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)
     OUT.mkdir(exist_ok=True)
     (OUT / "index.html").write_text(page, encoding="utf-8")
-    print(f"Built {OUT / 'index.html'} ({len(page) // 1024} KB)")
+    print(f"Built {OUT / 'index.html'} ({len(page) // 1024} KB). Best route: {best['name']}")
+    for r in routes:
+        print(f"  {r['name']}: {r['length_m'] / 1000:.2f} km, {r['verified_pct']}% rover-driven, closest red zone {r['min_red_m']} m")
 
 
 def open_window(url):

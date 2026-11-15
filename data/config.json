@@ -97,7 +97,11 @@
   ],
   "limits": {
     "eva_hours": 8,
-    "daylight_margin_hours": 1
+    "daylight_margin_hours": 1,
+    "tilt_bands_deg": [
+      5,
+      10
+    ]
   },
   "minerals": [
     {
@@ -134,5 +138,30 @@
   "hazard": {
     "cell_deg": 0.000674824194325,
     "min_slope_deg": 20
+  },
+  "routes": [
+    {
+      "id": "north",
+      "name": "North loop",
+      "colour": "#3fb950",
+      "via": "Perseverance's own tracks around the north side of the Séítah sand ripples (Rapid Traverse, sols 379–414)."
+    },
+    {
+      "id": "south",
+      "name": "South, then west",
+      "colour": "#e3b341",
+      "via": "Perseverance's tracks south to its sol 200 position, then a straight line over ground no rover has driven."
+    },
+    {
+      "id": "direct",
+      "name": "Direct line",
+      "colour": "#ff7b72",
+      "via": "Straight from A to B, across the Séítah ripple field the rover drove around."
+    }
+  ],
+  "south_until_sol": 200,
+  "places": {
+    "A": "Habitat site at Octavia E. Butler Landing, where Perseverance touched down on 18 February 2021.",
+    "B": "Three Forks, at the base of the western delta. Perseverance laid out its 10-tube sample depot in this area, completed in January 2023 (JPL)."
   }
 }

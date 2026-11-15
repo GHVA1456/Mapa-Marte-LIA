@@ -7,38 +7,46 @@
 {{MAP_HEAD}}
 <style>
 /* Built for pressurised gloves: every control is at least 64 px, nothing needs hover, typing or a precise tap. */
-:root{color-scheme:dark;--bg:#0e1117;--panel:#171d27;--line:#46556b;--accent:#ff9d5c;--go:#3fb950;--stop:#f85149;--muted:#b9c3d1}
+:root{color-scheme:dark;--bg:#0e1117;--panel:#171d27;--line:#46556b;--accent:#ff9d5c;--go:#3fb950;--stop:#f85149;--muted:#b9c3d1;--sky:#39d0ff}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{background:var(--bg);color:#fff;font:18px/1.45 system-ui,sans-serif}
 header{padding:.7rem 1rem;border-bottom:2px solid var(--line);display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap}
-h1{font-size:1.3rem;margin:0}h2{font-size:1.1rem;color:var(--accent);margin:0 0 .6rem}h3{font-size:1rem;margin:1rem 0 .3rem}
-a{color:#8bc7ff}main{max-width:1600px;margin:auto;padding:.8rem;display:grid;gap:.8rem}
-.top{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(320px,1fr);gap:.8rem}
+h1{font-size:1.3rem;margin:0}h2{font-size:1.1rem;color:var(--accent);margin:.9rem 0 .5rem}h2:first-child{margin-top:0}
+a{color:#8bc7ff}main{max-width:1700px;margin:auto;padding:.8rem;display:grid;gap:.8rem}
+.top{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(340px,1fr);gap:.8rem}
 .panel{min-width:0;background:var(--panel);border:2px solid var(--line);border-radius:.8rem;padding:.8rem}
-.bar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}.bar .bar,.bar:first-child{margin:0}
+.bar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}.bar .bar,.bar:first-child{margin:0}.gap{flex:1}
 button{font:700 1.05rem system-ui;color:#fff;background:#232c3a;border:2px solid var(--line);border-radius:.7rem;min-height:64px;min-width:64px;padding:0 1.1rem;cursor:pointer;touch-action:manipulation}
 button:active{transform:scale(.96)}button.on{background:#9b4e29;border-color:var(--accent)}
-.gap{flex:1}#views{position:relative}#weatherbox{position:absolute;right:12px;bottom:12px;z-index:900;background:rgba(14,17,23,.85);border:2px solid #8bc7ff;border-radius:.7rem;padding:.6rem .9rem;font-size:1.05rem;pointer-events:none}#weatherbox b{color:#8bc7ff;font-size:1.3rem}
-#view2d,#view3d{height:62vh;min-height:420px;border-radius:.6rem;overflow:hidden;background:#000}
-#status{font-weight:800;font-size:1.2rem;padding:.5rem 1.2rem;border-radius:.7rem;color:#0e1117;background:var(--go)}#status.no{background:var(--stop);color:#fff}
-#nav{display:grid;grid-template-columns:96px 1fr 96px;gap:.6rem;align-items:stretch;margin-top:.6rem}
-#nav button{font-size:2rem;min-height:96px}#wp{background:#10151d;border-radius:.7rem;padding:.5rem .9rem}
-#wp b{font-size:1.5rem;color:var(--accent)}#wp span{display:block}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.stat{background:#10151d;border-radius:.6rem;padding:.6rem}
-.stat b{display:block;font-size:1.5rem;color:var(--accent)}
-.step{display:grid;grid-template-columns:1fr 64px 4.5rem 64px;gap:.5rem;align-items:center;margin:.5rem 0}
-.step output{font-size:1.4rem;font-weight:800;text-align:center}.step button{font-size:1.8rem;padding:0}
+#views{position:relative}#view2d,#view3d{height:60vh;min-height:420px;border-radius:.6rem;overflow:hidden;background:#000}
+#weatherbox{position:absolute;right:12px;bottom:12px;z-index:900;background:rgba(14,17,23,.85);border:2px solid #8bc7ff;border-radius:.7rem;padding:.6rem .9rem;font-size:1.05rem;pointer-events:none}
+#weatherbox b{color:#8bc7ff;font-size:1.3rem}
+#status{font-weight:800;font-size:1.15rem;padding:.5rem 1.2rem;border-radius:.7rem;color:#0e1117;background:var(--go)}#status.no{background:var(--stop);color:#fff}
+#sim{display:grid;grid-template-columns:96px 1fr;gap:.6rem;align-items:center;margin-top:.6rem}#play{font-size:1.8rem;min-height:72px}
+#simout{font-weight:700;color:var(--sky)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:20px;border-radius:10px;background:var(--line);margin:22px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:60px;height:60px;border-radius:50%;background:var(--sky);border:4px solid #fff;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:52px;height:52px;border-radius:50%;background:var(--sky);border:4px solid #fff;cursor:pointer}
+#nav{display:grid;grid-template-columns:96px 1fr 96px;gap:.6rem;align-items:stretch;margin-top:.6rem}#nav button{font-size:2rem;min-height:96px}
+#wp{background:#10151d;border-radius:.7rem;padding:.6rem .9rem}#wp>b{font-size:1.4rem;color:var(--accent)}#wp>span{display:block;font-weight:700}
+#wp ul{margin:.4rem 0;padding-left:1.2rem}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.4rem;margin-top:.4rem}
+.facts span,.stat{background:#171d27;border-radius:.5rem;padding:.4rem .6rem;font-size:.85rem;color:var(--muted)}.facts b,.stat b{display:block;font-size:1.2rem;color:#fff}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.stat{background:#10151d;font-size:.95rem}.stat b{font-size:1.45rem;color:var(--accent)}
+.route{display:block;width:100%;text-align:left;margin:.5rem 0;padding:.6rem .9rem;font-weight:400}.route b{font-size:1.15rem}.route span{display:block;color:var(--muted);font-size:.9rem}
+.pill{float:right;font:800 .8rem system-ui;padding:.2rem .6rem;border-radius:1rem;background:var(--stop)}.pill.best{background:var(--go);color:#0e1117}
+.step{display:grid;grid-template-columns:1fr 64px 5rem 64px;gap:.5rem;align-items:center;margin:.5rem 0}
+.step output{font-size:1.35rem;font-weight:800;text-align:center}.step button{font-size:1.8rem;padding:0}
+#day{position:relative;height:44px;background:#05070a;border-radius:.5rem;margin:.6rem 0 .2rem;overflow:hidden}
+#day i{position:absolute;top:0;bottom:0}#sun{background:#5a4a1c}#eva{background:var(--sky);opacity:.85;top:10px!important;bottom:10px!important;border-radius:.3rem}
 .muted{color:var(--muted);font-size:.9rem}.key i{display:inline-block;width:1rem;height:1rem;border-radius:50%;margin-right:.4rem;vertical-align:-2px}
-.key span{margin-right:1rem;white-space:nowrap}.tab:not(.on){display:none}.two{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
-.check{display:flex;gap:1rem;align-items:center;min-height:64px;padding:.4rem .8rem;margin:.5rem 0;background:#10151d;border:2px solid var(--line);border-radius:.7rem;cursor:pointer}
-.check input{width:36px;height:36px;flex:none;accent-color:var(--go)}.check:has(:checked){border-color:var(--go)}
+.key span{margin-right:1rem;white-space:nowrap}.tab:not(.on){display:none}
 .warn{border-left:4px solid #e3b341;background:#241f13;padding:.5rem .8rem;margin:.6rem 0}
-table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.5rem;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.5rem;border-bottom:1px solid var(--line)}tr.best td{color:var(--go);font-weight:700}
 .tag{white-space:nowrap;background:#0e1117;color:#fff;border:2px solid #fff;border-radius:.4rem;padding:.2rem .5rem;font:800 15px system-ui;width:max-content}
 .pop{font:17px/1.4 system-ui}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171d27;color:#fff}
 .leaflet-container a.leaflet-popup-close-button{font-size:34px;width:56px;height:56px;line-height:56px;color:#fff}
 .leaflet-touch .leaflet-bar a,.leaflet-bar a{width:64px;height:64px;line-height:64px;font-size:34px}
-li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minmax(0,1fr)}}
+li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -51,7 +59,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
 <section class="top">
   <div class="panel">
     <div class="bar">
-      <button data-layer="hazards" class="on">HAZARDS</button><button id="minerals">MINERALS</button><button data-layer="weather" class="on">WEATHER</button>
+      <button data-layer="hazards">HAZARDS</button><button id="minerals">MINERALS</button><button data-layer="weather">WEATHER</button>
       <button data-layer="thermal">THERMAL</button><button id="b3d">3D</button>
       <span class="gap"></span>
       <span id="go2d" class="bar"><button data-go="0">A</button><button data-go="-1">B</button><button data-go="all">ROUTE</button></span>
@@ -59,37 +67,48 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
       <button id="full" aria-label="Full screen">⛶</button>
     </div>
     <div id="views"><div id="view2d">{{MAP_BODY}}</div>
-    <div id="view3d" hidden>{{PLOT3D}}</div>
+      <div id="view3d" hidden>{{PLOT3D}}</div>
       <div id="weatherbox" hidden></div></div>
-    <div id="nav"><button id="prev" aria-label="Previous waypoint">◀</button><div id="wp"></div><button id="next" aria-label="Next waypoint">▶</button></div>
+    <div id="sim"><button id="play" aria-label="Play the walk">▶</button>
+      <div><input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Position along the route"><div id="simout"></div></div></div>
+    <div id="nav"><button id="prev" aria-label="Previous point">◀</button><div id="wp"></div><button id="next" aria-label="Next point">▶</button></div>
     <p class="muted" id="layerinfo"></p>
+    <p class="muted">Tap any spot on the map to read its elevation and slope. Tap a dashed route to select it. Large dots are key points.</p>
   </div>
   <aside class="panel">
-    <h2>EVA plan · habitat to Three Forks and back</h2>
-    <p class="muted">Distance, weather and daylight are NASA measurements. Times and GO / NO-GO are calculated from the assumptions below.</p>
+    <h2>Choose a route from A to B</h2>
+    <div id="routes"></div>
+    <p class="muted" id="via"></p>
+    <h2>EVA plan · out and back</h2>
     <div class="stats">
       <div class="stat"><b id="sTime"></b>total EVA time</div>
-      <div class="stat"><b id="sLeave"></b>latest departure</div>
+      <div class="stat"><b id="sBack"></b>back at habitat</div>
       <div class="stat"><b id="sDist"></b>round trip</div>
-      <div class="stat"><b id="sDay"></b>daylight</div>
+      <div class="stat"><b id="sLeft"></b>daylight left on return</div>
       <div class="stat"><b id="sTemp"></b>air temperature</div>
       <div class="stat"><b id="sPress"></b>air pressure</div>
     </div>
+    <div id="day"><i id="sun"></i><i id="eva"></i></div>
     <p class="muted" id="wx"></p>
+    <div class="step"><span>Departure</span><button data-step="depart,-0.5">−</button><output id="depart"></output><button data-step="depart,0.5">+</button></div>
     <div class="step"><span>Speed (km/h)</span><button data-step="speed,-0.5">−</button><output id="speed"></output><button data-step="speed,0.5">+</button></div>
     <div class="step"><span>Time at B (min)</span><button data-step="stop,-15">−</button><output id="stop"></output><button data-step="stop,15">+</button></div>
-    <p class="key"><span><i style="background:#3fb950"></i>tilt under 5°</span><span><i style="background:#e3b341"></i>5–10°</span><span><i style="background:#f85149"></i>over 10°, red zone or no-go</span></p>
-    <p class="muted">Assumptions (not NASA limits): walking speed, time at B, an 8 h suit limit, a 1 h daylight margin and the tilt colour bands.</p>
+    <p class="key"><span><i style="background:#3fb950"></i>rover tilt under 5°</span><span><i style="background:#e3b341"></i>5–10°</span><span><i style="background:#f85149"></i>over 10° or red zone</span><span><i style="background:#d16bff"></i>never driven</span></p>
+    <p class="muted">Distance, elevation, tilt, weather and daylight are NASA and USGS measurements. Times and GO / NO-GO are calculated from
+    assumptions that are not NASA limits: walking speed, time at B, an 8 h suit limit, a 1 h daylight margin and the tilt colour bands.</p>
   </aside>
 </section>
 <section class="panel">
   <div class="bar" id="tabs">
-    <button data-tab="plan" class="on">PROFILE</button><button data-tab="weather">CONDITIONS</button><button data-tab="data">DATA SOURCES</button>
+    <button data-tab="plan" class="on">PROFILE</button><button data-tab="compare">COMPARE ROUTES</button><button data-tab="weather">CONDITIONS</button><button data-tab="data">DATA SOURCES</button>
   </div>
-  <div id="plan" class="tab on">
-    {{PROFILE}}
-    <p>Elevation and tilt at each waypoint were measured by Perseverance. The route follows the rover's own tracks around the north side
-    of the Séítah sand ripples (JPL Rapid Traverse Campaign, sols 379 to 409, continued to Three Forks).</p>
+  <div id="plan" class="tab on"><div id="profile"></div>
+    <p class="muted">Elevation along the selected route. Tap a dot to jump to that point. Rover-driven points use the rover's own measurement;
+    points never driven use the USGS elevation model.</p></div>
+  <div id="compare" class="tab">
+    <table><thead><tr><th>Route</th><th>Length</th><th>Rover-driven</th><th>Climb</th><th>Max rover tilt</th><th>Max terrain slope</th><th>Closest red zone</th></tr></thead><tbody id="cmp"></tbody></table>
+    <p>The best route is the one with the most rover-driven ground, then the shortest. Only ground a rover has driven has measured tilt and proven
+    footing; elsewhere the map knows only what orbiters saw. Terrain slope comes from the 80 m USGS grid, so it misses rocks and sand ripples.</p>
   </div>
   <div id="weather" class="tab">
     <p>Measured at Jezero by MEDA, the weather station on Perseverance. These are the latest sols in NASA's public feed, not live readings.</p>
@@ -97,23 +116,75 @@ li{margin:.3rem 0}@media(max-width:1000px){.top,.two{grid-template-columns:minma
     <p class="muted">Times are local solar time at the rover.</p>
   </div>
   <div id="data" class="tab">
-    <h3>Map layers</h3><ul id="layers"></ul>
-    <p class="warn">What this map does not claim: the route is a planning sketch on rover-driven ground, not an approved traverse. Tilt is the
-    rover's attitude at each stop. Red zones are slopes over 20° computed from the 20 m USGS model. The CRISM layers are NASA's published
-    browse images, shown without interpretation. The Séítah line is the straight A-to-B path the rover avoided, not a measured sand outline.</p>
-    <h3>References</h3><ol id="refs"></ol>
+    <h2>Map layers</h2><ul id="layers"></ul>
+    <p class="warn">What this map does not claim: no route here is an approved traverse. Tilt is the rover's attitude at each stop. Red zones are slopes
+    over 20° computed from the 20 m USGS model. The CRISM layers are NASA's published browse images, shown without interpretation. Sand is not
+    measured by any layer here.</p>
+    <h2>References</h2><ol id="refs"></ol>
   </div>
 </section>
 </main>
 <script>{{MAP_SCRIPT}}</script>
 <script>
 const DATA = {{DATA}}, map = window[DATA.map], $ = id => document.getElementById(id), all = s => document.querySelectorAll(s);
-const eva = DATA.eva, total = eva.at(-1).dist_m, wx = DATA.weather.at(-1), state = {speed: 2, stop: 60, wp: 0, relief: 3};
+const wx = DATA.weather.at(-1), dem = DATA.dem, [mLat, mLon] = dem.m_per_deg, south = dem.north - dem.rows * dem.cell_deg, east = dem.west + dem.cols * dem.cell_deg;
+const state = {speed: 2, stop: 60, depart: 8, wp: 0, relief: 3, t: 0, playing: false}, [tilt1, tilt2] = DATA.limits.tilt_bands_deg;
+let route, pts;
 const clock = t => { const [h, m] = t.split(":").map(Number); return h + m / 60; };
-const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.floor(h % 1 * 60)).padStart(2, "0")}`;
-const bounds = L.latLngBounds(eva.map(p => [p.lat, p.lon])).pad(0.1);
-const ring = L.circleMarker([0, 0], {radius: 20, color: "#fff", weight: 5, fill: false, interactive: false}).addTo(map);
+const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.floor(h % 1 * 60 + 1e-6)).padStart(2, "0")}`;
+const ll = p => [p.lat, p.lon], km = m => (m / 1000).toFixed(2);
+const metres = (a, b) => Math.hypot((a[0] - b[0]) * mLat, (a[1] - b[1]) * mLon);
+const colour = p => !p.verified ? "#d16bff" : p.tilt_deg < tilt1 ? "#3fb950" : p.tilt_deg < tilt2 ? "#e3b341" : "#f85149";
 
+function elevAt(lat, lon) {  // bilinear read of the USGS grid, same maths as ground() in app.py
+  const c = Math.min(Math.max((lon - dem.west) / dem.cell_deg - 0.5, 0), dem.cols - 1.001), r = Math.min(Math.max((dem.north - lat) / dem.cell_deg - 0.5, 0), dem.rows - 1.001);
+  const c0 = Math.floor(c), r0 = Math.floor(r), g = dem.grid, top = g[r0][c0] + (g[r0][c0 + 1] - g[r0][c0]) * (c - c0), bottom = g[r0 + 1][c0] + (g[r0 + 1][c0 + 1] - g[r0 + 1][c0]) * (c - c0);
+  return top + (bottom - top) * (r - r0);
+}
+function slopeAt(lat, lon) {
+  const d = dem.cell_deg, e = (elevAt(lat, lon + d) - elevAt(lat, lon - d)) / (2 * d * mLon), n = (elevAt(lat + d, lon) - elevAt(lat - d, lon)) / (2 * d * mLat);
+  return Math.atan(Math.hypot(e, n)) * 180 / Math.PI;
+}
+
+// ---- Map drawing -------------------------------------------------------------------------------------------------------
+L.polyline(DATA.traverse, {color: "#fff", weight: 2, opacity: 0.6, interactive: false}).addTo(map);
+const others = L.layerGroup().addTo(map), detail = L.layerGroup().addTo(map);
+const ring = L.circleMarker([0, 0], {radius: 22, color: "#fff", weight: 5, fill: false, interactive: false}).addTo(map);
+const walker = L.circleMarker([0, 0], {radius: 11, color: "#fff", weight: 4, fillColor: "#39d0ff", fillOpacity: 1, interactive: false}).addTo(map);
+
+function select(id) {
+  route = DATA.routes.find(r => r.id === id); pts = route.points; play(false);
+  others.clearLayers(); detail.clearLayers();
+  DATA.routes.filter(r => r !== route).forEach(r => L.polyline(r.points.map(ll), {color: r.colour, weight: 7, dashArray: "4 14", bubblingMouseEvents: false}).on("click", () => select(r.id)).addTo(others));
+  L.polyline(pts.map(ll), {color: "#0e1117", weight: 14, interactive: false}).addTo(detail);
+  pts.slice(1).forEach((p, i) => L.polyline([ll(pts[i]), ll(p)], {color: colour(p), weight: 8, dashArray: p.verified ? null : "2 12", interactive: false}).addTo(detail));
+  pts.forEach((p, i) => L.circleMarker(ll(p), {radius: p.notes.length ? 14 : 9, color: "#0e1117", weight: 3, fillColor: colour(p), fillOpacity: 1, bubblingMouseEvents: false}).on("click", () => goto(i, false)).addTo(detail));
+  [[pts[0], "A · HABITAT"], [pts.at(-1), "B · THREE FORKS"]].forEach(([p, text]) =>
+    L.marker(ll(p), {icon: L.divIcon({html: `<div class="tag">${text}</div>`, className: "", iconAnchor: [-18, 18]}), interactive: false}).addTo(detail));
+  ring.bringToFront(); walker.bringToFront();
+  all("[data-route]").forEach(b => b.classList.toggle("on", b.dataset.route === id));
+  $("via").textContent = route.via;
+  Plotly.restyle("plot3d", {"line.width": DATA.routes.map(r => r === route ? 12 : 4)}, DATA.routes.map((_, i) => 3 + i));
+  Plotly.react("profile", [
+    {x: pts.map(p => p.dist_m / 1000), y: pts.map(p => p.elev_m), mode: "lines+markers", line: {color: "#d98a52", width: 3}, hovertemplate: "%{x:.2f} km · %{y:.0f} m<extra></extra>",
+     marker: {size: pts.map(p => p.notes.length ? 18 : 12), color: pts.map(colour), line: {color: "#0e1117", width: 2}}},
+    {x: [0], y: [pts[0].elev_m], mode: "markers", hoverinfo: "skip", marker: {size: 20, color: "#39d0ff", line: {color: "#fff", width: 3}}}],
+    {paper_bgcolor: "#171d27", plot_bgcolor: "#171d27", font: {color: "#edf0f5", size: 15}, height: 320, showlegend: false, margin: {l: 70, r: 20, t: 10, b: 55},
+     xaxis: {title: {text: "Distance from habitat (km)"}, gridcolor: "#2a3442"}, yaxis: {title: {text: "Elevation (m)"}, gridcolor: "#2a3442"}}, {displayModeBar: false, responsive: true});
+  goto(0, false); plan();
+}
+
+map.on("click", e => {  // terrain inspector: any spot inside the elevation model
+  const {lat, lng} = e.latlng;
+  if (lng < dem.west || lng > east || lat < south || lat > dem.north) return;
+  const red = Math.min(...DATA.steep.map(s => metres(s, [lat, lng]))), near = Math.min(...pts.map(p => metres(ll(p), [lat, lng])));
+  L.popup({maxWidth: 330}).setLatLng(e.latlng).setContent(`<div class="pop"><b>Terrain here</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
+    Elevation ${elevAt(lat, lng).toFixed(0)} m · slope ${slopeAt(lat, lng).toFixed(1)}°<br>
+    ${red < 25 ? `<b style="color:#ff7b72">Inside a red zone: over ${DATA.hazard.min_slope_deg}°</b>` : `Nearest red zone ${Math.round(red)} m`}<br>
+    ${Math.round(near)} m from the selected route<br><span class="muted">USGS elevation model, 80 m grid</span></div>`).openOn(map);
+});
+
+// ---- Layers and views --------------------------------------------------------------------------------------------------
 const shown = {hazards: true, thermal: false, clays: false, carbonates: false, weather: true};
 function draw() {
   for (const [group, ids] of Object.entries(DATA.groups)) if (group in shown) ids.forEach(id => shown[group] ? window[id].addTo(map) : window[id].remove());
@@ -121,18 +192,18 @@ function draw() {
   const mineral = shown.clays ? "clays" : shown.carbonates ? "carbonates" : "";
   $("minerals").textContent = mineral ? mineral.toUpperCase() : "MINERALS"; $("minerals").classList.toggle("on", !!mineral);
   $("weatherbox").hidden = !shown.weather;
-  const names = DATA.layers.filter(l => l.group === "base" || shown[l.group]);
-  $("layerinfo").textContent = "Layers on: " + names.map(l => l.name).join(" + ") + (shown.hazards ? " + red zones: slopes over 20° (USGS elevation model) and the Séítah no-go line" : "");
+  $("layerinfo").textContent = "Layers on: " + DATA.layers.filter(l => l.group === "base" || shown[l.group]).map(l => l.name).join(" + ")
+    + (shown.hazards ? ` + red zones: slopes over ${DATA.hazard.min_slope_deg}° (USGS elevation model)` : "");
 }
 all("[data-layer]").forEach(b => b.onclick = () => { shown[b.dataset.layer] = !shown[b.dataset.layer]; draw(); });
 $("minerals").onclick = () => { [shown.clays, shown.carbonates] = shown.clays ? [false, true] : shown.carbonates ? [false, false] : [true, false]; draw(); };
 function show3d(on) {
   $("b3d").classList.toggle("on", on); $("b3d").textContent = on ? "2D MAP" : "3D";
   $("view3d").hidden = $("go3d").hidden = !on; $("view2d").hidden = $("go2d").hidden = on;
-  on ? Plotly.Plots.resize("plot3d") : map.invalidateSize();
+  on ? Plotly.Plots.resize("plot3d") : map.invalidateSize(); setT(state.t);
 }
 $("b3d").onclick = () => show3d($("view3d").hidden);
-all("[data-go]").forEach(b => b.onclick = () => b.dataset.go === "all" ? map.fitBounds(bounds) : goto(+b.dataset.go));
+all("[data-go]").forEach(b => b.onclick = () => { show3d(false); b.dataset.go === "all" ? map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1)) : goto(+b.dataset.go); });
 all("[data-cam]").forEach(b => b.onclick = () => { const [x, y, z] = b.dataset.cam.split(",").map(Number); Plotly.relayout("plot3d", {"scene.camera.eye": {x, y, z}}); });
 $("relief").onclick = () => {
   state.relief = {1: 3, 3: 5, 5: 1}[state.relief]; $("relief").textContent = `RELIEF ×${state.relief}`;
@@ -140,45 +211,87 @@ $("relief").onclick = () => {
 };
 $("full").onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.querySelector(".top .panel").requestFullscreen();
 
+// ---- Point-by-point navigator ------------------------------------------------------------------------------------------
 function goto(i, pan = true) {
-  state.wp = (i + eva.length) % eva.length;
-  const p = eva[state.wp], next = eva[state.wp + 1];
-  ring.setLatLng([p.lat, p.lon]);
-  if (pan) map.setView([p.lat, p.lon], Math.max(map.getZoom(), 15));
+  state.wp = (i + pts.length) % pts.length;
+  const p = pts[state.wp], next = pts[state.wp + 1];
+  ring.setLatLng(ll(p));
+  if (pan) map.setView(ll(p), Math.max(map.getZoom(), 15));
   let line = "Arrived at B · Three Forks";
   if (next) {
-    const east = (next.lon - p.lon) * Math.cos(p.lat * Math.PI / 180), north = next.lat - p.lat;
-    const heading = (Math.atan2(east, north) * 180 / Math.PI + 360) % 360;
-    line = `Heading ${String(Math.round(heading)).padStart(3, "0")}° ${["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(heading / 45) % 8]} · ${next.dist_m - p.dist_m} m to next`;
+    const heading = (Math.atan2((next.lon - p.lon) * mLon, (next.lat - p.lat) * mLat) * 180 / Math.PI + 360) % 360;
+    line = `Heading ${String(Math.round(heading)).padStart(3, "0")}° ${["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(heading / 45) % 8]} · ${next.dist_m - p.dist_m} m to the next point`;
   }
-  $("wp").innerHTML = `<b>Waypoint ${state.wp + 1} / ${eva.length}</b><span>${line}</span>
-    <span class="muted">${(p.dist_m / 1000).toFixed(2)} km walked · ${((total - p.dist_m) / 1000).toFixed(2)} km to B · tilt ${p.tilt_deg}° · elevation ${Math.round(p.elev_m)} m</span>`;
+  $("wp").innerHTML = `<b>Point ${state.wp + 1} / ${pts.length}</b><span>${line}</span>
+    ${p.notes.length ? `<ul>${p.notes.map(n => `<li>${n}</li>`).join("")}</ul>` : ""}
+    <div class="facts"><span><b>${Math.round(p.elev_m)} m</b>elevation · ${p.verified ? "rover" : "USGS model"}</span>
+    <span><b>${p.verified ? p.tilt_deg + "°" : "no data"}</b>${p.verified ? `rover tilt · sol ${p.sol}` : "never driven by a rover"}</span>
+    <span><b>${p.slope_deg}°</b>terrain slope · 80 m grid</span><span><b>${p.red_m} m</b>to nearest red zone</span>
+    <span><b>${km(p.dist_m)} km</b>walked</span><span><b>${km(route.length_m - p.dist_m)} km</b>to B</span></div>`;
+  if (!state.playing) setT(p.dist_m / route.length_m);
 }
 $("prev").onclick = () => goto(state.wp - 1); $("next").onclick = () => goto(state.wp + 1);
 
-function plan() {
-  const hours = 2 * total / 1000 / state.speed + state.stop / 60, rise = clock(wx.sunrise), set = clock(wx.sunset);
-  const leave = set - DATA.limits.daylight_margin_hours - hours, ok = hours <= DATA.limits.eva_hours && leave >= rise;
-  ["speed", "stop"].forEach(k => $(k).textContent = state[k]);
-  $("sTime").textContent = `${hours.toFixed(1)} h`; $("sLeave").textContent = leave >= rise ? hhmm(leave) : "none";
-  $("sDist").textContent = `${(2 * total / 1000).toFixed(1)} km`; $("sDay").textContent = `${(set - rise).toFixed(1)} h`;
-  $("sTemp").textContent = `${wx.min_temp_c} to ${wx.max_temp_c} °C`; $("sPress").textContent = `${(wx.pressure_pa / 100).toFixed(1)} mbar`;
-  $("status").textContent = ok ? "GO · plan fits suit and daylight" : hours > DATA.limits.eva_hours ? `NO-GO · EVA longer than ${DATA.limits.eva_hours} h` : "NO-GO · not enough daylight";
-  $("status").classList.toggle("no", !ok);
-  $("wx").textContent = `MEDA sol ${wx.sol} (${wx.earth_date}), latest record in NASA's public feed: sunrise ${wx.sunrise.slice(0, 5)}, sunset ${wx.sunset.slice(0, 5)}.`;
+// ---- Walk simulation ---------------------------------------------------------------------------------------------------
+function setT(t) {
+  state.t = Math.min(Math.max(t, 0), 1);
+  const d = state.t * route.length_m, i = Math.max(pts.findIndex(p => p.dist_m >= d), 1), a = pts[i - 1], b = pts[i], f = (d - a.dist_m) / (b.dist_m - a.dist_m || 1);
+  const lat = a.lat + (b.lat - a.lat) * f, lon = a.lon + (b.lon - a.lon) * f, elev = a.elev_m + (b.elev_m - a.elev_m) * f;
+  walker.setLatLng([lat, lon]); $("scrub").value = state.t * 1000;
+  $("simout").textContent = `${km(d)} km from A · clock ${hhmm(state.depart + d / 1000 / state.speed)} · elevation ${Math.round(elev)} m · ${b.verified ? "rover-driven ground" : "never driven"}`;
+  Plotly.restyle("profile", {x: [[d / 1000]], y: [[elev]]}, [1]);
+  if (!$("view3d").hidden) Plotly.restyle("plot3d", {x: [[(lon - dem.west) * mLon / 1000]], y: [[(lat - south) * mLat / 1000]], z: [[elevAt(lat, lon) + 6]]}, [DATA.routes.length + 4]);
 }
-const floor = {speed: 0.5, stop: 0};
-all("[data-step]").forEach(b => b.onclick = () => { const [k, d] = b.dataset.step.split(","); state[k] = Math.max(floor[k], state[k] + +d); plan(); });
+function play(on) {
+  state.playing = on; $("play").textContent = on ? "❚❚" : "▶";
+  if (!on) return;
+  if (state.t >= 1) state.t = 0;
+  let last = performance.now(), drawn = 0;
+  const step = now => {
+    if (!state.playing) return;
+    state.t += (now - last) / 30000; last = now;  // the whole route plays in 30 seconds
+    if (now - drawn > 60 || state.t >= 1) { drawn = now; setT(state.t); }
+    state.t >= 1 ? play(false) : requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+$("play").onclick = () => play(!state.playing);
+$("scrub").oninput = e => { play(false); setT(e.target.value / 1000); };
+
+// ---- EVA plan ----------------------------------------------------------------------------------------------------------
+function plan() {
+  const limits = DATA.limits, hours = 2 * route.length_m / 1000 / state.speed + state.stop / 60, rise = clock(wx.sunrise), set = clock(wx.sunset), back = state.depart + hours;
+  const why = route.verified_pct < 100 ? `${100 - route.verified_pct}% of this route was never driven by a rover` : hours > limits.eva_hours ? `EVA longer than ${limits.eva_hours} h`
+    : state.depart < rise ? "departure before sunrise" : back > set - limits.daylight_margin_hours ? `back less than ${limits.daylight_margin_hours} h before sunset` : "";
+  $("status").textContent = why ? `NO-GO · ${why}` : "GO · rover-driven route, fits suit and daylight"; $("status").classList.toggle("no", !!why);
+  $("depart").textContent = hhmm(state.depart); $("speed").textContent = state.speed; $("stop").textContent = state.stop;
+  $("sTime").textContent = `${hours.toFixed(1)} h`; $("sBack").textContent = hhmm(back % 24); $("sDist").textContent = `${km(2 * route.length_m)} km`;
+  $("sLeft").textContent = `${(set - back).toFixed(1)} h`; $("sTemp").textContent = `${wx.min_temp_c} to ${wx.max_temp_c} °C`; $("sPress").textContent = `${(wx.pressure_pa / 100).toFixed(1)} mbar`;
+  const pos = h => `${Math.min(Math.max((h - 4) / 16, 0), 1) * 100}%`;  // the bar spans 04:00 to 20:00
+  Object.assign($("sun").style, {left: pos(rise), right: `calc(100% - ${pos(set)})`}); Object.assign($("eva").style, {left: pos(state.depart), right: `calc(100% - ${pos(back)})`});
+  $("wx").textContent = `Bar: daylight (${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}, MEDA sol ${wx.sol}, ${wx.earth_date}) with the EVA in blue.`;
+  setT(state.t);
+}
+const range = {speed: [0.5, 10], stop: [0, 240], depart: [4, 18]};
+all("[data-step]").forEach(b => b.onclick = () => { const [k, d] = b.dataset.step.split(","); state[k] = Math.min(Math.max(state[k] + +d, range[k][0]), range[k][1]); plan(); });
+
+// ---- Static content ----------------------------------------------------------------------------------------------------
+const badge = r => r.best ? '<i class="pill best">BEST</i>' : r.verified_pct < 100 ? '<i class="pill">NOT VERIFIED</i>' : "";
+$("routes").innerHTML = DATA.routes.map(r => `<button class="route" data-route="${r.id}">${badge(r)}<b>${r.name}</b><span>${km(r.length_m)} km one way · ${r.verified_pct}% rover-driven</span></button>`).join("");
+all("[data-route]").forEach(b => b.onclick = () => select(b.dataset.route));
+$("cmp").innerHTML = DATA.routes.map(r => `<tr class="${r.best ? "best" : ""}"><td>${r.name}${r.best ? " · best" : ""}</td><td>${km(r.length_m)} km</td><td>${r.verified_pct}%</td><td>${r.climb_m} m</td>
+  <td>${r.verified_pct ? r.max_tilt + "°" : "no data"}</td><td>${r.max_slope}°</td><td>${r.min_red_m} m</td></tr>`).join("");
 all("#tabs button").forEach(b => b.onclick = () => {
   all("#tabs button, .tab").forEach(x => x.classList.remove("on"));
   b.classList.add("on"); $(b.dataset.tab).classList.add("on");
   if (b.dataset.tab === "plan") Plotly.Plots.resize("profile");
 });
-$("wxrows").innerHTML = DATA.weather.map(w => `<tr><td>${w.sol}</td><td>${w.earth_date}</td><td>${w.max_temp_c} °C</td><td>${w.min_temp_c} °C</td><td>${(w.pressure_pa / 100).toFixed(1)} mbar</td><td>${w.sunrise.slice(0, 5)}</td><td>${w.sunset.slice(0, 5)}</td></tr>`).join("");
-$("layers").innerHTML = DATA.layers.map(l => `<li>${l.name}</li>`).join("") + "<li>3D terrain and red slope zones: USGS Mars 2020 CTX elevation model, 20 m</li>";
-$("refs").innerHTML = DATA.references.map(([t, u]) => `<li>${t}<br><a href="${u}" target="_blank" rel="noreferrer">${u}</a></li>`).join("");
 $("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} to ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>Sun ${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}`;
-draw(); map.fitBounds(bounds); goto(0, false); plan();
+$("wxrows").innerHTML = DATA.weather.map(w => `<tr><td>${w.sol}</td><td>${w.earth_date}</td><td>${w.max_temp_c} °C</td><td>${w.min_temp_c} °C</td><td>${(w.pressure_pa / 100).toFixed(1)} mbar</td><td>${w.sunrise.slice(0, 5)}</td><td>${w.sunset.slice(0, 5)}</td></tr>`).join("");
+$("layers").innerHTML = DATA.layers.map(l => `<li>${l.name}</li>`).join("") + "<li>3D terrain, slopes and red zones: USGS Mars 2020 CTX elevation model, 20 m</li><li>Routes: Perseverance waypoints (NASA/JPL)</li>";
+$("refs").innerHTML = DATA.references.map(([t, u]) => `<li>${t}<br><a href="${u}" target="_blank" rel="noreferrer">${u}</a></li>`).join("");
+draw(); select(DATA.routes.find(r => r.best).id); map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
+$("profile").on("plotly_click", e => { if (e.points[0].curveNumber === 0) goto(e.points[0].pointNumber); });
 </script>
 </body>
 </html>
