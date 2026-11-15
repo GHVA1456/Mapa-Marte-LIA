@@ -19,7 +19,7 @@
   const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.round(h % 1 * 60)).padStart(2, "0")}`;
   const escape = text => text.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
   function render() {
-    const mission = load(), map = `<a class="link" href="index.html">${t("OPEN THE MAP", "ABRIR EL MAPA")}</a>`;
+    const mission = load(), map = `<a class="link" href="{{MAP}}">${t("OPEN THE MAP", "ABRIR EL MAPA")}</a>`;
     if (!mission) {
       box.innerHTML = `<h2>${t("Mission log", "Bitácora de misión")}</h2><p>${t("No landing yet. Mark a landing site on the map and this log starts at sol 0.",
         "Aún no hay aterrizaje. Marca un sitio de aterrizaje en el mapa y esta bitácora empieza en el sol 0.")}</p><div class="row">${map}</div>`;

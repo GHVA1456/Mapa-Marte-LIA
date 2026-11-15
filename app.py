@@ -2,7 +2,7 @@
 
 Every coordinate, elevation, weather record and map tile comes from the NASA
 and USGS sources listed in data/config.json. Run `python app.py` to build
-docs/index.html and open it in its own window, or `python app.py --build` to
+the site in docs/ and open it in its own window, or `python app.py --build` to
 only rebuild the page. The first run creates a virtual environment in .venv
 and installs Folium and Plotly there; nothing is installed system-wide.
 """
@@ -230,8 +230,17 @@ def build_3d(traverse, routes):
     return aspect, html
 
 
+def nav(current):
+    """One bar on every page: the survival guide is the home page, the map and MARS SURVIVAL are the other sections."""
+    style = ("font:700 17px system-ui;color:#fff;text-decoration:none;min-height:64px;padding:0 1.2rem;display:inline-flex;"
+             "align-items:center;border-radius:.7rem;border:2px solid ")
+    links = "".join(f'<a href="{page["file"]}" style="{style}{"#ff9d5c;background:#9b4e29" if page["file"] == current else "#46556b;background:#232c3a"}">'
+                    f'{page["label"]}</a>' for page in [CFG["guides"][0], CFG["map"], *CFG["guides"][1:]])
+    return f'<nav aria-label="Sections" style="display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;background:#0e1117">{links}</nav>'
+
+
 def build():
-    """Write the static site to docs/index.html (the folder GitHub Pages serves)."""
+    """Write the static site to docs/: the survival guide as home page, the map and MARS SURVIVAL as sections."""
     traverse = table("perseverance_route.csv")
     rover = {"north": table("eva_route.csv"), "south": [p for p in traverse if p["sol"] <= CFG["south_until_sol"]]}
     routes = [make_route(spec, rover) for spec in CFG["routes"]]
@@ -266,7 +275,7 @@ def build():
     for scene in CFG["minerals"]:
         image = OUT / "assets" / f"crism-{scene['group']}.png"
         data["mineral_images"][scene["group"]] = "data:image/png;base64," + base64.b64encode(image.read_bytes()).decode("ascii")
-    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
+    parts = {"NAV": nav(CFG["map"]["file"]), "MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
     page = (ROOT / "template.html").read_text(encoding="utf-8")
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)
@@ -274,9 +283,10 @@ def build():
     logbook = (ROOT / "logbook.html").read_text(encoding="utf-8")
     for guide in CFG["guides"]:  # copy each survival guide next to the map with the shared mission log on top
         source = (ROOT / guide["source"]).read_text(encoding="utf-8")
-        (OUT / guide["file"]).write_text(re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + logbook, source, count=1), encoding="utf-8")
-    (OUT / "index.html").write_text(page, encoding="utf-8")
-    print(f"Built {OUT / 'index.html'} ({len(page) // 1024} KB). Best route: {best['name']}")
+        top = nav(guide["file"]) + logbook.replace("{{MAP}}", CFG["map"]["file"])
+        (OUT / guide["file"]).write_text(re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + top, source, count=1), encoding="utf-8")
+    (OUT / CFG["map"]["file"]).write_text(page, encoding="utf-8")
+    print(f"Built {OUT / CFG['map']['file']} ({len(page) // 1024} KB). Best route: {best['name']}")
     for r in routes:
         print(f"  {r['name']}: {r['length_m'] / 1000:.2f} km, {r['verified_pct']}% rover-driven, closest red zone {r['min_red_m']} m")
 

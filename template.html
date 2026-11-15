@@ -89,10 +89,10 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
 </style>
 </head>
 <body>
+{{NAV}}
 <header>
   <div><h1><span data-es="MARS-NAV · Delta occidental de Jezero">MARS-NAV · Jezero Western Delta</span></h1>
   <span class="muted"><span data-es="18.44° N, 77.45° E · Datos de NASA y USGS">18.44° N, 77.45° E · NASA and USGS data only</span></span></div>
-  <span id="guides" class="bar"></span>
   <button id="language" type="button" lang="es" aria-label="Cambiar a español">ES</button>
   <div id="status" role="status"></div>
 </header>
@@ -643,7 +643,6 @@ function showMission() {
   const m = mission();
   $("mission").textContent = m ? `${t("Mission sol", "Sol de misión")} ${m.sol} · ${t("landing at", "aterrizaje a las")} ${hhmm(m.landing.hour)} · ${m.log.length} ${t("log entries, shared with the guide", "entradas en la bitácora, compartida con la guía")}`
     : t("No mission yet: add a landing site to start sol 0 of the mission log.", "Sin misión: agrega un sitio de aterrizaje para iniciar el sol 0 de la bitácora.");
-  $("guides").innerHTML = DATA.guides.map(g => `<a href="${g.file}"><button type="button">${t(g.label, g.label_es)}</button></a>`).join("");
 }
 $("logplan").onclick = () => {
   const m = mission();
