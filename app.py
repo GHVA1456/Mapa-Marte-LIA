@@ -193,6 +193,7 @@ def build_3d(traverse, routes):
 
     inside = [p for p in traverse if DEM["west"] < p["lon"] < EAST and SOUTH < p["lat"] < DEM["north"]]
     ends = routes[0]["points"][::len(routes[0]["points"]) - 1]
+    ax, ay = xy_km(ends[0])  # the 3D axes read distance from habitat A
     width_km, height_km = COLS * DEM["cell_deg"] * KM_PER_DEG_LON, ROWS * DEM["cell_deg"] * KM_PER_DEG
     relief_km = (max(map(max, GRID)) - min(map(min, GRID))) / 1000
     aspect = {k: {"x": 2, "y": 2 * height_km / width_km, "z": 2 * relief_km * k / width_km} for k in (1, 3, 5)}
@@ -219,7 +220,9 @@ def build_3d(traverse, routes):
     fig.update_layout(
         template="plotly_dark", paper_bgcolor="#0e1117", margin={"l": 0, "r": 0, "t": 0, "b": 0},
         legend={"x": 0.01, "y": 0.99, "bgcolor": "rgba(14,17,23,0.7)", "font": {"size": 14}}, font={"color": "#edf0f5"},
-        scene={"xaxis_title": "East (km)", "yaxis_title": "North (km)", "zaxis_title": "Elevation (m)",
+        scene={"xaxis": {"title": "East of habitat A (km)", "tickvals": [ax + k / 2 for k in range(-8, 3)], "ticktext": [f"{k / 2:g}" for k in range(-8, 3)]},
+               "yaxis": {"title": "North of habitat A (km)", "tickvals": [ay + k / 2 for k in range(-4, 7)], "ticktext": [f"{k / 2:g}" for k in range(-4, 7)]},
+               "zaxis_title": "Elevation (m)",
                "aspectmode": "manual", "aspectratio": aspect[3], "camera": {"eye": {"x": 0, "y": -1.5, "z": 1.1}}})
     html = fig.to_html(full_html=False, include_plotlyjs="cdn", div_id="plot3d",
                        config={"displaylogo": False, "responsive": True, "displayModeBar": False})
@@ -262,8 +265,7 @@ def build():
     for scene in CFG["minerals"]:
         image = OUT / "assets" / f"crism-{scene['group']}.png"
         data["mineral_images"][scene["group"]] = "data:image/png;base64," + base64.b64encode(image.read_bytes()).decode("ascii")
-    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data),
-             "GROUND_RENDERER": (ROOT / "ground-renderer.js").read_text(encoding="utf-8")}
+    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
     page = (ROOT / "template.html").read_text(encoding="utf-8")
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)
