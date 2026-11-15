@@ -92,10 +92,12 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
 <header>
   <div><h1><span data-es="MARS-NAV · Delta occidental de Jezero">MARS-NAV · Jezero Western Delta</span></h1>
   <span class="muted"><span data-es="18.44° N, 77.45° E · Datos de NASA y USGS">18.44° N, 77.45° E · NASA and USGS data only</span></span></div>
+  <span id="guides" class="bar"></span>
   <button id="language" type="button" lang="es" aria-label="Cambiar a español">ES</button>
   <div id="status" role="status"></div>
 </header>
 <main>
+<p id="mission" class="panel" style="margin:0;font-weight:700;color:var(--sky)" role="status"></p>
 <section class="top">
   <div class="panel">
     <div class="bar">
@@ -198,6 +200,7 @@ li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1
     </label>
     <p class="muted"><span data-es="MEDA muestra los extremos térmicos del sol seleccionado. La capa TÉRMICO muestra un mosaico infrarrojo nocturno del terreno.">MEDA shows the temperature extremes of the selected sol. The THERMAL layer shows a nighttime infrared mosaic of the terrain.</span></p>
     <p class="warn" id="terrain-summary"></p>
+    <button id="logplan" type="button" style="width:100%;margin:.5rem 0"><span data-es="GUARDAR PLAN EN LA BITÁCORA">SAVE PLAN TO MISSION LOG</span></button>
     <div class="step"><span><span data-es="Salida">Departure</span></span><button data-step="depart,-0.5">−</button><output id="depart"></output><button data-step="depart,0.5">+</button></div>
     <div class="step"><span><span data-es="Velocidad (km/h)">Speed (km/h)</span></span><button data-step="speed,-0.5">−</button><output id="speed"></output><button data-step="speed,0.5">+</button></div>
     <div class="step"><span><span data-es="Tiempo en B (min)">Time at B (min)</span></span><button data-step="stop,-15">−</button><output id="stop"></output><button data-step="stop,15">+</button></div>
@@ -632,6 +635,25 @@ $("measure").onclick = () => {
 
 // ---- Landing sites added by the user: every figure is read from the USGS grid at the tapped spot ----------------------
 const landings = L.layerGroup().addTo(map);
+// ---- Mission log shared with the survival guides through this site's browser storage ---------------------------------
+const MISSION = "marsnav.mission";
+const mission = () => { try { return JSON.parse(localStorage.getItem(MISSION)); } catch { return null; } };
+function saveMission(m) { try { localStorage.setItem(MISSION, JSON.stringify(m)); } catch {} showMission(); }
+function showMission() {
+  const m = mission();
+  $("mission").textContent = m ? `${t("Mission sol", "Sol de misión")} ${m.sol} · ${t("landing at", "aterrizaje a las")} ${hhmm(m.landing.hour)} · ${m.log.length} ${t("log entries, shared with the guide", "entradas en la bitácora, compartida con la guía")}`
+    : t("No mission yet: add a landing site to start sol 0 of the mission log.", "Sin misión: agrega un sitio de aterrizaje para iniciar el sol 0 de la bitácora.");
+  $("guides").innerHTML = DATA.guides.map(g => `<a href="${g.file}"><button type="button">${t(g.label, g.label_es)}</button></a>`).join("");
+}
+$("logplan").onclick = () => {
+  const m = mission();
+  if (!m) { $("mission").textContent = t("Add a landing site first: the log starts at sol 0 with the landing.", "Primero agrega un sitio de aterrizaje: la bitácora empieza en el sol 0 con el aterrizaje."); return; }
+  m.log.push({sol: m.sol, text: `${t("EVA plan", "Plan de EVA")}: ${t(route.name, route.name_es || route.name)}, ${$("sDist").textContent}, ${$("sTime").textContent}, ${t("departure", "salida")} ${$("depart").textContent}. ${$("status").textContent}`});
+  saveMission(m);
+};
+addEventListener("storage", e => { if (e.key === MISSION) showMission(); });
+showMission();
+
 function addLanding({lat, lng}) {
   if (!withinDEM([lat, lng])) return;
   const here = [lat, lng], a = DATA.routes[0].points[0], b = DATA.routes[0].points.at(-1), slope = slopeAt(lat, lng);
@@ -647,14 +669,20 @@ function addLanding({lat, lng}) {
       ${day ? t("In daylight", "Con luz de día") : t("In darkness", "De noche")} · ${t("sun", "sol")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)} (MEDA sol ${wx.sol})`;
     site.setIcon(icon());
   };
-  const shift = hours => () => { hour = (hour + hours + 24) % 24; paint(); };
+  const isMission = () => { const m = mission(); return m && m.landing.lat === lat && m.landing.lon === lng; };
+  const landed = () => `${t("Landing at", "Aterrizaje en")} ${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E, ${hhmm(hour)}.`;
+  const start = () => saveMission({sol: 0, landing: {lat, lon: lng, elev_m: Math.round(elevAt(lat, lng)), slope_deg: +slope.toFixed(1), hour},
+    log: [{sol: 0, text: landed()}]});
+  const shift = hours => () => { hour = (hour + hours + 24) % 24; paint(); if (isMission()) { const m = mission(); m.landing.hour = hour; m.log[0].text = landed(); saveMission(m); } };
+  if (!mission()) start();  // the first landing marked becomes sol 0 of the mission log
   box.innerHTML = `<b>${t("Landing site", "Sitio de aterrizaje")} ${n}</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
     ${t("Elevation", "Elevación")} ${elevAt(lat, lng).toFixed(0)} m · ${t("slope", "pendiente")} ${slope.toFixed(1)}° (USGS, 80 m)<br>
     ${t("Nearest red-zone cell centre", "Centro de celda roja más cercano")} · ${Math.round(red)} m<br>
     ${t("Straight line to A", "Línea recta a A")} ${(metres(ll(a), here) / 1000).toFixed(2)} km · ${t("to B", "a B")} ${(metres(ll(b), here) / 1000).toFixed(2)} km<br>
     <span class="muted">${t("Proposed by the user: the place and time are a planning choice, not NASA data.", "Propuesto por el usuario: el lugar y la hora son una decisión de planeación, no un dato de la NASA.")}</span>`;
   const row = document.createElement("div"); row.style.cssText = "display:flex;gap:.5rem;margin-top:.4rem";
-  row.append(button("−", shift(-0.5)), button("+", shift(0.5)), button(t("REMOVE", "QUITAR"), () => landings.removeLayer(site)));
+  row.append(button("−", shift(-0.5)), button("+", shift(0.5)), button(t("REMOVE", "QUITAR"), () => landings.removeLayer(site)),
+    button(t("START SOL 0 HERE", "INICIAR SOL 0 AQUÍ"), start));
   box.append(when, row); paint(); site.bindPopup(box, {maxWidth: 340}).openPopup();
   $("landing").onclick();
 }

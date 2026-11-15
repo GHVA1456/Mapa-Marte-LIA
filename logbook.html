@@ -1,0 +1,46 @@
+<!-- Mission log shared with the MARS-NAV map. app.py inserts this block into each survival guide it copies to docs/. -->
+<style>
+#mnav{font:18px/1.45 system-ui,sans-serif;background:#0e1117;color:#fff;border-bottom:3px solid #ff9d5c;padding:1rem}
+#mnav *{box-sizing:border-box}#mnav h2{margin:0 0 .5rem;font-size:1.3rem;color:#ff9d5c}#mnav a{color:#8bc7ff}
+#mnav .row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.6rem 0}
+#mnav button,#mnav .link{font:700 1.05rem system-ui;color:#fff;background:#232c3a;border:2px solid #46556b;border-radius:.7rem;min-height:64px;padding:0 1.1rem;cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+#mnav .sol{font-size:2.2rem;font-weight:800;color:#39d0ff;margin-right:.6rem}
+#mnav textarea{flex:1;min-width:240px;min-height:64px;font:inherit;color:#fff;background:#10151d;border:2px solid #46556b;border-radius:.7rem;padding:.6rem}
+#mnav ol{list-style:none;margin:.4rem 0 0;padding:0;max-height:16rem;overflow:auto}
+#mnav li{background:#171d27;border-radius:.5rem;padding:.5rem .7rem;margin:.3rem 0}#mnav li b{color:#39d0ff;margin-right:.5rem}
+#mnav .muted{color:#b9c3d1;font-size:.9rem}
+</style>
+<section id="mnav" aria-live="polite"></section>
+<script>
+(() => {
+  const KEY = "marsnav.mission", es = document.documentElement.lang.startsWith("es"), t = (en, sp) => es ? sp : en, box = document.getElementById("mnav");
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } };
+  const save = mission => { try { localStorage.setItem(KEY, JSON.stringify(mission)); } catch {} render(); };
+  const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.round(h % 1 * 60)).padStart(2, "0")}`;
+  const escape = text => text.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+  function render() {
+    const mission = load(), map = `<a class="link" href="index.html">${t("OPEN THE MAP", "ABRIR EL MAPA")}</a>`;
+    if (!mission) {
+      box.innerHTML = `<h2>${t("Mission log", "Bitácora de misión")}</h2><p>${t("No landing yet. Mark a landing site on the map and this log starts at sol 0.",
+        "Aún no hay aterrizaje. Marca un sitio de aterrizaje en el mapa y esta bitácora empieza en el sol 0.")}</p><div class="row">${map}</div>`;
+      return;
+    }
+    const site = mission.landing;
+    box.innerHTML = `<h2>${t("Mission log", "Bitácora de misión")}</h2>
+      <div class="row"><span class="sol">Sol ${mission.sol}</span><span>${t("Landing", "Aterrizaje")} ${hhmm(site.hour)} · ${site.lat.toFixed(5)}° N, ${site.lon.toFixed(5)}° E ·
+        ${site.elev_m} m · ${t("slope", "pendiente")} ${site.slope_deg}°<br><span class="muted">${t("Sol 0 is the landing day. The crew advances the count; place and time were chosen on the map.",
+        "El sol 0 es el día del aterrizaje. La tripulación avanza la cuenta; el lugar y la hora se eligieron en el mapa.")}</span></span></div>
+      <div class="row"><button id="mnav-next">${t("NEXT SOL", "SIGUIENTE SOL")} ▶</button>${map}</div>
+      <div class="row"><textarea id="mnav-text" aria-label="${t("New log entry", "Nueva entrada")}" placeholder="${t("Write a log entry for this sol", "Escribe una entrada para este sol")}"></textarea>
+        <button id="mnav-add">${t("ADD ENTRY", "AGREGAR")}</button></div>
+      <ol>${mission.log.map(entry => `<li><b>Sol ${entry.sol}</b>${escape(entry.text)}</li>`).reverse().join("")}</ol>`;
+    document.getElementById("mnav-next").onclick = () => { mission.sol += 1; mission.log.push({sol: mission.sol, text: t("New sol started.", "Comienza un nuevo sol.")}); save(mission); };
+    document.getElementById("mnav-add").onclick = () => {
+      const text = document.getElementById("mnav-text").value.trim();
+      if (text) { mission.log.push({sol: mission.sol, text}); save(mission); }
+    };
+  }
+  addEventListener("storage", event => { if (event.key === KEY) render(); });  // the map changed the mission in another tab
+  render();
+})();
+</script>

@@ -12,6 +12,7 @@ import base64
 import json
 import math
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -241,7 +242,7 @@ def build():
     relief, plot3d = build_3d(traverse, routes)
     data = {**names, "relief": relief, "routes": routes, "traverse": [(p["lat"], p["lon"]) for p in traverse],
             "weather": table("meda_weather.csv"), "limits": CFG["limits"], "layers": CFG["layers"] + CFG["minerals"],
-            "references": CFG["references"], "steep": [(c["lat"], c["lon"]) for c in STEEP], "hazard": HAZARD,
+            "references": CFG["references"], "guides": CFG["guides"], "steep": [(c["lat"], c["lon"]) for c in STEEP], "hazard": HAZARD,
             "dem": {**DEM, "rows": ROWS, "cols": COLS, "grid": GRID, "m_per_deg": [KM_PER_DEG * 1000, KM_PER_DEG_LON * 1000]}}
     ground_layers = {
         "base": "JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0",
@@ -270,6 +271,10 @@ def build():
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)
     OUT.mkdir(exist_ok=True)
+    logbook = (ROOT / "logbook.html").read_text(encoding="utf-8")
+    for guide in CFG["guides"]:  # copy each survival guide next to the map with the shared mission log on top
+        source = (ROOT / guide["source"]).read_text(encoding="utf-8")
+        (OUT / guide["file"]).write_text(re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + logbook, source, count=1), encoding="utf-8")
     (OUT / "index.html").write_text(page, encoding="utf-8")
     print(f"Built {OUT / 'index.html'} ({len(page) // 1024} KB). Best route: {best['name']}")
     for r in routes:

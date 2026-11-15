@@ -163,5 +163,19 @@
   "places": {
     "A": "Habitat site at Octavia E. Butler Landing, where Perseverance touched down on 18 February 2021.",
     "B": "Three Forks, at the base of the western delta. Perseverance laid out its 10-tube sample depot in this area, completed in January 2023 (JPL)."
-  }
+  },
+  "guides": [
+    {
+      "file": "guide.html",
+      "label": "SURVIVAL GUIDE",
+      "label_es": "GUÍA DE SUPERVIVENCIA",
+      "source": "Proyecto Nasa Hackathon (pagina)/Nasa, Marte(guia de supervivencia).html"
+    },
+    {
+      "file": "guia.html",
+      "label": "MARS SURVIVAL",
+      "label_es": "MARS SURVIVAL",
+      "source": "guia de supervivencia.html"
+    }
+  ]
 }

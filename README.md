@@ -85,6 +85,14 @@ opens the 3D overview. Thermal and mineral imagery are selected one at a time.
 Glove-friendly design: every control is at least 64 px and there is nothing
 to type or hover.
 
+## Mission log shared with the survival guides
+
+`app.py` copies each survival guide listed in `data/config.json` into `docs/`
+(`guide.html`, `guia.html`) and puts the mission log from `logbook.html` at
+the top. The first landing site marked on the map starts sol 0; the map and
+the guides then read and write the same log in the browser's storage, so they
+must be opened from the same site (the local server, Netlify or GitHub Pages).
+
 ## Run it
 
 ```bash
