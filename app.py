@@ -245,23 +245,16 @@ def build_3d(traverse, routes):
 
 
 def nav(current, native):
-    """One bar on every page: sections plus the EN / ES button, whose choice is remembered across the three pages."""
+    """One bar on every page: sections plus the language selector, whose choice is remembered across the three pages."""
     style = ("font:700 17px system-ui;color:#fff;text-decoration:none;min-height:64px;padding:0 1.2rem;display:inline-flex;"
              "align-items:center;border-radius:.7rem;cursor:pointer;border:2px solid ")
     links = "".join(f'<a href="{page["file"]}" data-label-en="{page["label"]}" data-label-es="{page["label_es"]}" style="{style}'
                     f'{"#ff9d5c;background:#9b4e29" if page["file"] == current else "#46556b;background:#232c3a"}">{page["label"]}</a>'
                     for page in [CFG["guides"][0], CFG["map"], *CFG["guides"][1:]])
-    script = """<script>(() => {
-  const KEY = "marsnav.lang"; let memory = "%s";
-  window.marsnavLang = () => { try { return localStorage.getItem(KEY) || memory; } catch { return memory; } };
-  const button = document.getElementById("site-lang");
-  const paint = () => { const es = marsnavLang() === "es"; button.textContent = es ? "ENGLISH" : "ESPAÑOL";
-    document.querySelectorAll("nav[aria-label=Sections] a").forEach(a => { a.textContent = es ? a.dataset.labelEs : a.dataset.labelEn; }); };
-  button.onclick = () => { memory = marsnavLang() === "es" ? "en" : "es"; try { localStorage.setItem(KEY, memory); } catch {} paint(); dispatchEvent(new Event("marsnav-lang")); };
-  paint();
-})();</script>""" % native
     return (f'<nav aria-label="Sections" style="display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;background:#0e1117">{links}'
-            f'<span style="flex:1"></span><button id="site-lang" type="button" style="{style}#39d0ff;background:#232c3a"></button></nav>{script}')
+            f'<span style="flex:1"></span><select id="site-lang" data-native="{native}" aria-label="Language / Idioma" '
+            f'style="{style}#39d0ff;background:#232c3a"></select></nav>'
+            '<script src="assets/site-languages.js"></script>')
 
 
 def build():
