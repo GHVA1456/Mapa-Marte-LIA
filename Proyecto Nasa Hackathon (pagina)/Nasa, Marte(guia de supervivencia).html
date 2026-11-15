@@ -450,6 +450,9 @@
             
         }
 
+        #robotMessage {
+    white-space: pre-line;
+}
     </style>
 </head>
 
@@ -973,7 +976,6 @@
 
     <div class="robot-container">
 
-
         <div class="robot-dialog" id="robotDialog">
 
             <button
@@ -981,7 +983,6 @@
                 id="robotClose"
                 aria-label="Close dialog"
                 type="button">
-                ×
             </button>
 
             <p id="robotMessage">
@@ -1013,33 +1014,53 @@
             </svg>
         </button>
     
-
     </div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
 
         const robotMessages = [
 
-            `Put on some sunscreen—with an SPF of a million! Although Mars is farther from the Sun than Earth, walking on its surface is extremely dangerous for your skin. Because the planet has an ultra-thin atmosphere and lacks a protective magnetic field, the Sun’s ultraviolet rays would burn you in a matter of minutes. That is why NASA constantly monitors space weather. 
-    	Reference: NASA Science / MAVEN Mission – Mars Space Weather and Radiation Observations.`,
+            `DID YOU KNOW?!
 
-            `Sunsets with a ghostly blue hue. If you ever travel to Mars and look toward the horizon at sunset, you won’t see a red or orange sky as you would on Earth. The fine dust floating in the Martian atmosphere absorbs warm light while allowing blue tones to pass through, creating a distinctly blue sunset—a phenomenon the Perseverance rover has captured on several occasions.
-       Reference: NASA / JPL-Caltech – Mars 2020 Perseverance Rover Imaging and Atmospheric Science.`,
+             Put on some sunscreen—with an SPF of a million! Although Mars is farther from the Sun than Earth, walking on its surface is extremely dangerous for your skin. Because the planet has an ultra-thin atmosphere and lacks a protective magnetic field, the Sun’s ultraviolet rays would burn you in a matter of minutes. That is why NASA constantly monitors space weather. 
+    	
+            Reference: NASA Science / MAVEN Mission – Mars Space Weather and Radiation Observations.`,
 
-            `The wind plays music and stirs up "dust ghosts." In Jezero Crater, the atmosphere is so thin and quiet that the wind is barely audible; however, as it warms the ground, it creates giant whirlwinds known as "dust devils." These sand "ghosts" roam the desert on their own and have been captured by NASA’s cameras and microphones.
-    	Reference: NASA / JPL-Caltech – Mars Environmental Dynamics Analyzer (MEDA) Instrument Team Reports.`,
+            `DID YOU KNOW?! 
 
-            `One of the two Martian moons, called Phobos, is doomed. It orbits so close to the surface of Mars that the planet’s gravitational pull is slowly dragging it inward (at a rate of about 2 centimeters per year). In some 30 to 50 million years, Phobos will collapse and disintegrate, forming an impressive ring of debris and dust around Mars—just like Saturn’s!
-        Reference: NASA Solar System Exploration. (s.f.). Phobos: Facts. National Aeronautics and Space Administration. https://solarsystem.nasa.gov/`,
+            Sunsets with a ghostly blue hue. If you ever travel to Mars and look toward the horizon at sunset, you won’t see a red or orange sky as you would on Earth. The fine dust floating in the Martian atmosphere absorbs warm light while allowing blue tones to pass through, creating a distinctly blue sunset—a phenomenon the Perseverance rover has captured on several occasions.
+       
+            Reference: NASA / JPL-Caltech – Mars 2020 Perseverance Rover Imaging and Atmospheric Science.`,
 
-            `Thanks to the microphones carried by the Perseverance rover, we discovered that sound on Mars is a very strange experience. Because the atmosphere is 95% carbon dioxide and much thinner than our own, sound travels at different speeds—causing low and high frequencies to fall out of sync—which makes distant voices or noises sound muffled and subject to a peculiar delay.
-        Reference: Maurice, S., Chide, B., Murdoch, N., Wiens, R. C., Alonso, R., Ayotte, B., ... & Zorzano, M. P. (2022). In situ recording of Mars soundscape with Perseverance rover. Nature, 605(7910), 653–658. https://doi.org/10.1038/s41586-022-04670-0`,
+            `DID YOU KNOW?! 
 
-            `Although we know it today as a frozen, rusted desert, geological data show that more than 3.5 billion years ago, Mars was a planet covered in water. It held enough water to form a global ocean that would have covered the entire planet to a depth of up to 140 meters, concentrated primarily in its northern hemisphere.
-        Reference: NASA Goddard Space Flight Center. (2015). NASA research reveals Mars once had more water than Arctic Ocean. National Aeronautics and Space Administration. https://www.nasa.gov/`,
+            The wind plays music and stirs up "dust ghosts." In Jezero Crater, the atmosphere is so thin and quiet that the wind is barely audible; however, as it warms the ground, it creates giant whirlwinds known as "dust devils." These sand "ghosts" roam the desert on their own and have been captured by NASA’s cameras and microphones.
+    	
+            Reference: NASA / JPL-Caltech – Mars Environmental Dynamics Analyzer (MEDA) Instrument Team Reports.`,
 
-            `Upon microscopic analysis of Martian meteorites that fell to Earth (such as the famous ALH 84001), scientists discovered complex organic molecules and tiny pockets of water trapped inside them for over 4 billion years. These small space fragments demonstrated that Mars harbored a rich, complex chemistry and liquid water long before our own planet hosted advanced life.
-        Reference: Steele, A., Benning, L. G., Wirth, R., Siljeström, S., Fries, M. D., Dobrzhinetskaya, L., Rundgren, P., Katerinopoulou, A., & Cody, G. D. (2022). Organic synthesis on Mars by non-biological mechanisms from 4 billion years ago. Science, 377(6611), 1172–1177. https://doi.org/10.1126/science.abg7905`,
+            `DID YOU KNOW?!
+
+             One of the two Martian moons, called Phobos, is doomed. It orbits so close to the surface of Mars that the planet’s gravitational pull is slowly dragging it inward (at a rate of about 2 centimeters per year). In some 30 to 50 million years, Phobos will collapse and disintegrate, forming an impressive ring of debris and dust around Mars—just like Saturn’s!
+        
+             Reference: NASA Solar System Exploration. (s.f.). Phobos: Facts. National Aeronautics and Space Administration. https://solarsystem.nasa.gov/`,
+
+            `DID YOU KNOW?!
+
+           Thanks to the microphones carried by the Perseverance rover, we discovered that sound on Mars is a very strange experience. Because the atmosphere is 95% carbon dioxide and much thinner than our own, sound travels at different speeds—causing low and high frequencies to fall out of sync—which makes distant voices or noises sound muffled and subject to a peculiar delay.
+    
+            Reference: Maurice, S., Chide, B., Murdoch, N., Wiens, R. C., Alonso, R., Ayotte, B., ... & Zorzano, M. P. (2022). In situ recording of Mars soundscape with Perseverance rover. Nature, 605(7910), 653–658. https://doi.org/10.1038/s41586-022-04670-0`,
+
+            `DID YOU KNOW?!
+
+            Although we know it today as a frozen, rusted desert, geological data show that more than 3.5 billion years ago, Mars was a planet covered in water. It held enough water to form a global ocean that would have covered the entire planet to a depth of up to 140 meters, concentrated primarily in its northern hemisphere.
+    
+            Reference: NASA Goddard Space Flight Center. (2015). NASA research reveals Mars once had more water than Arctic Ocean. National Aeronautics and Space Administration. https://www.nasa.gov/`,
+
+            `DID YOU KNOW?!
+            
+            Upon microscopic analysis of Martian meteorites that fell to Earth (such as the famous ALH 84001), scientists discovered complex organic molecules and tiny pockets of water trapped inside them for over 4 billion years. These small space fragments demonstrated that Mars harbored a rich, complex chemistry and liquid water long before our own planet hosted advanced life.
+    
+            Reference: Steele, A., Benning, L. G., Wirth, R., Siljeström, S., Fries, M. D., Dobrzhinetskaya, L., Rundgren, P., Katerinopoulou, A., & Cody, G. D. (2022). Organic synthesis on Mars by non-biological mechanisms from 4 billion years ago. Science, 377(6611), 1172–1177. https://doi.org/10.1126/science.abg7905`,
 
             `Welcome, astronaut! Your mission starts here!`
         ];
