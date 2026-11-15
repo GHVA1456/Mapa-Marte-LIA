@@ -296,7 +296,7 @@ def build():
     for guide in CFG["guides"]:  # copy each survival guide next to the map with the shared mission log on top
         source = (ROOT / guide["source"]).read_text(encoding="utf-8")
         words = json.dumps(translations.get(guide["file"], {}), ensure_ascii=False)
-        top = nav(guide["file"], guide["lang"]) + logbook.replace("{{MAP}}", CFG["map"]["file"]).replace("{{NATIVE}}", guide["lang"]).replace("{{WORDS}}", words)
+        top = nav(guide["file"], guide["lang"]) + logbook.replace("{{MAP}}", CFG["map"]["file"]).replace("{{NATIVE}}", guide["lang"]).replace("{{WORDS}}", words).replace("{{PHRASES}}", json.dumps(translations.get(guide["file"] + "#phrases", []), ensure_ascii=False))
         (OUT / guide["file"]).write_text(re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + top, source, count=1), encoding="utf-8")
     (OUT / CFG["map"]["file"]).write_text(page, encoding="utf-8")
     print(f"Built {OUT / CFG['map']['file']} ({len(page) // 1024} KB). Best route: {best['name']}")
