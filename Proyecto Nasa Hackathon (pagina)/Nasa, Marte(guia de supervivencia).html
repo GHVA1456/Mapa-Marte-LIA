@@ -4,79 +4,819 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Life Support Systems and Habitat Engineering for Human Survival on Mars.</title>
-    <style type="text/css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: url("https://okdiario.com/img/2026/02/23/marte-crater.jpg") no-repeat center center fixed;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+
+            background:
+                linear-gradient(rgba(8, 12, 22, 0.65),
+                    rgba(8, 12, 22, 0.85)),
+                url("https://okdiario.com/img/2026/02/23/marte-crater.jpg") no-repeat center center fixed;
+
+            background-size: cover;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: rgb(214, 144, 64);
+        }
+
+        td {
+            border: 2px solid black;
+            padding: 12px;
+            text-align: center;
         }
 
         h1 {
-            color: rgb(243, 0, 0);
-            background-color: rgb(255, 175, 101);
-            width: 60%;
-            margin: auto;
-            border-radius: 20px;
-            padding: auto;
+            display: inline-block;
+            width: auto;
+            max-width: 100%;
 
-            animation: cambiarColor 5s infinite alternate;
+            color: #ffffff;
+            background: linear-gradient(90deg,
+                    #a83c1d,
+                    #e67e36,
+                    #a83c1d);
+
+            background-size: 200% 200%;
+
+            padding: 22px 35px;
+            border-radius: 18px;
+
+            font-size: clamp(28px, 5vw, 55px);
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+
+            animation: cambiarColor 6s ease infinite;
         }
 
         @keyframes cambiarColor {
             0% {
-                background-color: rgb(255, 175, 101);
-            }
-
-            25% {
-                background-color: rgb(240, 255, 81);
-
+                background-position: 0% 50%;
             }
 
             50% {
-                background-color: rgb(255, 229, 29);
+                background-position: 100% 50%;
             }
-
-            75% {}
 
             100% {
-                background-color: rgb(255, 175, 101);
+                background-position: 0% 50%;
             }
+        }
+
+        .panel {
+            background: rgba(12, 19, 32, 0.82);
+
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+
+            padding: 35px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+            transition: transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         h2 {
-            color: rgb(0, 153, 255);
-            background-color: rgb(0, 0, 0);
-            width: 95%;
-            margin: auto;
+            color: #ffae73;
+            font-size: 26px;
+            font-weight: 700;
+
+            border-left: 5px solid #e76f35;
+            padding-left: 15px;
+
+            margin-bottom: 25px;
         }
 
         h3 {
-            color: rgb(0, 0, 0);
-            background-color: rgb(255, 255, 255);
-            width: 200px;
-            margin: auto;
+            color: #ffffff;
+            background: rgba(230, 111, 53, 0.2);
+
+            display: inline-block;
+            width: auto;
+
+            padding: 12px 22px;
+            border-radius: 10px;
+
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #e5e9f0;
+
+            margin-bottom: 20px;
+        }
+
+        .contenido {
+            padding: 10px 5px;
+        }
+
+        .media-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0 30px;
+        }
+
+        .media-row .texto {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .media-row .texto p {
+            margin-bottom: 15px;
+        }
+
+        .media-row figure {
+            flex: 0 1 40%;
+            width: 40%;
+            min-width: 250px;
+            margin: 0;
+        }
+
+        .media-row figure img {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+        }
+
+        .media-row.invertido {
+            flex-direction: row-reverse;
+        }
+
+        figure {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            width: fit-content;
+            max-width: 100%;
+
+            margin: 25px auto;
+            text-align: center;
+        }
+
+        figure img {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+
+            float: none !important;
+            margin: 0 auto !important;
+
+            border: 6px solid rgb(0, 38, 255);
+            padding: 8px;
+            background-color: rgb(0, 0, 0);
+
+            border-radius: 12px;
+        }
+
+        figure figcaption {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px 12px;
+
+            color: #c5cbd5;
+            background: rgba(0, 0, 0, 0.55);
+
+            border-left: 3px solid #e76f35;
+            border-radius: 7px;
+
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 750px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            h1 {
+                padding: 18px;
+                font-size: 30px;
+            }
+
+            .panel {
+                padding: 22px;
+            }
+
+            h2 {
+                font-size: 21px;
+            }
+
+            p {
+                font-size: 15px;
+            }
+
+            .media-row,
+            .media-row.invertido {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .media-row .texto {
+                width: 100%;
+            }
+
+            .media-row figure {
+                width: 100%;
+                min-width: 0;
+                max-width: 500px;
+            }
+
+            .media-row figure img {
+                max-height: 300px;
+            }
+
+            figure {
+                width: 100%;
+            }
+
+            figure figcaption {
+                font-size: 12px;
+            }
+
+            table {
+                width: 100%;
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: #c5cbd5;
+            font-size: 13px;
+            margin-top: 35px;
         }
     </style>
 </head>
 
-<body background="">
-    <br>
-    <h1 align="center">
-        <p style="font-size: 65px;">
-            <span class="animado">
+<body>
+
+    <div class="contenedor">
+
+        <header>
+            <h1>
                 "How to Survive on Mars?"
-            </span>
-        </p>
-    </h1>
-    <h2 align="center">
-        <p style="font-size: 25px;">
-            <br>
-            "Texto"
-            <br><br>
-            "Texto"
-            <br>
-    </h2>
+            </h1>
+        </header>
+
+        <main>
+
+            <section class="panel">
+
+                <h2>
+                    Life Support Systems and Habitat Engineering
+                </h2>
+
+                <div class="contenido">
+
+                    <h3>
+                        Mars – Understanding the Planet, Its Dangers and the Importance of Survival
+                    </h3>
+
+                    <div class="media-row">
+
+                        <div class="texto">
+                            <p style="text-align: justify;">
+                                Mars, known as the Red Planet, is one of the celestial bodies that has generated the
+                                most
+                                interest in space exploration due to its geological, atmospheric, and environmental
+                                characteristics.
+                                It is the fourth planet from the Sun and represents one of the main targets for future
+                                human
+                                exploration missions. However, although it shares some similarities with Earth, its
+                                natural
+                                conditions are extremely different and present significant challenges to survival.
+                            </p>
+                        </div>
+
+                        <figure>
+                            <img src="https://cdn.mos.cms.futurecdn.net/rFxjRZcHNTZ8Jpw34pthnQ-750-80.jpg.webp"
+                                width="450" alt="Mars surface">
+
+                            <figcaption>
+                                (Reference: Yahoo! Noticias. (s.f.). Why is Mars red? Scientists may finally have the
+                                answer. Yahoo! Style.)
+                            </figcaption>
+                        </figure>
+
+                    </div>
+
+                </div>
+
+                <p style="text-align: justify;">
+                    To understand what it would be like to live on Mars, it is necessary to know its chemical
+                    composition and internal structure, as well as its main physical characteristics. Its surface is
+                    mainly composed of rocks, minerals, and dust rich in iron oxides, which are responsible for its
+                    characteristic reddish color. Its atmosphere is very thin and is composed of approximately
+                    95% carbon dioxide, in addition to nitrogen and argon, with small amounts of other gases. This
+                    composition means that the planet does not have breathable air for humans and cannot maintain
+                    temperatures suitable for life without technological intervention.
+                    Furthermore, Mars presents hazardous environmental conditions, including extremely low
+                    temperatures,
+                    intense solar and cosmic radiation, dust storms, and atmospheric pressure far lower than
+                    Earth's.
+                    For these reasons, any human mission would require specialized technology to provide oxygen,
+                    water,
+                    food, energy, and protection. Studying these characteristics allows us to understand the
+                    challenges
+                    of Mars exploration and demonstrates why it is crucial to develop a survival guide that
+                    establishes
+                    procedures, preventative measures, and technological solutions to protect human life.
+                </p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <div class="contenedor">
+
+        <main>
+
+            <section class="panel">
+
+                <h2>
+                    Life Support Systems and Habitat Engineering
+                </h2>
+
+                <div class="media-row invertido">
+
+                    <div class="texto">
+
+                        <p style="text-align: justify;">
+                            Mars is a rocky planet that is one of the inner planets of the Solar System.
+                            Its reddish appearance is mainly due to the presence of iron oxides in its soil and rocks.
+                        </p>
+
+                        <table border="1">
+                            <tr>
+                                <td>Characteristics</td>
+                                <td>Information</td>
+                            </tr>
+                            <tr>
+                                <td>Position</td>
+                                <td>Fourth planet from the Sun</td>
+                            </tr>
+                            <tr>
+                                <td>Diameter</td>
+                                <td>Approximately 6,779 km</td>
+                            </tr>
+                            <tr>
+                                <td>Volume</td>
+                                <td>Approximately 163 billion km³</td>
+                            </tr>
+                            <tr>
+                                <td>Gravity</td>
+                                <td>3.71 m/s²</td>
+                            </tr>
+                            <tr>
+                                <td>Length of day</td>
+                                <td>24 hours and 37 minutes</td>
+                            </tr>
+                            <tr>
+                                <td>Length of year</td>
+                                <td>687 Earth days</td>
+                            </tr>
+                            <tr>
+                                <td>Average temperature</td>
+                                <td>Approximately −63 °C</td>
+                            </tr>
+                            <tr>
+                                <td>Natural satellites</td>
+                                <td>Fobos and Deimos</td>
+                            </tr>
+                            <tr>
+                                <td>Color</td>
+                                <td>Reddish due to iron oxides</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <figure>
+                        <img src="https://static.nationalgeographicla.com/files/styles/image_3200/public/pia26344.webp?w=1600&h=900"
+                            width="600" alt="Mars planet">
+
+                        <figcaption>
+                            (Reference: Landau, E. (2025, 11 de septiembre). ¿Realmente hubo vida en Marte? El hallazgo
+                            científico que ofrece nuevos indicios sobre el pasado del planeta rojo. National
+                            Geographic.)
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <div class="contenedor">
+
+        <main>
+
+            <section class="panel">
+
+                <h2>
+                    Life Support Systems and Habitat Engineering
+                </h2>
+
+                <h3>
+                    Chemical Composition of Mars
+                </h3>
+
+                <div class="media-row">
+
+                    <div class="texto">
+
+                        <p style="text-align: justify;">
+                            Mars is composed primarily of chemical elements that form minerals, rocks, and materials
+                            present on
+                            its surface and in its interior.
+
+                            Among its most important components are:
+                            - Iron (Fe): present in minerals and iron oxides, responsible for its reddish color.
+                            <br>
+                            - Silicon (Si): a component of silicates, which make up a large portion of its rocks.
+                            <br>
+                            - Oxygen (O): found mainly combined with other elements in minerals and oxides.
+                            <br>
+                            - Magnesium (Mg): a component of various minerals present in the crust.
+                            <br>
+                            - Aluminum (Al): present in different minerals of Martian rocks.
+                            <br>
+                            - Sulfur (S): found in minerals such as sulfates.
+                            <br>
+                            - Composition of the Martian Atmosphere
+                            <br>
+                            Gas Approximate Percentage
+                            Carbon Dioxide (CO₂) 95.3%
+                            Nitrogen (N₂) 2.7%
+                            Argon (Ar) 1.6%
+                            Oxygen (O₂) 0.13%
+                            Carbon Monoxide (CO) 0.08%
+
+                            The Martian atmosphere is unbreathable for humans. Its low pressure and low oxygen
+                            concentration
+                            make the use of artificial life support systems essential.
+                        </p>
+
+                    </div>
+
+                    <figure>
+                        <img src="https://s.yimg.com/lo/mysterio/api/41ec80d7456bd03c99d6b14f4f7682ab1bb12f3e14fb3d2f33ee0b646b7069a8/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fcountry_living_645%2F5b283fcec9219227a23d2471882a8fcc"
+                            width="450" alt="Chemical composition of Mars">
+
+                        <figcaption>
+                            (Reference:Yahoo! Style. (s. f.). Why is Mars red? Scientists were surprised to discover the
+                            answer.)
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+                <h3>
+                    <div text-align="justify">
+                        Internal structure of Mars
+                    </div>
+                </h3>
+
+                <div class="media-row invertido">
+
+                    <div class="texto">
+
+                        <p style="text-align: justify;">
+                            Like Earth, Mars has an internal structure divided into three main regions:
+
+                            1. Crust: This is the solid outer layer of the planet, made up of rocks and minerals. Its
+                            surface
+                            contains volcanoes, craters, mountains, and extensive plains.
+                            2. Mantle: Located beneath the crust, it is composed mainly of rocky materials rich in
+                            silicates and
+                            iron and magnesium minerals.
+                            3. Core: This is the central region of the planet, composed mainly of iron, nickel, and
+                            light
+                            elements such as sulfur.
+                            This structure allows us to understand how Mars formed and how it evolved geologically over
+                            billions
+                            of years.
+                        </p>
+
+                    </div>
+
+                    <figure>
+                        <img src="https://www.seis-insight.eu/images/Public-Images/S4-Models/mars_structure_interne_eclatee_big.jpg"
+                            width="450" alt="Internal structure of Mars">
+
+                        <figcaption>
+                            (Reference:SEIS-InSight. (s. f.). Internal models of Mars.)
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+                <br>
+
+                <h3>
+                    <div text-align="justify">
+                        Main environmental hazards of Mars
+                    </div>
+                </h3>
+
+                <div class="media-row">
+
+                    <div class="texto">
+
+                        <p style="text-align: justify;">
+                            Human survival on Mars presents a challenge due to several natural conditions:
+                            - Lack of oxygen: the atmosphere contains very little oxygen available for breathing.
+                            - Extreme temperatures: temperatures can drop to approximately -125 °C.
+                            - Radiation: Mars lacks a strong global magnetic field, and its thin atmosphere offers
+                            little
+                            protection from radiation.
+                            - Dust storms: these can reduce visibility and damage solar panels and equipment.
+                            - Low atmospheric pressure: this poses a danger to the unprotected human body.
+                            - Scarcity of liquid water: although water exists, primarily in the form of ice, obtaining
+                            and
+                            processing it requires technology.
+                            - Difficulty in producing food: it would be necessary to build protected facilities to
+                            cultivate
+                            plants.
+                        </p>
+
+                    </div>
+
+                    <figure>
+                        <img src="https://www.lavanguardia.com/files/image_936_458/files/fp/uploads/2025/11/25/6926199535b70.r_d.415-275-11264.jpeg"
+                            width="450" alt="Electrical activity in Mars atmosphere">
+
+                        <figcaption>
+                            (Reference:Català, J. A. (2025, 26 de noviembre). Detectada por primera vez actividad
+                            eléctrica en la
+                            atmósfera de Marte. La Vanguardia.)
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+                <h3>
+                    <div text-align="justify">
+                        Systems needed to survive on Mars
+                    </div>
+                </h3>
+
+                <div class="media-row invertido">
+
+                    <div class="texto">
+
+                        To establish a human presence on Mars, it would be necessary to develop technological systems
+                        capable of maintaining conditions similar to those on Earth.
+                        <br><br>
+
+                        An astronaut suit is essential for human survival on Mars because the planet has no breathable
+                        atmosphere and experiences extreme temperatures and dangerous radiation. It works as a small
+                        personal
+                        life-support system, providing oxygen, regulating body temperature, and maintaining the pressure
+                        necessary for the human body.
+                        <br><br>
+
+                        The suit also protects astronauts from dust, harmful particles, and other environmental hazards
+                        while
+                        allowing them to move, communicate, and perform scientific activities outside their habitat. Its
+                        gloves,
+                        helmet, and special layers are designed to provide safety and mobility during space exploration.
+
+                    </div>
+
+                    <figure>
+                        <img src="https://miro.medium.com/v2/format:webp/1*-yP97WJayWLu268UaVrVdQ.jpeg" width="450"
+                            alt="Extravehicular mobility unit astronaut suit">
+
+                        <figcaption>
+                            (Reference:Diodati, M. (2015, 30 de noviembre). Tutti i pezzi della ISS (9/22):
+                            Extravehicular Mobility
+                            Unit (EMU). Medium.)
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+                <table border="1">
+                    <tr>
+                        <td>System</td>
+                        <td>Function</td>
+                    </tr>
+                    <tr>
+                        <td>Oxygen Support</td>
+                        <td>Provide breathable air</td>
+                    </tr>
+                    <tr>
+                        <td>Thermal Control</td>
+                        <td>Maintain appropriate temperatures</td>
+                    </tr>
+                    <tr>
+                        <td>Radiation Protection</td>
+                        <td>Reduce exposure to hazardous particles</td>
+                    </tr>
+                    <tr>
+                        <td>Water Supply</td>
+                        <td>Obtain, purify and store water</td>
+                    </tr>
+                    <tr>
+                        <td>Food Production</td>
+                        <td>Grow food in controlled environments</td>
+                    </tr>
+                    <tr>
+                        <td>Power Generation</td>
+                        <td>Provide electricity using solar panels or other sources</td>
+                    </tr>
+                    <tr>
+                        <td>Pressurized Habitats</td>
+                        <td>Create safe living and working environments</td>
+                    </tr>
+                </table>
+
+                <h3>
+                    <div text-align="justify">
+                        Importance of a survival guide on Mars
+                    </div>
+                </h3>
+
+                <p text-align="justify">
+                    A survival guide is essential for organizing activities nd establishing procedures to protect human
+                    life in an environment so different from Earth.
+
+                    Its importance lies in several aspects:
+                    - Identifying environmental hazards and knowing how to prevent them.
+                    - Establishing emergency protocols in case of failures in life support systems.
+                    - Determining how to obtain, store, and manage essential resources.
+                    - Designing safe habitats that protect against radiation and extreme temperatures.
+                    - Ensuring the supply of oxygen, water, food, and energy.
+                    - Preparing astronauts to respond to unexpected situations.
+                    A guide of this type would not only serve to solve problems during a mission, but also
+                    to plan future human colonies and develop technologies that allow for a prolonged stay on Mars.
+                </p>
+
+                <h3>
+                    <div text-align="justify">
+                        Conclusion
+                    </div>
+                </h3>
+
+                <p text-align="justify">
+                    Mars presents one of the greatest challenges for space exploration due to its geological, chemical,
+                    and
+                    environmental conditions. Although it possesses some characteristics similar to Earth, its carbon
+                    dioxide-rich
+                    atmosphere, extremely low temperatures, radiation, and scarcity of liquid water make human survival
+                    impossible without specialized technology.
+                    Understanding its chemical composition, internal structure, gravity, and environmental conditions
+                    allows us to identify the main risks
+                    astronauts would face. Therefore, developing a survival guide is fundamental to establishing safety
+                    measures, utilizing available resources,
+                    and designing life support systems that maintain suitable conditions for life.
+                    In conclusion, the possibility of inhabiting Mars will depend on scientific and technological
+                    advancements, as well as humanity's ability to adapt
+                    to an environment completely different from that of our planet.
+                </p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <div class="contenedor">
+        <main>
+            <section class="panel">
+                <h2>
+                    Landing zone
+                </h2>
+                <h3>
+                    <div text-align="justify">
+
+                    </div>
+                </h3>
+                <p style="text-align: justify;">
+                </p>
+            </section>
+        </main>
+
+        <div class="contenedor">
+            <main>
+                <section class="panel">
+                    <h2>
+                        Viewer-guide
+                    </h2>
+                    <h3></h3>
+                    <p style="text-align: justify;"></p>
+                </section>
+            </main>
+        </div>
+
+        <div class="contenedor">
+            <main>
+                <section class="panel">
+                    <h2>
+                        Life Support Systems and Habitat Engineering
+                    </h2>
+                    <h3></h3>
+                    <p style="text-align: justify;"></p>
+                </section>
+            </main>
+        </div>
+
+        <div class="contenedor">
+            <main>
+                <section class="panel">
+                    <h2>
+                        Life Support Systems and Habitat Engineering
+                    </h2>
+                    <h3></h3>
+                    <p style="text-align: justify;"></p>
+                </section>
+            </main>
+        </div>
+
+        <div class="contenedor">
+            <main>
+                <section class="panel">
+                    <h2>
+                        Life Support Systems and Habitat Engineering
+                    </h2>
+                    <h3></h3>
+                    <p style="text-align: justify;"></p>
+                </section>
+            </main>
+        </div>
+
+        <div class="contenedor">
+            <main>
+                <section class="panel">
+                    <h2>
+                        Life Support Systems and Habitat Engineering
+                    </h2>
+                    <h3></h3>
+                    <p style="text-align: justify;"></p>
+                </section>
+            </main>
+        </div>
+
+    </div>
+
+</body>
 
 </html>
