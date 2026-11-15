@@ -1476,6 +1476,11 @@ $("language").onclick = () => {
   renderCustomProfile();
   renderGroundReference();
 };
+// The EN / ES button in the top bar drives this page too, and the choice is shared with the guides.
+$("language").hidden = true;
+const syncLanguage = () => { if ((document.documentElement.lang === "es") !== (marsnavLang() === "es")) { $("language").onclick(); showMission(); } };
+addEventListener("marsnav-lang", syncLanguage);
+
 renderRoutes(); draw(); drawCoverage(); select(DATA.routes.find(r => r.best).id); map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
 $("plot3d").on("plotly_click", e => {
   if (!state.measuring) return;
@@ -1496,6 +1501,7 @@ $("profile").on("plotly_click", e => {
   map.panTo(ll(pts[point.pointNumber]));
   inspectSegment(Math.min(point.pointNumber, pts.length - 2));
 });
+syncLanguage();
 </script>
 </body>
 </html>

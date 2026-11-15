@@ -13,7 +13,21 @@
 <section id="mnav" aria-live="polite"></section>
 <script>
 (() => {
-  const KEY = "marsnav.mission", es = document.documentElement.lang.startsWith("es"), t = (en, sp) => es ? sp : en, box = document.getElementById("mnav");
+  const KEY = "marsnav.mission", NATIVE = "{{NATIVE}}", WORDS = {{WORDS}}, t = (en, sp) => marsnavLang() === "es" ? sp : en, box = document.getElementById("mnav");
+  function translate(root) {  // swap each known text for its translation, or back; unknown text stays as written
+    const other = marsnavLang() !== NATIVE, walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    for (let node; (node = walker.nextNode());) {
+      if (!node.parentElement || node.parentElement.closest("script,style,#mnav,nav[aria-label=Sections]")) continue;
+      if (node.original === undefined) {
+        const found = WORDS[node.nodeValue.replace(/\s+/g, " ").trim()];
+        if (!found) continue;
+        node.original = node.nodeValue; node.translated = found;
+      }
+      const wanted = other ? node.translated : node.original;
+      if (node.nodeValue !== wanted) node.nodeValue = wanted;
+    }
+  }
+  const relabel = () => { document.documentElement.lang = marsnavLang(); translate(document.body); render(); };
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } };
   const save = mission => { try { localStorage.setItem(KEY, JSON.stringify(mission)); } catch {} render(); };
   const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.round(h % 1 * 60)).padStart(2, "0")}`;
@@ -41,6 +55,12 @@
     };
   }
   addEventListener("storage", event => { if (event.key === KEY) render(); });  // the map changed the mission in another tab
+  addEventListener("marsnav-lang", relabel);
+  addEventListener("DOMContentLoaded", () => {  // the page body is parsed after this block
+    relabel();
+    new MutationObserver(changes => changes.forEach(change => change.addedNodes.forEach(node => node.parentNode && translate(node.nodeType === 1 ? node : node.parentNode))))
+      .observe(document.body, {childList: true, subtree: true});
+  });
   render();
 })();
 </script>
