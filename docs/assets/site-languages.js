@@ -14,6 +14,7 @@
 
   for (const [code, name] of Object.entries(languages)) select.add(new Option(name, code));
   window.marsnavLang = () => selected === 'es' ? 'es' : 'en';
+  window.marsnavLocale = () => selected;
 
   const excluded = 'script,style,noscript,code,pre,#site-lang,[contenteditable],textarea,input,[data-no-translate],.leaflet-control-attribution,.modebar';
   const eligible = value => /\p{L}/u.test(value) && !/^(?:https?:|www\.)/i.test(value.trim());

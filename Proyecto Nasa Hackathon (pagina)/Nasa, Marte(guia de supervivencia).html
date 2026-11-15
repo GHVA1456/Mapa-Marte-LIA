@@ -1805,7 +1805,7 @@ The project is not represented as entirely AI-generated. Scientific references r
         </div>
     </div>
 
-    <div class="robot-container">
+    <div class="robot-container" data-no-translate>
 
         <div class="robot-dialog" id="robotDialog">
 
@@ -1832,6 +1832,7 @@ The project is not represented as entirely AI-generated. Scientific references r
         </button>
     
     </div>
+    <script src="./assets/robot-facts.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -1924,6 +1925,23 @@ The project is not represented as entirely AI-generated. Scientific references r
             }
 
             function renderRobotMessage() {
+                const locale = window.marsnavLocale?.() ?? document.documentElement.lang;
+                const translation = window.marsRobotFacts?.[locale];
+                if (translation) {
+                    robotButton.setAttribute("aria-label", translation.talk);
+                    robotClose.setAttribute("aria-label", translation.close);
+                    if (lastMessageIndex < 0) {
+                        robotMessage.textContent = translation.welcome;
+                        return;
+                    }
+                    const reference = robotMessages[lastMessageIndex].split("Reference:")[1]?.trim();
+                    const fact = translation.facts[lastMessageIndex];
+                    robotMessage.textContent = reference
+                        ? [translation.heading, fact, translation.reference + ": " + reference].join("\n\n")
+                        : fact;
+                    return;
+                }
+
                 const spanish = (window.marsnavLang?.() ?? document.documentElement.lang).startsWith("es");
                 robotButton.setAttribute("aria-label", spanish ? "Hablar con el robot" : "Talk to the robot");
                 robotClose.setAttribute("aria-label", spanish ? "Cerrar diálogo" : "Close dialog");
