@@ -9,6 +9,7 @@ and installs Folium and Plotly there; nothing is installed system-wide.
 
 import csv
 import base64
+import importlib
 import json
 import math
 import os
@@ -41,6 +42,8 @@ except ModuleNotFoundError as error:
         raise
     print("Installing the map dependencies in the active virtual environment...", flush=True)
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(ROOT / "requirements.txt")])
+    # pip ran in another process, so clear the import cache before retrying.
+    importlib.invalidate_caches()
     import folium
     import plotly.graph_objects as go
 
