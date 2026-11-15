@@ -636,15 +636,26 @@ function addLanding({lat, lng}) {
   if (!withinDEM([lat, lng])) return;
   const here = [lat, lng], a = DATA.routes[0].points[0], b = DATA.routes[0].points.at(-1), slope = slopeAt(lat, lng);
   const red = Math.min(...DATA.steep.map(s => metres(s, here))), n = landings.getLayers().length + 1;
-  const site = L.marker(here, {icon: L.divIcon({html: `<div class="tag" style="border-color:#39d0ff">▼ ${t("LANDING", "ATERRIZAJE")} ${n}</div>`, className: "", iconAnchor: [10, 36]})}).addTo(landings);
-  const remove = document.createElement("button"); remove.textContent = t("REMOVE", "QUITAR"); remove.onclick = () => landings.removeLayer(site);
-  const box = document.createElement("div"); box.className = "pop";
+  let hour = state.depart;  // landing time in local solar hours, changed with the popup's − and + buttons
+  const icon = () => L.divIcon({html: `<div class="tag" style="border-color:#39d0ff">▼ ${t("LANDING", "ATERRIZAJE")} ${n} · ${hhmm(hour)}</div>`, className: "", iconAnchor: [10, 36]});
+  const site = L.marker(here, {icon: icon()}).addTo(landings);
+  const button = (label, action) => Object.assign(document.createElement("button"), {textContent: label, onclick: action});
+  const box = document.createElement("div"), when = document.createElement("p"); box.className = "pop";
+  const paint = () => {
+    const day = hour >= clock(wx.sunrise) && hour <= clock(wx.sunset);
+    when.innerHTML = `<b>${t("Landing time", "Hora de aterrizaje")} ${hhmm(hour)}</b> ${t("local solar time", "hora solar local")}<br>
+      ${day ? t("In daylight", "Con luz de día") : t("In darkness", "De noche")} · ${t("sun", "sol")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)} (MEDA sol ${wx.sol})`;
+    site.setIcon(icon());
+  };
+  const shift = hours => () => { hour = (hour + hours + 24) % 24; paint(); };
   box.innerHTML = `<b>${t("Landing site", "Sitio de aterrizaje")} ${n}</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
     ${t("Elevation", "Elevación")} ${elevAt(lat, lng).toFixed(0)} m · ${t("slope", "pendiente")} ${slope.toFixed(1)}° (USGS, 80 m)<br>
     ${t("Nearest red-zone cell centre", "Centro de celda roja más cercano")} · ${Math.round(red)} m<br>
     ${t("Straight line to A", "Línea recta a A")} ${(metres(ll(a), here) / 1000).toFixed(2)} km · ${t("to B", "a B")} ${(metres(ll(b), here) / 1000).toFixed(2)} km<br>
-    <span class="muted">${t("Proposed by the user. No rover has measured this spot unless it lies on the white traverse.", "Propuesto por el usuario. Ningún rover midió este punto, salvo que esté sobre el recorrido blanco.")}</span><br>`;
-  box.append(remove); site.bindPopup(box, {maxWidth: 340}).openPopup();
+    <span class="muted">${t("Proposed by the user: the place and time are a planning choice, not NASA data.", "Propuesto por el usuario: el lugar y la hora son una decisión de planeación, no un dato de la NASA.")}</span>`;
+  const row = document.createElement("div"); row.style.cssText = "display:flex;gap:.5rem;margin-top:.4rem";
+  row.append(button("−", shift(-0.5)), button("+", shift(0.5)), button(t("REMOVE", "QUITAR"), () => landings.removeLayer(site)));
+  box.append(when, row); paint(); site.bindPopup(box, {maxWidth: 340}).openPopup();
   $("landing").onclick();
 }
 $("landing").onclick = () => {

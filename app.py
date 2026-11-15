@@ -160,7 +160,7 @@ def build_2d():
         if layer["group"] == "thermal":
             thermal = folium.raster_layers.ImageOverlay(
                 thermal_image(), [[18.28125, 77.34375], [18.6328125, 77.6953125]],
-                name=layer["name"], pane="thermal", opacity=1,
+                name=layer["name"], pane="thermal", opacity=1, pixelated=False,  # smooth, not blocky
                 attr="NASA/JPL-Caltech/ASU · Mars Odyssey THEMIS",
             ).add_to(m)
             groups["thermal"] = [thermal.get_name()]
@@ -172,7 +172,7 @@ def build_2d():
             **({"bounds": layer["bounds"]} if "bounds" in layer else {})).add_to(m)
         groups.setdefault(layer["group"], []).append(tiles.get_name())
     for scene in CFG["minerals"]:  # real CRISM mineral-indicator images, served by NASA's Planetary Data System
-        image = folium.raster_layers.ImageOverlay(scene["url"], scene["bounds"], opacity=0.8, name=scene["name"]).add_to(m)
+        image = folium.raster_layers.ImageOverlay(scene["url"], scene["bounds"], opacity=0.8, name=scene["name"], pixelated=False).add_to(m)
         groups[scene["group"]] = [image.get_name()]
     hazards, half = folium.FeatureGroup("Hazards").add_to(m), HAZARD["cell_deg"] / 2
     groups["hazards"] = [hazards.get_name()]
