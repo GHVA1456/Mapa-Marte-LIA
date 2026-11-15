@@ -114,6 +114,13 @@ connection is needed because map tiles load live from NASA.
 
 In VS Code, install the recommended **Python** extension, open `app.py` and press `F5`.
 
+## Editing the pages
+
+Edit the source files, never the copies in `docs/`: the guides listed in
+`data/config.json`, `template.html` for the map and `logbook.html` for the
+mission log. While the program is running, save the file and refresh the
+window (Ctrl+R): the site is rebuilt automatically.
+
 ## Embed it in another page
 
 `docs/index.html` is a self-contained page. Put it next to your page and add

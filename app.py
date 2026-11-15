@@ -304,6 +304,23 @@ def build():
         print(f"  {r['name']}: {r['length_m'] / 1000:.2f} km, {r['verified_pct']}% rover-driven, closest red zone {r['min_red_m']} m")
 
 
+class FreshPages(SimpleHTTPRequestHandler):
+    """Serve docs/, rebuilding first if a source file was saved since the last build: save, then refresh."""
+    built, lock = 0.0, threading.Lock()
+
+    def do_GET(self):
+        sources = [ROOT / "template.html", ROOT / "logbook.html", *DATA.glob("*.json"), *(ROOT / g["source"] for g in CFG["guides"])]
+        with FreshPages.lock:
+            if max(path.stat().st_mtime for path in sources) > FreshPages.built:
+                build()
+                FreshPages.built = max(path.stat().st_mtime for path in sources)
+        super().do_GET()
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store")  # the window must never show a stale copy
+        super().end_headers()
+
+
 def open_window(url):
     """Open the map as a program window (Edge or Chrome app mode); return the process, or None if neither exists."""
     folders = [os.environ.get(k, "") for k in ("PROGRAMFILES(X86)", "PROGRAMFILES", "LOCALAPPDATA")]
@@ -319,7 +336,7 @@ def open_window(url):
 if __name__ == "__main__":
     build()
     if "--build" not in sys.argv:
-        handler = partial(SimpleHTTPRequestHandler, directory=str(OUT))
+        handler = partial(FreshPages, directory=str(OUT))
         try:
             server = ThreadingHTTPServer(("127.0.0.1", 8000), handler)
         except OSError:  # port 8000 is busy: let the system pick a free one
