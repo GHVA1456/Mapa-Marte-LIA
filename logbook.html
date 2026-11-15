@@ -13,13 +13,17 @@
 <section id="mnav" aria-live="polite"></section>
 <script>
 (() => {
-  const KEY = "marsnav.mission", NATIVE = "{{NATIVE}}", WORDS = {{WORDS}}, t = (en, sp) => marsnavLang() === "es" ? sp : en, box = document.getElementById("mnav");
+  const KEY = "marsnav.mission", NATIVE = "{{NATIVE}}", WORDS = {{WORDS}}, PHRASES = {{PHRASES}}, t = (en, sp) => marsnavLang() === "es" ? sp : en, box = document.getElementById("mnav");
   function translate(root) {  // swap each known text for its translation, or back; unknown text stays as written
     const other = marsnavLang() !== NATIVE, walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     for (let node; (node = walker.nextNode());) {
       if (!node.parentElement || node.parentElement.closest("script,style,#mnav,nav[aria-label=Sections]")) continue;
       if (node.original === undefined) {
-        const found = WORDS[node.nodeValue.replace(/\s+/g, " ").trim()];
+        let found = WORDS[node.nodeValue.replace(/\s+/g, " ").trim()];
+        if (!found && PHRASES.length) {  // text built by the page's own scripts: translate the known pieces inside it
+          found = PHRASES.reduce((text, [from, to]) => text.split(from).join(to), node.nodeValue);
+          if (found === node.nodeValue) found = "";
+        }
         if (!found) continue;
         node.original = node.nodeValue; node.translated = found;
       }
@@ -32,7 +36,9 @@
   const save = mission => { try { localStorage.setItem(KEY, JSON.stringify(mission)); } catch {} render(); };
   const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.round(h % 1 * 60)).padStart(2, "0")}`;
   const escape = text => text.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+  let armed = false;
   function render() {
+    const draft = (document.getElementById("mnav-text") || {}).value || "";  // keep what is being typed across redraws
     const mission = load(), map = `<a class="link" href="{{MAP}}">${t("OPEN THE MAP", "ABRIR EL MAPA")}</a>`;
     if (!mission) {
       box.innerHTML = `<h2>${t("Mission log", "Bitácora de misión")}</h2><p>${t("No landing yet. Mark a landing site on the map and this log starts at sol 0.",
@@ -44,10 +50,17 @@
       <div class="row"><span class="sol">Sol ${mission.sol}</span><span>${t("Landing", "Aterrizaje")} ${hhmm(site.hour)} · ${site.lat.toFixed(5)}° N, ${site.lon.toFixed(5)}° E ·
         ${site.elev_m} m · ${t("slope", "pendiente")} ${site.slope_deg}°<br><span class="muted">${t("Sol 0 is the landing day. The crew advances the count; place and time were chosen on the map.",
         "El sol 0 es el día del aterrizaje. La tripulación avanza la cuenta; el lugar y la hora se eligieron en el mapa.")}</span></span></div>
-      <div class="row"><button id="mnav-next">${t("NEXT SOL", "SIGUIENTE SOL")} ▶</button>${map}</div>
+      <div class="row"><button id="mnav-next">${t("NEXT SOL", "SIGUIENTE SOL")} ▶</button>
+        <button id="mnav-reset">${armed ? t("TAP AGAIN TO RESET", "TOCA OTRA VEZ PARA REINICIAR") : t("RESET TO SOL 0", "REINICIAR A SOL 0")}</button>${map}</div>
       <div class="row"><textarea id="mnav-text" aria-label="${t("New log entry", "Nueva entrada")}" placeholder="${t("Write a log entry for this sol", "Escribe una entrada para este sol")}"></textarea>
         <button id="mnav-add">${t("ADD ENTRY", "AGREGAR")}</button></div>
       <ol>${mission.log.map(entry => `<li><b>Sol ${entry.sol}</b>${escape(entry.text)}</li>`).reverse().join("")}</ol>`;
+    document.getElementById("mnav-text").value = draft;
+    document.getElementById("mnav-reset").style.borderColor = armed ? "#f85149" : "";
+    document.getElementById("mnav-reset").onclick = () => {  // two taps, so a gloved slip cannot wipe the count
+      if (!armed) { armed = true; render(); setTimeout(() => { if (armed) { armed = false; render(); } }, 5000); return; }
+      armed = false; mission.sol = 0; mission.log = mission.log.slice(0, 1); save(mission);
+    };
     document.getElementById("mnav-next").onclick = () => { mission.sol += 1; mission.log.push({sol: mission.sol, text: t("New sol started.", "Comienza un nuevo sol.")}); save(mission); };
     document.getElementById("mnav-add").onclick = () => {
       const text = document.getElementById("mnav-text").value.trim();
