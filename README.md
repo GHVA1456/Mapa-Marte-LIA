@@ -31,6 +31,57 @@ the reason each key point matters, a walk simulation with a scrubber, a tap
 anywhere terrain inspector (elevation, slope, nearest red zone), a departure
 time planner with a daylight bar, and a GO / NO-GO banner.
 
+Use **ES / EN** in the map header to switch languages. For a quick demo,
+compare the north route with the direct route, then change the departure time
+to see how the estimated daylight margin changes. Select **Follow walk** and
+press play to follow the simulated explorer with heading and distance cues.
+In **3D**, the camera offers **Free view**, **Follow explorer**, and
+**First person**. The first-person camera faces the direction of travel on
+the CTX terrain, including on the return leg. It projects the Jezero CTX
+orbital mosaic from NASA Mars Trek over the USGS relief when the imagery
+loads. Throughout the walk from A (Octavia E. Butler Landing) to B (Three Forks),
+the WebGL view requests nearby Mars Trek HiRISE imagery and aligns it to the
+same terrain coordinates. The two buttons below the view open Mastcam-Z
+reference photos. The Three Forks photo shows the sample depot in the area
+on sol 693, after the sol 414 endpoint used for the route.
+On compatible browsers, WebGL draws the terrain with depth testing
+and interpolated shading. The simulated sun follows a local arc estimated
+from the selected MEDA sol's sunrise and sunset. Both the first-person and
+overview cameras reflect this lighting as the walk progresses.
+The original CRISM PNGs in `docs/assets` are embedded in the generated page
+for 3D mineral rendering. Their source URLs remain in `data/config.json`.
+The original THEMIS tile `docs/assets/themis-9-203-732.png` is also embedded
+for both 2D and 3D. Its geographic extent is 77.34375–77.6953125° E and
+18.28125–18.6328125° N, covering every route. It comes from the configured
+NASA Mars Trek THEMIS layer, tile matrix 9, row 203, column 732.
+**View** switches between illustrative day and night lighting. Automatic mode
+uses the simulated local time and sunrise/sunset for the selected historical
+MEDA sol (1130–1133). MEDA reports temperature extremes for each sol. The
+thermal map layer shows nighttime infrared imagery of the terrain. Terrain
+figures summarize sampled route points, and red-zone distances are measured
+to cell centres.
+
+**Return to habitat** retraces the selected route from the simulated position.
+Its ETA uses the assumed walking speed, the selected MEDA sol and the NASA GISS
+Mars24 mean-sol conversion. A is a hypothetical habitat at the actual landing
+site. Click a route segment or profile point to inspect its rover coverage and
+USGS CTX terrain estimates. **Measure two points** uses the map coordinates for
+local straight-line distance and bearing, and interpolates elevation only within
+the CTX grid. The map links to the mission and terrain sources under Data Sources.
+
+In 2D or 3D, **Measure two points** compares a dashed direct line with the
+shortest route through adjacent CTX grid cells that avoid mapped slope hazards.
+Select an orange cell to inspect the slope threshold. The custom elevation
+profile highlights segments on the map, and its return estimate uses the
+selected speed, departure, stop duration and historical MEDA sol. **CTX coverage**
+outlines the grid and shades its exterior in 2D.
+
+The top controls also operate in the 3D overview. A and B focus the explorer,
+Route restores the overall view, and Hazards toggles slope markers. Thermal
+and Minerals project the source imagery onto the elevation surface when the
+source permits image loading. Selecting these terrain layers in first person
+opens the 3D overview. Thermal and mineral imagery are selected one at a time.
+
 Glove-friendly design: every control is at least 64 px and there is nothing
 to type or hover.
 

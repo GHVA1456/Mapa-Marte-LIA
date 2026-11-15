@@ -8,6 +8,7 @@ and installs Folium and Plotly there; nothing is installed system-wide.
 """
 
 import csv
+import base64
 import json
 import math
 import os
@@ -110,26 +111,40 @@ def make_route(spec, rover):
         p["slope_deg"] = round(terrain_slope(p), 1)
         p["red_m"] = round(min(metres(p, cell) for cell in STEEP))
         p["notes"] = []
+        p["notes_es"] = []
     points[0]["notes"].append(CFG["places"]["A"])
     points[-1]["notes"].append(CFG["places"]["B"])
+    points[0]["notes_es"].append("Hábitat en el lugar de aterrizaje Octavia E. Butler, donde Perseverance llegó el 18 de febrero de 2021.")
+    points[-1]["notes_es"].append("Three Forks, al pie del delta occidental. Perseverance completó aquí su depósito de diez tubos de muestras en enero de 2023 (JPL).")
     tilted = [p for p in points if p["verified"]]
-    notable = [(max(points, key=lambda p: p["elev_m"]), "Highest point of this route."),
-               (max(tilted, key=lambda p: p["tilt_deg"]), "Steepest rover tilt recorded on this route."),
-               (min(points, key=lambda p: p["red_m"]), "Closest this route comes to a red zone (slope over 20°).")]
+    notable = [
+        (max(points, key=lambda p: p["elev_m"]), "Highest point of this route.", "Punto más alto de la ruta."),
+        (max(tilted, key=lambda p: p["tilt_deg"]), "Highest recorded rover tilt.", "Mayor inclinación registrada por el rover."),
+        (min(points, key=lambda p: p["red_m"]), "Sampled point closest to a red-zone cell centre.", "Punto muestreado más cercano al centro de una celda roja."),
+    ]
     if len(tilted) < len(points):
-        notable.append((tilted[-1], "Last point driven by the rover. Beyond here the ground is known only from orbit."))
-    for point, note in notable:
-        point["notes"].append(note)
+        notable.append((tilted[-1], "Last rover point. Beyond here the terrain is known only from orbit.",
+                        "Último punto del rover. A partir de aquí el terreno se conoce por observaciones orbitales."))
+    for point, en, es in notable:
+        point["notes"].append(en)
+        point["notes_es"].append(es)
     for before, p, after in zip(points, points[1:], points[2:]):
         (x0, y0), (x1, y1), (x2, y2) = xy_km(before), xy_km(p), xy_km(after)
         turn = (math.degrees(math.atan2(x2 - x1, y2 - y1) - math.atan2(x1 - x0, y1 - y0)) + 180) % 360 - 180
         if abs(turn) >= 40:
             p["notes"].append(f"Turn {'right' if turn > 0 else 'left'} about {abs(turn):.0f}° here.")
+            direction_es = "derecha" if turn > 0 else "izquierda"
+            p["notes_es"].append(f"Gira unos {abs(turn):.0f}° a la {direction_es}.")
     verified_m = sum(q["dist_m"] - p["dist_m"] for p, q in zip(points, points[1:]) if q["verified"])
     return dict(spec, points=points, length_m=points[-1]["dist_m"], verified_pct=round(100 * verified_m / points[-1]["dist_m"]),
                 climb_m=round(sum(max(q["elev_m"] - p["elev_m"], 0) for p, q in zip(points, points[1:]))),
                 max_tilt=max(p["tilt_deg"] for p in tilted), max_slope=max(p["slope_deg"] for p in points),
                 min_red_m=min(p["red_m"] for p in points))
+
+
+def thermal_image():
+    image = OUT / "assets" / "themis-9-203-732.png"
+    return "data:image/png;base64," + base64.b64encode(image.read_bytes()).decode("ascii")
 
 
 def build_2d():
@@ -140,10 +155,20 @@ def build_2d():
     m.default_css = [("leaflet_css", LEAFLET + ".css")]  # skip Bootstrap and icon fonts we do not use
     m.default_js = [("leaflet", LEAFLET + ".js")]
     groups = {}
+    folium.map.CustomPane("thermal", z_index=250, pointer_events=False).add_to(m)
     for layer in CFG["layers"]:
+        if layer["group"] == "thermal":
+            thermal = folium.raster_layers.ImageOverlay(
+                thermal_image(), [[18.28125, 77.34375], [18.6328125, 77.6953125]],
+                name=layer["name"], pane="thermal", opacity=1,
+                attr="NASA/JPL-Caltech/ASU · Mars Odyssey THEMIS",
+            ).add_to(m)
+            groups["thermal"] = [thermal.get_name()]
+            continue
         tiles = folium.TileLayer(
             CFG["tiles"].replace("{id}", layer["id"]).replace("{ext}", layer["ext"]), name=layer["name"],
             attr="NASA/JPL-Caltech · USGS · Mars Trek", max_native_zoom=layer["zoom"], max_zoom=18,
+            pane="thermal" if layer["group"] == "thermal" else "tilePane",
             **({"bounds": layer["bounds"]} if "bounds" in layer else {})).add_to(m)
         groups.setdefault(layer["group"], []).append(tiles.get_name())
     for scene in CFG["minerals"]:  # real CRISM mineral-indicator images, served by NASA's Planetary Data System
@@ -184,6 +209,12 @@ def build_3d(traverse, routes):
         trace(ends, "A / B", None, mode="markers+text", text=["A · Habitat", "B · Three Forks"], textposition="top center",
               textfont={"size": 16}, marker={"size": 7, "color": "#ffffff", "line": {"color": "#0e1117", "width": 2}}),
         trace(ends[:1], "Astronaut", None, mode="markers", marker={"size": 9, "color": "#39d0ff", "line": {"color": "#fff", "width": 2}}),
+        go.Scatter3d(x=[], y=[], z=[], mode="lines", name="Ruta teórica / Theoretical route", line={"color": "#39d0ff", "width": 8}, hoverinfo="skip"),
+        go.Scatter3d(x=[], y=[], z=[], text=[], mode="markers+text", name="P1 / P2", marker={"color": "#fff", "size": 7}, hoverinfo="skip", textposition="top center"),
+        go.Scatter3d(x=[], y=[], z=[], mode="markers", name="Celdas de riesgo / Hazard cells", marker={"color": "#ff8e62", "size": 9, "symbol": "diamond"}, hovertemplate="%{text}<extra></extra>"),
+        go.Scatter3d(x=[], y=[], z=[], mode="lines", name="Línea directa / Direct line", line={"color": "#fff", "width": 5, "dash": "dash"}, hoverinfo="skip"),
+        go.Scatter3d(x=[], y=[], z=[], mode="lines", name="Cobertura CTX / CTX coverage", line={"color": "#e3b341", "width": 4}, hoverinfo="skip"),
+        go.Scatter3d(x=[], y=[], z=[], mode="lines+markers", name="Tramo elegido / Selected segment", line={"color": "#ffdf70", "width": 12}, marker={"size": 5, "color": "#ffdf70"}, hoverinfo="skip"),
     ])
     fig.update_layout(
         template="plotly_dark", paper_bgcolor="#0e1117", margin={"l": 0, "r": 0, "t": 0, "b": 0},
@@ -209,7 +240,30 @@ def build():
             "weather": table("meda_weather.csv"), "limits": CFG["limits"], "layers": CFG["layers"] + CFG["minerals"],
             "references": CFG["references"], "steep": [(c["lat"], c["lon"]) for c in STEEP], "hazard": HAZARD,
             "dem": {**DEM, "rows": ROWS, "cols": COLS, "grid": GRID, "m_per_deg": [KM_PER_DEG * 1000, KM_PER_DEG_LON * 1000]}}
-    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data)}
+    ground_layers = {
+        "base": "JEZ_ctx_B_soc_008_orthoMosaic_6m_Eqc_latTs0_lon0",
+        "detail": "JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first_dd",
+    }
+    data["ground_textures"] = {}
+    for key, layer_id in ground_layers.items():
+        layer = next(layer for layer in CFG["layers"] if layer["id"] == layer_id)
+        data["ground_textures"][key] = {
+            "zoom": layer["zoom"],
+            "url": CFG["tiles"].replace("{id}", layer_id).replace("{ext}", layer["ext"]),
+        }
+    thermal = next(layer for layer in CFG["layers"] if layer["group"] == "thermal")
+    data["thermal_texture"] = {
+        "image": thermal_image(),
+        "bounds": [[18.28125, 77.34375], [18.6328125, 77.6953125]],
+        "zoom": thermal["zoom"],
+        "url": CFG["tiles"].replace("{id}", thermal["id"]).replace("{ext}", thermal["ext"]),
+    }
+    data["mineral_images"] = {}
+    for scene in CFG["minerals"]:
+        image = OUT / "assets" / f"crism-{scene['group']}.png"
+        data["mineral_images"][scene["group"]] = "data:image/png;base64," + base64.b64encode(image.read_bytes()).decode("ascii")
+    parts = {"MAP_HEAD": head, "MAP_BODY": body, "MAP_SCRIPT": script, "PLOT3D": plot3d, "DATA": json.dumps(data),
+             "GROUND_RENDERER": (ROOT / "ground-renderer.js").read_text(encoding="utf-8")}
     page = (ROOT / "template.html").read_text(encoding="utf-8")
     for key, value in parts.items():
         page = page.replace("{{" + key + "}}", value)

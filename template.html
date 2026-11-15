@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MARS-NAV · Jezero Western Delta EVA map</title>
+<script>
+if (location.pathname.endsWith("/template.html")) {
+  location.replace(new URL("docs/index.html", location.href));
+}
+</script>
 {{MAP_HEAD}}
 <style>
 /* Built for pressurised gloves: every control is at least 64 px, nothing needs hover, typing or a precise tap. */
@@ -21,6 +26,30 @@ button:active{transform:scale(.96)}button.on{background:#9b4e29;border-color:var
 #views{position:relative}#view2d,#view3d{height:60vh;min-height:420px;border-radius:.6rem;overflow:hidden;background:#000}
 #weatherbox{position:absolute;right:12px;bottom:12px;z-index:900;background:rgba(14,17,23,.85);border:2px solid #8bc7ff;border-radius:.7rem;padding:.6rem .9rem;font-size:1.05rem;pointer-events:none}
 #weatherbox b{color:#8bc7ff;font-size:1.3rem}
+#views.night .leaflet-tile-pane{filter:brightness(.43) saturate(.65) hue-rotate(14deg)}
+#views.night .leaflet-container{background:#101624}
+#views.night #view3d{filter:brightness(.65) saturate(.75)}
+#view3d{position:relative}
+#view3d.first-person #plot3d{visibility:hidden}
+#view3d.first-person{filter:none!important}
+#ground-view,#ground-gpu{position:absolute;inset:0;width:100%;height:100%}
+#ground-caption{position:absolute;top:.7rem;left:.7rem;right:.7rem;width:fit-content;padding:.3rem .6rem;background:#0e1117e8;border-radius:.4rem}
+#ground-references{margin:.7rem 0}
+#ground-photo{margin:.5rem 0;padding:.65rem;background:#10151d;border-radius:.55rem}
+#ground-photo img{width:100%;max-height:320px;object-fit:contain;display:block;background:#0a0d12;border-radius:.4rem}
+#ground-photo figcaption{margin-top:.45rem}
+#solar-monitor{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:.5rem 0}
+#solar-arc{position:relative;display:inline-block;width:6rem;height:2rem;border:1px solid #a77956;border-bottom-color:#c99f7d;border-radius:100% 100% .3rem .3rem;background:#161c27}
+#solar-dot{position:absolute;width:.65rem;height:.65rem;border-radius:50%;background:#ffd68a;box-shadow:0 0 .6rem #ffc97b;transform:translate(-50%,-50%)}
+#walk-guide{border-left:4px solid var(--sky);padding:.45rem .7rem;background:#10151d}
+#walk-guide b{color:var(--sky)}
+#light-mode,#weather-sol,#camera-mode{min-height:64px;border:2px solid var(--line);border-radius:.7rem;padding:0 .6rem;background:#232c3a;color:#fff;font:inherit}
+#weather-sol{max-width:100%}
+.map-tools{margin:.6rem 0}
+.map-tools button{border-color:#6fb6de}
+.map-tools button:disabled{opacity:.65;cursor:default}
+.coverage-line{display:inline-block;width:2rem;margin-right:.35rem;vertical-align:middle;border-top:4px solid #fff}
+.coverage-line.orbit{border-top-style:dashed;border-color:#d16bff}
 #status{font-weight:800;font-size:1.15rem;padding:.5rem 1.2rem;border-radius:.7rem;color:#0e1117;background:var(--go)}#status.no{background:var(--stop);color:#fff}
 #sim{display:grid;grid-template-columns:96px 1fr;gap:.6rem;align-items:center;margin-top:.6rem}#play{font-size:1.8rem;min-height:72px}
 #simout{font-weight:700;color:var(--sky)}
@@ -47,93 +76,195 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.5rem;bo
 .leaflet-container a.leaflet-popup-close-button{font-size:34px;width:56px;height:56px;line-height:56px;color:#fff}
 .leaflet-touch .leaflet-bar a,.leaflet-bar a{width:64px;height:64px;line-height:64px;font-size:34px}
 li{margin:.3rem 0}@media(max-width:1000px){.top{grid-template-columns:minmax(0,1fr)}}
+.table-scroll{overflow-x:auto}
+@media(max-width:520px){
+  main,.panel{padding:.45rem}
+  #view2d,#view3d{height:55vh;min-height:280px}
+  #nav{grid-template-columns:64px minmax(0,1fr) 64px}
+  #nav button{padding:0}
+  .facts{grid-template-columns:1fr}
+  .step{grid-template-columns:1fr 64px 3.3rem 64px;gap:.25rem}
+}
 </style>
 </head>
 <body>
 <header>
-  <div><h1>MARS-NAV · Jezero Western Delta</h1>
-  <span class="muted">18.44° N, 77.45° E · NASA and USGS data only</span></div>
-  <div id="status"></div>
+  <div><h1><span data-es="MARS-NAV · Delta occidental de Jezero">MARS-NAV · Jezero Western Delta</span></h1>
+  <span class="muted"><span data-es="18.44° N, 77.45° E · Datos de NASA y USGS">18.44° N, 77.45° E · NASA and USGS data only</span></span></div>
+  <button id="language" type="button" lang="es" aria-label="Cambiar a español">ES</button>
+  <div id="status" role="status"></div>
 </header>
 <main>
 <section class="top">
   <div class="panel">
     <div class="bar">
-      <button data-layer="hazards">HAZARDS</button><button id="minerals">MINERALS</button><button data-layer="weather">WEATHER</button>
-      <button data-layer="thermal">THERMAL</button><button id="b3d">3D</button>
+      <button data-layer="hazards"><span data-es="RIESGOS">HAZARDS</span></button><button id="minerals"><span data-es="MINERALES">MINERALS</span></button><button data-layer="weather"><span data-es="CLIMA">WEATHER</span></button>
+      <button data-layer="thermal"><span data-es="TÉRMICO">THERMAL</span></button><button id="b3d">3D</button>
+      <button id="follow" type="button" aria-pressed="false"><span data-es="SEGUIR CAMINATA">FOLLOW WALK</span></button>
+      <label><span data-es="Vista">View</span>
+        <select id="light-mode">
+          <option value="auto" data-es="Automática">Automatic</option>
+          <option value="day" data-es="Día">Day</option>
+          <option value="night" data-es="Noche">Night</option>
+        </select>
+      </label>
       <span class="gap"></span>
-      <span id="go2d" class="bar"><button data-go="0">A</button><button data-go="-1">B</button><button data-go="all">ROUTE</button></span>
-      <span id="go3d" class="bar" hidden><button data-cam="0,0,2.2">TOP</button><button data-cam="0,-1.5,1.1">SOUTH</button><button data-cam="1.6,0,1">EAST</button><button id="relief">RELIEF ×3</button></span>
-      <button id="full" aria-label="Full screen">⛶</button>
+      <span id="go2d" class="bar"><button data-go="0">A</button><button data-go="-1">B</button><button data-go="all"><span data-es="RUTA">ROUTE</span></button></span>
+      <span id="go3d" class="bar" hidden>
+        <label><span data-es="Cámara 3D">3D camera</span>
+          <select id="camera-mode">
+            <option value="free" data-es="Vista libre">Free view</option>
+            <option value="track" data-es="Seguimiento">Follow explorer</option>
+            <option value="ground" data-es="Primera persona">First person</option>
+          </select>
+        </label>
+        <span id="camera-presets" class="bar"><button data-cam="0,0,2.2"><span data-es="CENITAL">TOP</span></button><button data-cam="0,-1.5,1.1"><span data-es="SUR">SOUTH</span></button><button data-cam="1.6,0,1"><span data-es="ESTE">EAST</span></button><button id="relief">RELIEF ×3</button></span>
+      </span>
+      <button id="full" aria-label="Full screen" data-aria-es="Pantalla completa">⛶</button>
     </div>
+    <div class="bar map-tools" role="group" aria-label="Navigation tools" data-aria-es="Herramientas de navegación">
+      <button id="return" type="button" aria-pressed="false"><span data-es="VOLVER AL HÁBITAT">RETURN TO HABITAT</span></button>
+      <button id="measure" type="button" aria-pressed="false"><span data-es="MEDIR DOS PUNTOS">MEASURE TWO POINTS</span></button>
+      <button id="coverage" type="button" aria-pressed="true" class="on"><span data-es="COBERTURA CTX">CTX COVERAGE</span></button>
+      <span class="muted" data-es="Avanza en la caminata para activar el regreso.">Advance the walk to enable the return.</span>
+    </div>
+    <p class="warn" id="return-summary" hidden></p>
+    <p class="warn" id="measure-summary" hidden></p>
+    <p class="warn" id="terrain-route-summary" hidden></p>
+    <p class="warn" id="hazard-inspection" hidden></p>
+    <p class="muted" id="custom-eta" hidden></p>
     <div id="views"><div id="view2d">{{MAP_BODY}}</div>
-      <div id="view3d" hidden>{{PLOT3D}}</div>
+      <div id="view3d" hidden>{{PLOT3D}}
+        <canvas id="ground-gpu" aria-label="First-person view of CTX terrain" data-aria-es="Terreno CTX en primera persona" hidden></canvas>
+        <canvas id="ground-view" aria-label="First-person view of CTX terrain" data-aria-es="Terreno CTX en primera persona" hidden></canvas>
+        <span id="ground-caption" class="muted" hidden></span>
+      </div>
       <div id="weatherbox" hidden></div></div>
-    <div id="sim"><button id="play" aria-label="Play the walk">▶</button>
-      <div><input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Position along the route"><div id="simout"></div></div></div>
-    <div id="nav"><button id="prev" aria-label="Previous point">◀</button><div id="wp"></div><button id="next" aria-label="Next point">▶</button></div>
+    <section id="ground-references" hidden>
+      <div class="bar">
+        <button type="button" data-ground-photo="A" aria-controls="ground-photo" aria-expanded="false">A · Octavia E. Butler</button>
+        <button type="button" data-ground-photo="B" aria-controls="ground-photo" aria-expanded="false">B · Three Forks</button>
+        <span class="muted" id="ground-reference-context"></span>
+      </div>
+      <figure id="ground-photo" hidden>
+        <img id="ground-photo-image" decoding="async" alt="">
+        <figcaption class="muted"><span id="ground-photo-caption"></span> <a id="ground-photo-source" target="_blank" rel="noreferrer"><span data-es="Fuente NASA">NASA source</span></a></figcaption>
+      </figure>
+    </section>
+    <div id="solar-monitor" hidden><span id="solar-arc" aria-hidden="true"><i id="solar-dot"></i></span><span id="solar-readout" class="muted"></span></div>
+    <div id="sim"><button id="play" aria-label="Play the walk" data-aria-es="Reproducir caminata">▶</button>
+      <div><input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Position along the route" data-aria-es="Posición en la ruta"><div id="simout"></div></div></div>
+    <div id="walk-guide" hidden></div>
+    <div class="muted">
+      <span class="coverage-line"></span><span data-es="En la ruta elegida, la línea continua une puntos de Perseverance (NASA/JPL)">On the selected route, solid lines connect Perseverance waypoints (NASA/JPL)</span>
+      <br><span class="coverage-line orbit"></span><span data-es="Línea morada discontinua: tramo propuesto sobre el modelo orbital">Purple dashed line: proposed segment on the orbital model</span>
+      <br><span data-es="El borde amarillo delimita la cobertura CTX. En 2D, el área sombreada queda fuera de la cuadrícula.">The yellow border marks CTX coverage. In 2D, shading marks the area outside the grid.</span>
+    </div>
+    <p class="muted" id="map-segment"></p>
+    <p class="muted" id="light-summary"></p>
+    <div id="thermal-controls" hidden>
+      <label><span data-es="Opacidad infrarroja">Infrared opacity</span>
+        <input id="thermal-opacity" type="range" min="0" max="100" value="100">
+      </label>
+      <p class="muted" id="thermal-status" role="status"></p>
+    </div>
+    <section id="custom-elevation" hidden>
+      <h2><span data-es="Perfil de la ruta P1 a P2">P1 to P2 route profile</span></h2>
+      <div id="custom-profile"></div>
+      <p id="custom-segment" class="muted"></p>
+    </section>
+    <div id="nav"><button id="prev" aria-label="Previous point" data-aria-es="Punto anterior">◀</button><div id="wp"></div><button id="next" aria-label="Next point" data-aria-es="Punto siguiente">▶</button></div>
     <p class="muted" id="layerinfo"></p>
-    <p class="muted">Tap any spot on the map to read its elevation and slope. Tap a dashed route to select it. Large dots are key points.</p>
+    <p class="muted"><span data-es="Toca el mapa para consultar la elevación y la pendiente. Toca una ruta discontinua para seleccionarla. Los puntos grandes señalan lugares clave.">Tap any spot on the map to read its elevation and slope. Tap a dashed route to select it. Large dots are key points.</span></p>
   </div>
   <aside class="panel">
-    <h2>Choose a route from A to B</h2>
+    <h2><span data-es="Elige una ruta de A a B">Choose a route from A to B</span></h2>
     <div id="routes"></div>
     <p class="muted" id="via"></p>
-    <h2>EVA plan · out and back</h2>
+    <h2><span data-es="Plan EVA · ida y vuelta">EVA plan · out and back</span></h2>
     <div class="stats">
-      <div class="stat"><b id="sTime"></b>total EVA time</div>
-      <div class="stat"><b id="sBack"></b>back at habitat</div>
-      <div class="stat"><b id="sDist"></b>round trip</div>
-      <div class="stat"><b id="sLeft"></b>daylight left on return</div>
-      <div class="stat"><b id="sTemp"></b>air temperature</div>
-      <div class="stat"><b id="sPress"></b>air pressure</div>
+      <div class="stat"><b id="sTime"></b><span data-es="duración total de la EVA">total EVA time</span></div>
+      <div class="stat"><b id="sBack"></b><span data-es="regreso al hábitat">back at habitat</span></div>
+      <div class="stat"><b id="sDist"></b><span data-es="ida y vuelta">round trip</span></div>
+      <div class="stat"><b id="sLeft"></b><span data-es="luz restante al regresar">daylight left on return</span></div>
+      <div class="stat"><b id="sTemp"></b><span data-es="temperatura del aire">air temperature</span></div>
+      <div class="stat"><b id="sPress"></b><span data-es="presión atmosférica">air pressure</span></div>
     </div>
     <div id="day"><i id="sun"></i><i id="eva"></i></div>
     <p class="muted" id="wx"></p>
-    <div class="step"><span>Departure</span><button data-step="depart,-0.5">−</button><output id="depart"></output><button data-step="depart,0.5">+</button></div>
-    <div class="step"><span>Speed (km/h)</span><button data-step="speed,-0.5">−</button><output id="speed"></output><button data-step="speed,0.5">+</button></div>
-    <div class="step"><span>Time at B (min)</span><button data-step="stop,-15">−</button><output id="stop"></output><button data-step="stop,15">+</button></div>
-    <p class="key"><span><i style="background:#3fb950"></i>rover tilt under 5°</span><span><i style="background:#e3b341"></i>5–10°</span><span><i style="background:#f85149"></i>over 10° or red zone</span><span><i style="background:#d16bff"></i>never driven</span></p>
-    <p class="muted">Distance, elevation, tilt, weather and daylight are NASA and USGS measurements. Times and GO / NO-GO are calculated from
-    assumptions that are not NASA limits: walking speed, time at B, an 8 h suit limit, a 1 h daylight margin and the tilt colour bands.</p>
+    <label><span data-es="Sol de referencia (MEDA)">Reference sol (MEDA)</span>
+      <select id="weather-sol"></select>
+    </label>
+    <p class="muted"><span data-es="MEDA muestra los extremos térmicos del sol seleccionado. La capa TÉRMICO muestra un mosaico infrarrojo nocturno del terreno.">MEDA shows the temperature extremes of the selected sol. The THERMAL layer shows a nighttime infrared mosaic of the terrain.</span></p>
+    <p class="warn" id="terrain-summary"></p>
+    <div class="step"><span><span data-es="Salida">Departure</span></span><button data-step="depart,-0.5">−</button><output id="depart"></output><button data-step="depart,0.5">+</button></div>
+    <div class="step"><span><span data-es="Velocidad (km/h)">Speed (km/h)</span></span><button data-step="speed,-0.5">−</button><output id="speed"></output><button data-step="speed,0.5">+</button></div>
+    <div class="step"><span><span data-es="Tiempo en B (min)">Time at B (min)</span></span><button data-step="stop,-15">−</button><output id="stop"></output><button data-step="stop,15">+</button></div>
+    <p class="key"><span><i style="background:#3fb950"></i><span data-es="inclinación del rover menor de 5°">rover tilt under 5°</span></span><span><i style="background:#e3b341"></i>5–10°</span><span><i style="background:#f85149"></i><span data-es="más de 10° o zona roja">over 10° or red zone</span></span><span><i style="background:#d16bff"></i><span data-es="sin recorrido del rover">never driven</span></span></p>
+    <p class="muted"><span data-es="La distancia, elevación, inclinación y clima se basan en datos de NASA y USGS. La velocidad, el tiempo en B, la autonomía y el margen de luz son supuestos de la simulación.">Distance, elevation, tilt, weather and daylight are NASA and USGS measurements. Times and GO / NO-GO are calculated from
+    assumptions that are not NASA limits: walking speed, time at B, an 8 h suit limit, a 1 h daylight margin and the tilt colour bands.</span></p>
   </aside>
 </section>
 <section class="panel">
   <div class="bar" id="tabs">
-    <button data-tab="plan" class="on">PROFILE</button><button data-tab="compare">COMPARE ROUTES</button><button data-tab="weather">CONDITIONS</button><button data-tab="data">DATA SOURCES</button>
+    <button data-tab="plan" class="on"><span data-es="PERFIL">PROFILE</span></button><button data-tab="compare"><span data-es="COMPARAR RUTAS">COMPARE ROUTES</span></button><button data-tab="weather"><span data-es="CONDICIONES">CONDITIONS</span></button><button data-tab="data"><span data-es="FUENTES">DATA SOURCES</span></button>
   </div>
   <div id="plan" class="tab on"><div id="profile"></div>
-    <p class="muted">Elevation along the selected route. Tap a dot to jump to that point. Rover-driven points use the rover's own measurement;
-    points never driven use the USGS elevation model.</p></div>
+    <p class="muted" id="segment-summary"></p>
+    <p class="muted"><span data-es="Elevación a lo largo de la ruta elegida. Toca un punto para saltar a él. En los puntos recorridos se usan mediciones del rover. Para el resto se usa el modelo del USGS.">Elevation along the selected route. Tap a dot to jump to that point. Rover-driven points use the rover's own measurement;
+    points never driven use the USGS elevation model.</span></p></div>
   <div id="compare" class="tab">
-    <table><thead><tr><th>Route</th><th>Length</th><th>Rover-driven</th><th>Climb</th><th>Max rover tilt</th><th>Max terrain slope</th><th>Closest red zone</th></tr></thead><tbody id="cmp"></tbody></table>
-    <p>The best route is the one with the most rover-driven ground, then the shortest. Only ground a rover has driven has measured tilt and proven
-    footing; elsewhere the map knows only what orbiters saw. Terrain slope comes from the 80 m USGS grid, so it misses rocks and sand ripples.</p>
+    <div class="table-scroll"><table><thead><tr><th><span data-es="Ruta">Route</span></th><th><span data-es="Longitud">Length</span></th><th><span data-es="Recorrido por el rover">Rover-driven</span></th><th><span data-es="Ascenso">Climb</span></th><th><span data-es="Inclinación máxima del rover">Max rover tilt</span></th><th><span data-es="Pendiente máxima">Max terrain slope</span></th><th><span data-es="Zona roja más cercana">Closest red zone</span></th></tr></thead><tbody id="cmp"></tbody></table></div>
+    <p><span data-es="La recomendación prioriza la cobertura del rover y, en caso de empate, la menor distancia. La cuadrícula de 80 m del USGS no permite distinguir rocas ni ondulaciones de arena.">The best route is the one with the most rover-driven ground, then the shortest. Only ground a rover has driven has measured tilt and proven
+    footing; elsewhere the map knows only what orbiters saw. Terrain slope comes from the 80 m USGS grid, so it misses rocks and sand ripples.</span></p>
   </div>
   <div id="weather" class="tab">
-    <p>Measured at Jezero by MEDA, the weather station on Perseverance. These are the latest sols in NASA's public feed, not live readings.</p>
-    <table><thead><tr><th>Sol</th><th>Earth date</th><th>High</th><th>Low</th><th>Pressure</th><th>Sunrise</th><th>Sunset</th></tr></thead><tbody id="wxrows"></tbody></table>
-    <p class="muted">Times are local solar time at the rover.</p>
+    <p><span data-es="Registros históricos de MEDA, la estación meteorológica de Perseverance en Jezero.">Measured at Jezero by MEDA, the weather station on Perseverance. These are historical records included with the map.</span></p>
+    <div class="table-scroll"><table><thead><tr><th>Sol</th><th><span data-es="Fecha terrestre">Earth date</span></th><th><span data-es="Máxima">High</span></th><th><span data-es="Mínima">Low</span></th><th><span data-es="Presión">Pressure</span></th><th><span data-es="Amanecer">Sunrise</span></th><th><span data-es="Atardecer">Sunset</span></th></tr></thead><tbody id="wxrows"></tbody></table></div>
+    <p class="muted"><span data-es="Las horas corresponden al tiempo solar local del rover.">Times are local solar time at the rover.</span></p>
   </div>
   <div id="data" class="tab">
-    <h2>Map layers</h2><ul id="layers"></ul>
-    <p class="warn">What this map does not claim: no route here is an approved traverse. Tilt is the rover's attitude at each stop. Red zones are slopes
+    <h2><span data-es="Capas del mapa">Map layers</span></h2><ul id="layers"></ul>
+    <p class="warn"><span data-es="Simulación educativa. Las zonas rojas marcan pendientes superiores a 20° según el modelo USGS de 20 m. La inclinación del rover corresponde a su postura en cada punto. Las imágenes CRISM se muestran tal como fueron publicadas. El mapa carece de mediciones directas de arena.">What this map does not claim: no route here is an approved traverse. Tilt is the rover's attitude at each stop. Red zones are slopes
     over 20° computed from the 20 m USGS model. The CRISM layers are NASA's published browse images, shown without interpretation. Sand is not
-    measured by any layer here.</p>
-    <h2>References</h2><ol id="refs"></ol>
+    measured by any layer here.</span></p>
+    <p class="muted"><span data-es="A representa un hábitat hipotético en el sitio de aterrizaje real. Las distancias, los rumbos y la hora de regreso se calculan dentro de la simulación.">A represents a hypothetical habitat at the actual landing site. Distances, bearings and return times are calculated by the simulator.</span></p>
+    <h2><span data-es="Referencias">References</span></h2><ol id="refs"></ol>
+    <ul>
+      <li><a href="https://science.nasa.gov/mission/mars-2020-perseverance/location-map/">NASA · Perseverance Rover Location Map</a></li>
+      <li><a href="https://astrogeology.usgs.gov/search/map/Mars/Mars2020/JEZ_ctx_B_soc_008_DTM_MOLAtopography_DeltaGeoid_20m_Eqc_latTs0_lon0">USGS · Mars 2020 CTX DTM</a></li>
+      <li><a href="https://www.giss.nasa.gov/tools/mars24/help/algorithm.html">NASA GISS · Mars24</a></li>
+    </ul>
   </div>
 </section>
 </main>
 <script>{{MAP_SCRIPT}}</script>
+<script>{{GROUND_RENDERER}}</script>
 <script>
 const DATA = {{DATA}}, map = window[DATA.map], $ = id => document.getElementById(id), all = s => document.querySelectorAll(s);
-const wx = DATA.weather.at(-1), dem = DATA.dem, [mLat, mLon] = dem.m_per_deg, south = dem.north - dem.rows * dem.cell_deg, east = dem.west + dem.cols * dem.cell_deg;
-const state = {speed: 2, stop: 60, depart: 8, wp: 0, relief: 3, t: 0, playing: false}, [tilt1, tilt2] = DATA.limits.tilt_bands_deg;
+let wx = DATA.weather.at(-1);
+const dem = DATA.dem, [mLat, mLon] = dem.m_per_deg, south = dem.north - dem.rows * dem.cell_deg, east = dem.west + dem.cols * dem.cell_deg;
+const state = {speed: 2, stop: 60, depart: 8, wp: 0, relief: 3, t: 0, playing: false, follow: false,
+  returnStart: null, segment: null, measuring: false, camera: "free"}, [tilt1, tilt2] = DATA.limits.tilt_bands_deg;
 let route, pts;
-const clock = t => { const [h, m] = t.split(":").map(Number); return h + m / 60; };
+const t = (en, es) => document.documentElement.lang === "es" ? es : en;
+const labels = [...all("[data-es]")].map(el => [el, el.textContent]);
+const accessibleLabels = [...all("[data-aria-es]")].map(el => [el, el.getAttribute("aria-label")]);
+const spanishRoutes = {
+  north: ["Ruta norte", "Sigue las huellas de Perseverance al norte de las ondulaciones de Séítah (soles 379–414)."],
+  south: ["Sur, luego oeste", "Sigue las huellas de Perseverance hasta el sol 200 y continúa en línea recta por terreno sin recorrer."],
+  direct: ["Ruta directa", "Cruza en línea recta las ondulaciones de Séítah que Perseverance rodeó."],
+};
+const routeName = r => t(r.name, spanishRoutes[r.id][0]);
+
+const clock = time => { const [h, m, s] = time.split(":").map(Number); return h + m / 60 + s / 3600; };
 const hhmm = h => `${String(Math.floor(h)).padStart(2, "0")}:${String(Math.floor(h % 1 * 60 + 1e-6)).padStart(2, "0")}`;
 const ll = p => [p.lat, p.lon], km = m => (m / 1000).toFixed(2);
 const metres = (a, b) => Math.hypot((a[0] - b[0]) * mLat, (a[1] - b[1]) * mLon);
+const bearing = (a, b) => (Math.atan2((b[1] - a[1]) * mLon, (b[0] - a[0]) * mLat) * 180 / Math.PI + 360) % 360;
+// NASA GISS Mars24: an average sol is 1.0274912517 Earth days.
+const solarHours = earthHours => earthHours / 1.0274912517;
+const withinDEM = ([lat, lon]) => lon >= dem.west && lon <= east && lat >= south && lat <= dem.north;
 const colour = p => !p.verified ? "#d16bff" : p.tilt_deg < tilt1 ? "#3fb950" : p.tilt_deg < tilt2 ? "#e3b341" : "#f85149";
 
 function elevAt(lat, lon) {  // bilinear read of the USGS grid, same maths as ground() in app.py
@@ -149,64 +280,523 @@ function slopeAt(lat, lon) {
 // ---- Map drawing -------------------------------------------------------------------------------------------------------
 L.polyline(DATA.traverse, {color: "#fff", weight: 2, opacity: 0.6, interactive: false}).addTo(map);
 const others = L.layerGroup().addTo(map), detail = L.layerGroup().addTo(map);
+const measurementLayer = L.layerGroup().addTo(map), measurement = [];
+const coverageLayer = L.layerGroup().addTo(map);
+const customHighlight = L.polyline([], {color: "#ffdf70", weight: 10, interactive: false}).addTo(map);
+let terrainRoute = null, inspectedHazard = null, customSegment = null, coverageShown = true, customProfileReady = false;
+const segmentLine = L.polyline([], {color: "#ffdf70", weight: 13, opacity: 0.85, interactive: false}).addTo(map);
 const ring = L.circleMarker([0, 0], {radius: 22, color: "#fff", weight: 5, fill: false, interactive: false}).addTo(map);
 const walker = L.circleMarker([0, 0], {radius: 11, color: "#fff", weight: 4, fillColor: "#39d0ff", fillOpacity: 1, interactive: false}).addTo(map);
 
-function select(id) {
-  route = DATA.routes.find(r => r.id === id); pts = route.points; play(false);
+function select(id, preservePosition = false) {
+  const {wp, t: position} = state;
+  route = DATA.routes.find(r => r.id === id); pts = route.points;
+  if (!preservePosition) {
+    play(false);
+    state.returnStart = state.segment = null;
+  }
   others.clearLayers(); detail.clearLayers();
-  DATA.routes.filter(r => r !== route).forEach(r => L.polyline(r.points.map(ll), {color: r.colour, weight: 7, dashArray: "4 14", bubblingMouseEvents: false}).on("click", () => select(r.id)).addTo(others));
+  DATA.routes.filter(r => r !== route).forEach(r => L.polyline(r.points.map(ll), {color: r.colour, weight: 7, dashArray: "4 14", bubblingMouseEvents: false}).on("click", e => {
+    if (state.measuring) measurePoint(e.latlng); else select(r.id);
+  }).addTo(others));
   L.polyline(pts.map(ll), {color: "#0e1117", weight: 14, interactive: false}).addTo(detail);
-  pts.slice(1).forEach((p, i) => L.polyline([ll(pts[i]), ll(p)], {color: colour(p), weight: 8, dashArray: p.verified ? null : "2 12", interactive: false}).addTo(detail));
-  pts.forEach((p, i) => L.circleMarker(ll(p), {radius: p.notes.length ? 14 : 9, color: "#0e1117", weight: 3, fillColor: colour(p), fillOpacity: 1, bubblingMouseEvents: false}).on("click", () => goto(i, false)).addTo(detail));
-  [[pts[0], "A · HABITAT"], [pts.at(-1), "B · THREE FORKS"]].forEach(([p, text]) =>
+  pts.slice(1).forEach((p, i) => L.polyline([ll(pts[i]), ll(p)], {color: colour(p), weight: 8, dashArray: p.verified ? null : "2 12", bubblingMouseEvents: false}).on("click", e => {
+    if (state.measuring) measurePoint(e.latlng); else inspectSegment(i);
+  }).addTo(detail));
+  pts.forEach((p, i) => L.circleMarker(ll(p), {radius: p.notes.length ? 14 : 9, color: "#0e1117", weight: 3, fillColor: colour(p), fillOpacity: 1, bubblingMouseEvents: false}).on("click", e => {
+    if (state.measuring) { measurePoint(e.latlng); return; }
+    goto(i, false);
+    inspectSegment(Math.min(i, pts.length - 2));
+  }).addTo(detail));
+  [[pts[0], t("A · HABITAT", "A · HÁBITAT")], [pts.at(-1), "B · THREE FORKS"]].forEach(([p, text]) =>
     L.marker(ll(p), {icon: L.divIcon({html: `<div class="tag">${text}</div>`, className: "", iconAnchor: [-18, 18]}), interactive: false}).addTo(detail));
   ring.bringToFront(); walker.bringToFront();
   all("[data-route]").forEach(b => b.classList.toggle("on", b.dataset.route === id));
-  $("via").textContent = route.via;
+  $("via").textContent = t(route.via, spanishRoutes[route.id][1]);
   Plotly.restyle("plot3d", {"line.width": DATA.routes.map(r => r === route ? 12 : 4)}, DATA.routes.map((_, i) => 3 + i));
   Plotly.react("profile", [
     {x: pts.map(p => p.dist_m / 1000), y: pts.map(p => p.elev_m), mode: "lines+markers", line: {color: "#d98a52", width: 3}, hovertemplate: "%{x:.2f} km · %{y:.0f} m<extra></extra>",
      marker: {size: pts.map(p => p.notes.length ? 18 : 12), color: pts.map(colour), line: {color: "#0e1117", width: 2}}},
-    {x: [0], y: [pts[0].elev_m], mode: "markers", hoverinfo: "skip", marker: {size: 20, color: "#39d0ff", line: {color: "#fff", width: 3}}}],
+    {x: [0], y: [pts[0].elev_m], mode: "markers", hoverinfo: "skip", marker: {size: 20, color: "#39d0ff", line: {color: "#fff", width: 3}}},
+    {x: [], y: [], mode: "lines", hoverinfo: "skip", line: {color: "#ffdf70", width: 5}}],
     {paper_bgcolor: "#171d27", plot_bgcolor: "#171d27", font: {color: "#edf0f5", size: 15}, height: 320, showlegend: false, margin: {l: 70, r: 20, t: 10, b: 55},
-     xaxis: {title: {text: "Distance from habitat (km)"}, gridcolor: "#2a3442"}, yaxis: {title: {text: "Elevation (m)"}, gridcolor: "#2a3442"}}, {displayModeBar: false, responsive: true});
-  goto(0, false); plan();
+     xaxis: {title: {text: t("Distance from habitat (km)", "Distancia desde el hábitat (km)")}, gridcolor: "#2a3442"}, yaxis: {title: {text: t("Elevation (m)", "Elevación (m)")}, gridcolor: "#2a3442"}}, {displayModeBar: false, responsive: true});
+  goto(preservePosition ? wp : 0, false);
+  if (preservePosition) setT(position);
+  inspectSegment(state.segment);
+  renderMeasure();
+  plan();
 }
 
+function inspectSegment(index) {
+  state.segment = index;
+  const segment = index === null ? [] : pts.slice(index, index + 2);
+  segmentLine.setLatLngs(segment.map(ll)).bringToFront();
+  ring.bringToFront(); walker.bringToFront();
+  Plotly.restyle("profile", {x: [segment.map(p => p.dist_m / 1000)], y: [segment.map(p => p.elev_m)]}, [2]);
+  const summary = $("segment-summary");
+  if (!segment.length) {
+    summary.textContent = t("Select a route segment on the map or click a point in the elevation profile.", "Selecciona un tramo en el mapa o toca un punto del perfil de elevación.");
+    $("map-segment").textContent = "";
+    return;
+  }
+  const [a, b] = segment, start = ll(a), end = ll(b);
+  const dy = (end[0] - start[0]) * mLat, dx = (end[1] - start[1]) * mLon;
+  const nearest = Math.min(...DATA.steep.map(([lat, lon]) => {
+    const y = (lat - start[0]) * mLat, x = (lon - start[1]) * mLon;
+    const f = Math.min(1, Math.max(0, (x * dx + y * dy) / (dx * dx + dy * dy || 1)));
+    return Math.hypot(x - f * dx, y - f * dy);
+  }));
+  const slope = Math.max(a.slope_deg, b.slope_deg);
+  const coverage = b.verified
+    ? t("NASA/JPL · connects recorded Perseverance waypoints.", "NASA/JPL · une puntos registrados por Perseverance.")
+    : t("Proposed segment · elevation from the USGS Mars 2020 orbital model.", "Tramo propuesto · elevación del modelo orbital Mars 2020 del USGS.");
+  const text = t(
+    `Segment ${index + 1} · ${coverage} Max slope at endpoints: ${slope}°. Closest red-zone cell centre: ~${Math.round(nearest)} m. Terrain: USGS CTX.`,
+    `Tramo ${index + 1} · ${coverage} Pendiente máxima en los extremos: ${slope}°. Centro de celda roja más cercano: ~${Math.round(nearest)} m. Terreno: CTX del USGS.`
+  );
+  summary.textContent = text;
+  $("map-segment").textContent = text;
+}
+
+function renderMeasure() {
+  const summary = $("measure-summary");
+  summary.hidden = !state.measuring;
+  renderTerrainRouteSummary();
+  if (measurement.length < 2) {
+    summary.textContent = measurement.length
+      ? t("Tap the second point.", "Toca el segundo punto.")
+      : t("Tap two points to measure distance, bearing and elevation difference.", "Toca dos puntos para medir distancia, rumbo y diferencia de elevación.");
+    return;
+  }
+  const [a, b] = measurement, distance = metres(a, b);
+  const direction = distance ? `${Math.round(bearing(a, b)) % 360}°` : "—";
+  const delta = measurement.every(withinDEM) ? `${Math.round(elevAt(...b) - elevAt(...a))} m (USGS CTX)` : t("outside elevation coverage", "fuera de la cobertura de elevación");
+  summary.textContent = t(
+    `P1 → P2 · Straight-line distance ~${Math.round(distance)} m · Bearing ${direction} · Elevation change ${delta}.`,
+    `P1 → P2 · Distancia en línea recta ~${Math.round(distance)} m · Rumbo ${direction} · Diferencia de elevación ${delta}.`
+  );
+}
+
+// The DEM cells overlapping slope hazards are excluded from the route search.
+const hazardHalf = DATA.hazard.cell_deg / 2;
+const cell = ([lat, lon]) => [
+  Math.min(dem.rows - 1, Math.max(0, Math.floor((dem.north - lat) / dem.cell_deg))),
+  Math.min(dem.cols - 1, Math.max(0, Math.floor((lon - dem.west) / dem.cell_deg))),
+];
+const cellId = (r, c) => r * dem.cols + c;
+const centres = Array.from({length: dem.rows * dem.cols}, (_, id) => [
+  dem.north - (Math.floor(id / dem.cols) + 0.5) * dem.cell_deg,
+  dem.west + (id % dem.cols + 0.5) * dem.cell_deg,
+]);
+const blocked = new Set();
+for (const [lat, lon] of DATA.steep) {
+  const [r0, c0] = cell([lat + hazardHalf, lon - hazardHalf]);
+  const [r1, c1] = cell([lat - hazardHalf, lon + hazardHalf]);
+  for (let r = r0; r <= r1; r++) {
+    for (let c = c0; c <= c1; c++) blocked.add(cellId(r, c));
+  }
+}
+
+function shortestGridRoute(start, end) {
+  const first = cellId(...cell(start)), last = cellId(...cell(end));
+  if (blocked.has(first) || blocked.has(last)) return [];
+  if (first === last) return [start, end];
+  const costs = new Float64Array(centres.length).fill(Infinity);
+  const previous = new Int32Array(centres.length).fill(-1);
+  const open = new Set([first]);
+  costs[first] = 0;
+  while (open.size) {
+    let current, best = Infinity;
+    for (const id of open) {
+      const score = costs[id] + metres(centres[id], centres[last]);
+      if (score < best) { current = id; best = score; }
+    }
+    if (current === last) {
+      const path = [];
+      for (let id = last; id !== -1; id = previous[id]) path.push(centres[id]);
+      return [start, ...path.reverse(), end].filter((p, i, points) => i === 0 || metres(p, points[i - 1]) > 0.001);
+    }
+    open.delete(current);
+    const row = Math.floor(current / dem.cols), col = current % dem.cols;
+    for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      const r = row + dr, c = col + dc;
+      if (r < 0 || r >= dem.rows || c < 0 || c >= dem.cols) continue;
+      const id = cellId(r, c);
+      if (blocked.has(id)) continue;
+      const nextCost = costs[current] + metres(centres[current], centres[id]);
+      if (nextCost >= costs[id]) continue;
+      costs[id] = nextCost;
+      previous[id] = current;
+      open.add(id);
+    }
+  }
+  return [];
+}
+
+function crossesHazard(start, end, centre) {
+  let enter = 0, leave = 1;
+  for (const axis of [0, 1]) {
+    const delta = end[axis] - start[axis], offset = centre[axis] - start[axis];
+    if (delta === 0) {
+      if (Math.abs(offset) > hazardHalf) return false;
+      continue;
+    }
+    const a = (offset - hazardHalf) / delta, b = (offset + hazardHalf) / delta;
+    enter = Math.max(enter, Math.min(a, b));
+    leave = Math.min(leave, Math.max(a, b));
+    if (enter > leave) return false;
+  }
+  return true;
+}
+
+const terrainTrace = DATA.routes.length + 5;
+const to3D = (points, lift = 5) => ({
+  x: [points.map(p => (p[1] - dem.west) * mLon / 1000)],
+  y: [points.map(p => (p[0] - south) * mLat / 1000)],
+  z: [points.map(p => elevAt(...p) + lift)],
+});
+
+function sampleLine(start, end) {
+  const steps = Math.max(1, Math.ceil(metres(start, end) / (dem.cell_deg * Math.min(mLat, mLon) / 2)));
+  return Array.from({length: steps + 1}, (_, i) => [
+    start[0] + (end[0] - start[0]) * i / steps,
+    start[1] + (end[1] - start[1]) * i / steps,
+  ]);
+}
+
+const coverage = [[south, dem.west], [south, east], [dem.north, east], [dem.north, dem.west], [south, dem.west]];
+const coverageFrame = coverage.slice(1).flatMap((point, i) => sampleLine(coverage[i], point));
+const pad = 0.03;
+L.polygon([
+  [[south - pad, dem.west - pad], [south - pad, east + pad], [dem.north + pad, east + pad], [dem.north + pad, dem.west - pad]],
+  coverage.slice(0, -1),
+], {stroke: false, fillColor: "#0e1117", fillOpacity: 0.65, interactive: false}).addTo(coverageLayer);
+L.polyline(coverage, {color: "#e3b341", weight: 3, dashArray: "8 6", interactive: false}).addTo(coverageLayer);
+
+function drawCoverage() {
+  if (coverageShown) coverageLayer.addTo(map); else coverageLayer.remove();
+  $("coverage").classList.toggle("on", coverageShown);
+  $("coverage").setAttribute("aria-pressed", String(coverageShown));
+  Plotly.restyle("plot3d", to3D(coverageShown ? coverageFrame : []), [terrainTrace + 4]);
+}
+
+$("coverage").onclick = () => { coverageShown = !coverageShown; drawCoverage(); };
+
+function hazardLabel(point) {
+  const [lat, lon] = point;
+  const position = `${lat.toFixed(5)}° N, ${lon.toFixed(5)}° E`;
+  return t(
+    `${position} · CTX hazard cell · slope over ${DATA.hazard.min_slope_deg}° (USGS). The direct line intersects this cell.`,
+    `${position} · Celda de riesgo CTX · pendiente superior a ${DATA.hazard.min_slope_deg}° (USGS). La línea directa cruza esta celda.`
+  );
+}
+
+function inspectHazard(point) {
+  inspectedHazard = point;
+  $("hazard-inspection").hidden = !point;
+  $("hazard-inspection").textContent = point ? hazardLabel(point) : "";
+}
+
+function drawTerrainRoute() {
+  terrainRoute = null;
+  inspectHazard(null);
+  customSegment = null;
+  if (measurement.length === 2 && measurement.every(withinDEM)) {
+    const [start, end] = measurement;
+    const path = shortestGridRoute(start, end);
+    const hazards = DATA.steep.filter(p => crossesHazard(start, end, p));
+    const distances = path.length ? [0] : [];
+    path.slice(1).forEach((p, i) => distances.push(distances[i] + metres(path[i], p)));
+    terrainRoute = {path, hazards, distances, distance: distances.at(-1) ?? 0};
+    if (path.length) L.polyline(path, {color: "#39d0ff", weight: 6, interactive: false}).addTo(measurementLayer);
+    for (const [lat, lon] of hazards) {
+      L.rectangle([[lat - hazardHalf, lon - hazardHalf], [lat + hazardHalf, lon + hazardHalf]],
+        {color: "#ff8e62", weight: 3, fillOpacity: 0.45, bubblingMouseEvents: false})
+        .on("click", () => inspectHazard([lat, lon])).addTo(measurementLayer);
+    }
+  }
+  Plotly.restyle("plot3d", to3D(terrainRoute?.path ?? []), [terrainTrace]);
+  Plotly.restyle("plot3d", {...to3D(measurement.filter(withinDEM)),
+    text: [measurement.flatMap((p, i) => withinDEM(p) ? [`P${i + 1}`] : [])]}, [terrainTrace + 1]);
+  const direct = terrainRoute ? sampleLine(...measurement) : [];
+  Plotly.restyle("plot3d", to3D(direct, 8), [terrainTrace + 3]);
+  renderCustomProfile();
+}
+
+function renderCustomProfile() {
+  const path = terrainRoute?.path ?? [];
+  $("custom-elevation").hidden = path.length < 2;
+  highlightCustomSegment(customSegment);
+  if (path.length < 2) return;
+  const profile = $("custom-profile");
+  const layout = {
+    paper_bgcolor: "#171d27", plot_bgcolor: "#171d27", font: {color: "#edf0f5"}, height: 255,
+    margin: {l: 60, r: 20, t: 15, b: 48},
+    xaxis: {title: {text: t("Distance from P1 (km)", "Distancia desde P1 (km)")}, gridcolor: "#2a3442"},
+    yaxis: {title: {text: t("CTX elevation (m)", "Elevación CTX (m)")}, gridcolor: "#2a3442"},
+  };
+  const graph = Plotly.react(profile, [{
+    x: terrainRoute.distances.map(d => d / 1000), y: path.map(p => elevAt(...p)), mode: "lines+markers",
+    line: {color: "#39d0ff", width: 4}, marker: {size: 8}, hovertemplate: "%{x:.2f} km · %{y:.0f} m<extra></extra>",
+  }], layout, {displayModeBar: false, responsive: true});
+  if (!customProfileReady) {
+    customProfileReady = true;
+    graph.then(() => profile.on("plotly_click", e => {
+      if (!terrainRoute?.path.length) return;
+      highlightCustomSegment(Math.min(e.points[0].pointNumber, terrainRoute.path.length - 2));
+    }));
+  }
+}
+
+function highlightCustomSegment(index) {
+  customSegment = index;
+  const segment = index === null ? [] : terrainRoute.path.slice(index, index + 2);
+  customHighlight.setLatLngs(segment).bringToFront();
+  Plotly.restyle("plot3d", to3D(segment, 10), [terrainTrace + 5]);
+  const summary = $("custom-segment");
+  if (!segment.length) {
+    summary.textContent = t("Select a point on the profile to highlight its segment.", "Selecciona un punto del perfil para resaltar su tramo.");
+    return;
+  }
+  const [start, end] = segment, distance = metres(start, end);
+  if ($("view3d").hidden) { setFollow(false); map.panTo(start); }
+  const slope = distance ? `${(Math.atan2(elevAt(...end) - elevAt(...start), distance) * 180 / Math.PI).toFixed(1)}°` : "—";
+  summary.textContent = t(
+    `Segment ${index + 1} · ${Math.round(distance)} m · Estimated grade ${slope} from CTX elevations.`,
+    `Tramo ${index + 1} · ${Math.round(distance)} m · Pendiente estimada ${slope} a partir de las elevaciones CTX.`
+  );
+}
+
+function renderCustomEta() {
+  const summary = $("custom-eta");
+  summary.hidden = !state.measuring || !terrainRoute?.path.length;
+  if (summary.hidden) return;
+  const oneWay = terrainRoute.distance / 1000 / state.speed;
+  const elapsed = 2 * oneWay + state.stop / 60;
+  const back = state.depart + solarHours(elapsed);
+  const margin = clock(wx.sunset) - back;
+  const time = `${hhmm(back % 24)}${back >= 24 ? ` (+${Math.floor(back / 24)} sol)` : ""}`;
+  summary.textContent = t(
+    `P1 → P2: ${Math.round(oneWay * 60)} min · Return to P1: ${time} local solar time, including ${state.stop} min at P2 · Sunset margin: ${margin.toFixed(1)} Mars h (historical sol ${wx.sol}).`,
+    `P1 → P2: ${Math.round(oneWay * 60)} min · Regreso a P1: ${time} hora solar local, con ${state.stop} min en P2 · Margen hasta el atardecer: ${margin.toFixed(1)} h marcianas (sol histórico ${wx.sol}).`
+  );
+}
+
+function renderTerrainRouteSummary() {
+  renderCustomEta();
+  inspectHazard(inspectedHazard);
+  const hazards = terrainRoute?.hazards ?? [];
+  Plotly.restyle("plot3d", {...to3D(hazards), text: [hazards.map(hazardLabel)]}, [terrainTrace + 2]);
+  const summary = $("terrain-route-summary");
+  summary.hidden = !state.measuring || measurement.length < 2;
+  if (summary.hidden) return;
+  if (!terrainRoute) {
+    summary.textContent = t("Both points must be inside the elevation grid to find a route.", "Ambos puntos deben estar dentro del modelo de elevación para buscar una ruta.");
+    return;
+  }
+  const {path, distance} = terrainRoute, direct = metres(...measurement);
+  const result = path.length
+    ? t(`Grid route: ${km(distance)} km (cyan) · Direct line: ${km(direct)} km (dashed white) · Detour: +${km(Math.max(0, distance - direct))} km.`,
+      `Ruta en la cuadrícula: ${km(distance)} km (cian) · Línea directa: ${km(direct)} km (blanca discontinua) · Desvío: +${km(Math.max(0, distance - direct))} km.`)
+    : t("No route found outside the red zones.", "No se encontró una ruta fuera de las zonas rojas.");
+  summary.textContent = `${result} ${t(
+    `Direct line crosses ${hazards.length} steep cells (orange). USGS CTX, 80 m route grid. The model cannot resolve rocks, sand or small obstacles.`,
+    `La línea directa cruza ${hazards.length} celdas de pendiente alta (naranja). CTX del USGS, cuadrícula de ruta de 80 m. El modelo no distingue rocas, arena ni obstáculos pequeños.`
+  )}`;
+}
+
+function measurePoint({lat, lng}) {
+  if (measurement.length === 2) { measurement.length = 0; measurementLayer.clearLayers(); }
+  const point = [lat, lng];
+  measurement.push(point);
+  L.circleMarker(point, {radius: 8, color: "#fff", fillColor: "#39d0ff", fillOpacity: 1, interactive: false})
+    .bindTooltip(`P${measurement.length}`, {permanent: true}).addTo(measurementLayer);
+  if (measurement.length === 2) L.polyline(measurement, {color: "#fff", weight: 3, dashArray: "6 6", interactive: false}).addTo(measurementLayer);
+  drawTerrainRoute();
+  renderMeasure();
+}
+
+$("measure").onclick = () => {
+  state.measuring = !state.measuring;
+  $("measure").setAttribute("aria-pressed", String(state.measuring));
+  $("measure").classList.toggle("on", state.measuring);
+  if (state.measuring) {
+    play(false); setFollow(false); map.closePopup();
+    if (!$("view3d").hidden && state.camera === "ground") setCameraMode("free");
+  }
+  else { measurement.length = 0; measurementLayer.clearLayers(); drawTerrainRoute(); }
+  renderMeasure();
+};
+
 map.on("click", e => {  // terrain inspector: any spot inside the elevation model
+  if (state.measuring) { measurePoint(e.latlng); return; }
   const {lat, lng} = e.latlng;
-  if (lng < dem.west || lng > east || lat < south || lat > dem.north) return;
+  if (!withinDEM([lat, lng])) return;
   const red = Math.min(...DATA.steep.map(s => metres(s, [lat, lng]))), near = Math.min(...pts.map(p => metres(ll(p), [lat, lng])));
-  L.popup({maxWidth: 330}).setLatLng(e.latlng).setContent(`<div class="pop"><b>Terrain here</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
-    Elevation ${elevAt(lat, lng).toFixed(0)} m · slope ${slopeAt(lat, lng).toFixed(1)}°<br>
-    ${red < 25 ? `<b style="color:#ff7b72">Inside a red zone: over ${DATA.hazard.min_slope_deg}°</b>` : `Nearest red zone ${Math.round(red)} m`}<br>
-    ${Math.round(near)} m from the selected route<br><span class="muted">USGS elevation model, 80 m grid</span></div>`).openOn(map);
+  L.popup({maxWidth: 330}).setLatLng(e.latlng).setContent(`<div class="pop"><b>${t("Terrain here", "Terreno en este punto")}</b><br>${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E<br>
+    ${t("Elevation", "Elevación")} ${elevAt(lat, lng).toFixed(0)} m · ${t("slope", "pendiente")} ${slopeAt(lat, lng).toFixed(1)}°<br>
+    ${t("Nearest red-zone cell centre", "Centro de celda roja más cercano")} · ${Math.round(red)} m<br>
+    ${Math.round(near)} m ${t("from the nearest route point", "al punto de ruta más cercano")}<br>
+    <span class="muted">${t("USGS elevation model, 80 m grid", "Modelo USGS, cuadrícula de 80 m")}</span></div>`).openOn(map);
 });
 
 // ---- Layers and views --------------------------------------------------------------------------------------------------
 const shown = {hazards: true, thermal: false, clays: false, carbonates: false, weather: true};
+let thermalFailed = false;
+function renderThermalStatus() {
+  $("thermal-controls").hidden = !shown.thermal || !$("view3d").hidden;
+  $("thermal-status").textContent = thermalFailed
+    ? t("NASA infrared tiles could not load. Toggle THERMAL to retry.", "No se pudieron cargar los mosaicos infrarrojos de NASA. Desactiva y activa TÉRMICO para reintentar.")
+    : t("THEMIS nighttime infrared · use opacity to compare with visible imagery. Enlarging the map magnifies the source pixels. Brightness represents infrared intensity.",
+      "Infrarrojo nocturno THEMIS · ajusta la opacidad para comparar con la imagen visible. Al ampliar el mapa se agrandan los píxeles de origen. El brillo representa intensidad infrarroja.");
+}
+for (const id of DATA.groups.thermal) {
+  window[id].on("error", () => { thermalFailed = true; renderThermalStatus(); });
+  window[id].on("load", () => { thermalFailed = false; renderThermalStatus(); });
+}
+$("thermal-opacity").oninput = e => {
+  DATA.groups.thermal.forEach(id => window[id].setOpacity(Number(e.target.value) / 100));
+};
+const surfaceLayers = new Map();
+let surfaceRequest = 0;
+const elevationScale = [[0, "#2a1711"], [.35, "#8c3f24"], [.7, "#d98a52"], [1, "#f7e2c0"]];
+const imageScale = Array.from({length: 256}, (_, value) => [
+  value / 255,
+  `rgb(${Math.round((value >> 5) * 255 / 7)},${Math.round(((value >> 2) & 7) * 255 / 7)},${(value & 3) * 85})`,
+]);
+
+function readLayerImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Image unavailable"));
+    image.src = url;
+  });
+}
+
+async function sampleSurfaceLayer(group) {
+  const canvas = document.createElement("canvas");
+  let project;
+  if (group === "thermal") {
+    const image = await readLayerImage(DATA.thermal_texture.image);
+    canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+    canvas.getContext("2d").drawImage(image, 0, 0);
+    const [[s, w], [n, e]] = DATA.thermal_texture.bounds;
+    project = (lat, lon) => [(lon - w) / (e - w) * canvas.width, (n - lat) / (n - s) * canvas.height];
+  } else {
+    const layer = DATA.layers.find(layer => layer.group === group);
+    const image = await readLayerImage(DATA.mineral_images[group]);
+    canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+    canvas.getContext("2d").drawImage(image, 0, 0);
+    const [[s, w], [n, e]] = layer.bounds;
+    project = (lat, lon) => [(lon - w) / (e - w) * canvas.width, (n - lat) / (n - s) * canvas.height];
+  }
+  const pixels = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+  return dem.grid.map((row, r) => row.map((_, c) => {
+    const [x, y] = project(dem.north - (r + .5) * dem.cell_deg, dem.west + (c + .5) * dem.cell_deg).map(Math.floor);
+    if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return null;
+    const offset = (y * canvas.width + x) * 4;
+    if (!pixels[offset + 3]) return null;
+    return ((pixels[offset] >> 5) << 5) | ((pixels[offset + 1] >> 5) << 2) | (pixels[offset + 2] >> 6);
+  }));
+}
+
+async function drawSurfaceLayer() {
+  const request = ++surfaceRequest;
+  const group = shown.clays ? "clays" : shown.carbonates ? "carbonates" : shown.thermal ? "thermal" : null;
+  Plotly.restyle("plot3d", {surfacecolor: [dem.grid], colorscale: [elevationScale], cauto: true, showscale: true}, [0]);
+  if (!group) return;
+  try {
+    if (!surfaceLayers.has(group)) surfaceLayers.set(group, sampleSurfaceLayer(group));
+    const colours = await surfaceLayers.get(group);
+    if (request !== surfaceRequest) return;
+    Plotly.restyle("plot3d", {surfacecolor: [colours], colorscale: [imageScale], cauto: false,
+      cmin: 0, cmax: 255, showscale: false}, [0]);
+  } catch {
+    surfaceLayers.delete(group);
+    if (request === surfaceRequest) $("layerinfo").textContent += t(
+      " · 3D imagery unavailable from the source. Elevation is displayed.",
+      " · Imagen 3D no disponible desde la fuente. Se muestra la elevación.");
+  }
+}
+
 function draw() {
   for (const [group, ids] of Object.entries(DATA.groups)) if (group in shown) ids.forEach(id => shown[group] ? window[id].addTo(map) : window[id].remove());
   all("[data-layer]").forEach(b => b.classList.toggle("on", shown[b.dataset.layer]));
   const mineral = shown.clays ? "clays" : shown.carbonates ? "carbonates" : "";
-  $("minerals").textContent = mineral ? mineral.toUpperCase() : "MINERALS"; $("minerals").classList.toggle("on", !!mineral);
+  $("minerals").textContent = shown.clays ? t("CLAYS", "ARCILLAS") : shown.carbonates ? t("CARBONATES", "CARBONATOS") : t("MINERALS", "MINERALES"); $("minerals").classList.toggle("on", !!mineral);
   $("weatherbox").hidden = !shown.weather;
-  $("layerinfo").textContent = "Layers on: " + DATA.layers.filter(l => l.group === "base" || shown[l.group]).map(l => l.name).join(" + ")
-    + (shown.hazards ? ` + red zones: slopes over ${DATA.hazard.min_slope_deg}° (USGS elevation model)` : "");
+  DATA.groups.thermal.forEach(id => window[id].setOpacity(Number($("thermal-opacity").value) / 100));
+  renderThermalStatus();
+  Plotly.restyle("plot3d", {visible: shown.hazards}, [1]);
+  drawSurfaceLayer();
+  $("layerinfo").textContent = t("Layers on: ", "Capas activas: ") + DATA.layers.filter(l => l.group === "base" || shown[l.group]).map(l => l.name).join(" + ")
+    + (shown.hazards ? ` + ${t("red zones: slopes over", "zonas rojas: pendientes superiores a")} ${DATA.hazard.min_slope_deg}° (USGS)` : "");
 }
-all("[data-layer]").forEach(b => b.onclick = () => { shown[b.dataset.layer] = !shown[b.dataset.layer]; draw(); });
-$("minerals").onclick = () => { [shown.clays, shown.carbonates] = shown.clays ? [false, true] : shown.carbonates ? [false, false] : [true, false]; draw(); };
+all("[data-layer]").forEach(b => b.onclick = () => {
+  if (!$("view3d").hidden && state.camera === "ground" && b.dataset.layer !== "weather") setCameraMode("free");
+  shown[b.dataset.layer] = !shown[b.dataset.layer];
+  if (b.dataset.layer === "thermal" && shown.thermal) {
+    thermalFailed = false;
+    DATA.groups.thermal.forEach(id => window[id].setUrl(DATA.thermal_texture.image));
+  }
+  if (b.dataset.layer === "thermal" && shown.thermal) shown.clays = shown.carbonates = false;
+  draw();
+});
+$("minerals").onclick = () => {
+  if (!$("view3d").hidden && state.camera === "ground") setCameraMode("free");
+  [shown.clays, shown.carbonates] = shown.clays ? [false, true] : shown.carbonates ? [false, false] : [true, false];
+  if (shown.clays || shown.carbonates) shown.thermal = false;
+  draw();
+};
 function show3d(on) {
-  $("b3d").classList.toggle("on", on); $("b3d").textContent = on ? "2D MAP" : "3D";
-  $("view3d").hidden = $("go3d").hidden = !on; $("view2d").hidden = $("go2d").hidden = on;
+  $("b3d").classList.toggle("on", on); $("b3d").textContent = on ? t("2D MAP", "MAPA 2D") : "3D";
+  $("view3d").hidden = $("go3d").hidden = !on; $("view2d").hidden = !on ? false : true;
+  $("go2d").hidden = false;
+  $("ground-references").hidden = !on || state.camera !== "ground";
+  renderThermalStatus();
+  syncFollowButton();
   on ? Plotly.Plots.resize("plot3d") : map.invalidateSize(); setT(state.t);
 }
+function setCameraMode(mode) {
+  if (mode === "ground" && state.measuring) $("measure").onclick();
+  if (state.camera === "track" && mode !== "track") {
+    Plotly.relayout("plot3d", {"scene.xaxis.autorange": true, "scene.yaxis.autorange": true});
+  }
+  state.camera = mode;
+  $("camera-mode").value = mode;
+  const ground = mode === "ground";
+  $("view3d").classList.toggle("first-person", ground);
+  $("ground-view").hidden = $("ground-gpu").hidden = $("ground-caption").hidden = !ground;
+  $("camera-presets").hidden = ground;
+  $("ground-references").hidden = !ground || $("view3d").hidden;
+  syncFollowButton();
+  setT(state.t);
+}
+$("camera-mode").onchange = e => setCameraMode(e.target.value);
 $("b3d").onclick = () => show3d($("view3d").hidden);
-all("[data-go]").forEach(b => b.onclick = () => { show3d(false); b.dataset.go === "all" ? map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1)) : goto(+b.dataset.go); });
+all("[data-go]").forEach(button => button.onclick = () => {
+  play(false);
+  setFollow(false);
+  const destination = button.dataset.go;
+  if (destination === "all") {
+    if ($("view3d").hidden) map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
+    else {
+      setCameraMode("free");
+      Plotly.relayout("plot3d", {"scene.xaxis.autorange": true, "scene.yaxis.autorange": true,
+        "scene.camera": {eye: {x: 0, y: -1.5, z: 1.1}}});
+    }
+    return;
+  }
+  state.returnStart = null;
+  if (!$("view3d").hidden && state.camera === "free") setCameraMode("track");
+  goto(Number(destination));
+});
 all("[data-cam]").forEach(b => b.onclick = () => { const [x, y, z] = b.dataset.cam.split(",").map(Number); Plotly.relayout("plot3d", {"scene.camera.eye": {x, y, z}}); });
 $("relief").onclick = () => {
-  state.relief = {1: 3, 3: 5, 5: 1}[state.relief]; $("relief").textContent = `RELIEF ×${state.relief}`;
+  state.relief = {1: 3, 3: 5, 5: 1}[state.relief]; $("relief").textContent = `${t("RELIEF", "RELIEVE")} ×${state.relief}`;
   Plotly.relayout("plot3d", {"scene.aspectratio": DATA.relief[state.relief]});
 };
 $("full").onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.querySelector(".top .panel").requestFullscreen();
@@ -217,81 +807,621 @@ function goto(i, pan = true) {
   const p = pts[state.wp], next = pts[state.wp + 1];
   ring.setLatLng(ll(p));
   if (pan) map.setView(ll(p), Math.max(map.getZoom(), 15));
-  let line = "Arrived at B · Three Forks";
+  let line = t("Arrived at B · Three Forks", "Llegada a B · Three Forks");
   if (next) {
     const heading = (Math.atan2((next.lon - p.lon) * mLon, (next.lat - p.lat) * mLat) * 180 / Math.PI + 360) % 360;
-    line = `Heading ${String(Math.round(heading)).padStart(3, "0")}° ${["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(heading / 45) % 8]} · ${next.dist_m - p.dist_m} m to the next point`;
+    const directions = t(["N", "NE", "E", "SE", "S", "SW", "W", "NW"], ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]);
+    line = `${t("Heading", "Rumbo")} ${String(Math.round(heading)).padStart(3, "0")}° ${directions[Math.round(heading / 45) % 8]} · ${next.dist_m - p.dist_m} m ${t("to the next point", "hasta el siguiente punto")}`;
   }
-  $("wp").innerHTML = `<b>Point ${state.wp + 1} / ${pts.length}</b><span>${line}</span>
-    ${p.notes.length ? `<ul>${p.notes.map(n => `<li>${n}</li>`).join("")}</ul>` : ""}
-    <div class="facts"><span><b>${Math.round(p.elev_m)} m</b>elevation · ${p.verified ? "rover" : "USGS model"}</span>
-    <span><b>${p.verified ? p.tilt_deg + "°" : "no data"}</b>${p.verified ? `rover tilt · sol ${p.sol}` : "never driven by a rover"}</span>
-    <span><b>${p.slope_deg}°</b>terrain slope · 80 m grid</span><span><b>${p.red_m} m</b>to nearest red zone</span>
-    <span><b>${km(p.dist_m)} km</b>walked</span><span><b>${km(route.length_m - p.dist_m)} km</b>to B</span></div>`;
+  $("wp").innerHTML = `<b>${t("Point ", "Punto ")}${state.wp + 1} / ${pts.length}</b><span>${line}</span>
+    ${p.notes.length ? `<ul>${t(p.notes, p.notes_es).map(n => `<li>${n}</li>`).join("")}</ul>` : ""}
+    <div class="facts"><span><b>${Math.round(p.elev_m)} m</b>${t("elevation · ", "elevación · ")}${p.verified ? "rover" : t("USGS model", "modelo USGS")}</span>
+    <span><b>${p.verified ? p.tilt_deg + "°" : t("no data", "sin datos")}</b>${p.verified ? `${t("rover tilt · sol ", "inclinación del rover · sol ")}${p.sol}` : t("never driven by a rover", "sin recorrido del rover")}</span>
+    <span><b>${p.slope_deg}°</b>${t("terrain slope · 80 m grid", "pendiente · cuadrícula de 80 m")}</span><span><b>${p.red_m} m</b>${t("to nearest red zone", "al centro de celda roja más cercano")}</span>
+    <span><b>${km(p.dist_m)} km</b>${t("walked", "recorridos")}</span><span><b>${km(route.length_m - p.dist_m)} km</b>${t("to B", "hasta B")}</span></div>`;
   if (!state.playing) setT(p.dist_m / route.length_m);
 }
 $("prev").onclick = () => goto(state.wp - 1); $("next").onclick = () => goto(state.wp + 1);
 
 // ---- Walk simulation ---------------------------------------------------------------------------------------------------
-function setT(t) {
-  state.t = Math.min(Math.max(t, 0), 1);
-  const d = state.t * route.length_m, i = Math.max(pts.findIndex(p => p.dist_m >= d), 1), a = pts[i - 1], b = pts[i], f = (d - a.dist_m) / (b.dist_m - a.dist_m || 1);
-  const lat = a.lat + (b.lat - a.lat) * f, lon = a.lon + (b.lon - a.lon) * f, elev = a.elev_m + (b.elev_m - a.elev_m) * f;
-  walker.setLatLng([lat, lon]); $("scrub").value = state.t * 1000;
-  $("simout").textContent = `${km(d)} km from A · clock ${hhmm(state.depart + d / 1000 / state.speed)} · elevation ${Math.round(elev)} m · ${b.verified ? "rover-driven ground" : "never driven"}`;
-  Plotly.restyle("profile", {x: [[d / 1000]], y: [[elev]]}, [1]);
-  if (!$("view3d").hidden) Plotly.restyle("plot3d", {x: [[(lon - dem.west) * mLon / 1000]], y: [[(lat - south) * mLat / 1000]], z: [[elevAt(lat, lon) + 6]]}, [DATA.routes.length + 4]);
+function setFollow(on) {
+  state.follow = on;
+  syncFollowButton();
 }
+
+function syncFollowButton() {
+  const active = $("view3d").hidden ? state.follow : state.camera !== "free";
+  $("follow").classList.toggle("on", active);
+  $("follow").setAttribute("aria-pressed", String(active));
+}
+
+$("follow").onclick = () => {
+  if (!$("view3d").hidden) {
+    setCameraMode(state.camera === "track" ? "free" : "track");
+    return;
+  }
+  setFollow(!state.follow);
+  if (state.follow) {
+    map.setZoom(Math.max(map.getZoom(), 16), {animate: false});
+  }
+  setT(state.t);
+};
+map.on("dragstart", () => setFollow(false));
+
+function solarPosition(hours, lat) {
+  const rise = clock(wx.sunrise), set = clock(wx.sunset);
+  const rad = Math.PI / 180;
+  const noon = (rise + set) / 2;
+  const latitude = lat * rad;
+  const horizonAngle = (set - rise) * 7.5 * rad;
+  // Fit a local solar arc to the historical MEDA sunrise and sunset.
+  const declination = Math.atan(-Math.cos(horizonAngle) / Math.tan(latitude));
+  const hourAngle = (hours - noon) * 15 * rad;
+  const sun = [
+    -Math.cos(declination) * Math.sin(hourAngle),
+    Math.cos(latitude) * Math.sin(declination) - Math.sin(latitude) * Math.cos(declination) * Math.cos(hourAngle),
+    Math.sin(latitude) * Math.sin(declination) + Math.cos(latitude) * Math.cos(declination) * Math.cos(hourAngle),
+  ];
+  const mode = $("light-mode").value;
+  const blend = Math.max(0, Math.min(1, (sun[2] + 0.1) / 0.31));
+  const daylight = mode === "day" ? 1 : mode === "night" ? 0 : blend * blend * (3 - 2 * blend);
+  return {sun, daylight, hours, rise, set, mode};
+}
+
+function renderLighting(solar) {
+  const {sun, hours, rise, set, mode} = solar;
+  const night = mode === "night" || (mode === "auto" && (hours < rise || hours >= set));
+  $("views").classList.toggle("night", night);
+  const lighting = night ? t("Night", "Noche") : t("Day", "Día");
+  $("light-summary").textContent = `${lighting} · ${t("Illustrative lighting. Automatic mode follows local sunrise and sunset for the selected sol.", "Iluminación ilustrativa. El modo automático sigue el amanecer y el atardecer locales del sol elegido.")}`;
+  $("solar-monitor").hidden = $("view3d").hidden;
+  if ($("view3d").hidden) return;
+  const elevation = Math.asin(Math.min(1, Math.max(-1, sun[2]))) * 180 / Math.PI;
+  const azimuth = (Math.atan2(sun[0], sun[1]) * 180 / Math.PI + 360) % 360;
+  const progress = Math.min(1, Math.max(0, (hours - rise) / (set - rise)));
+  $("solar-dot").style.left = `${8 + progress * 84}%`;
+  $("solar-dot").style.top = `${82 - Math.sin(Math.PI * progress) * 65}%`;
+  $("solar-dot").style.opacity = elevation >= 0 ? "1" : ".25";
+  $("solar-readout").textContent = t(
+    `${hhmm(hours)} local · Estimated sun: azimuth ${Math.round(azimuth) % 360}°, elevation ${Math.round(elevation)}° · MEDA sol ${wx.sol}`,
+    `${hhmm(hours)} local · Sol estimado: rumbo ${Math.round(azimuth) % 360}°, altura ${Math.round(elevation)}° · sol MEDA ${wx.sol}`
+  );
+}
+
+$("light-mode").onchange = () => setT(state.t);
+
+let lastCameraUpdate = -Infinity;
+let lastSunKey;
+function update3DWalk(lat, lon, direction, solar) {
+  if ($("view3d").hidden) return;
+  if (state.camera === "ground") {
+    renderGroundView(lat, lon, direction, solar);
+    return;
+  }
+  const sunKey = `${wx.sol},${Math.floor(solar.hours * 12)},${solar.mode}`;
+  if (sunKey !== lastSunKey) {
+    lastSunKey = sunKey;
+    const [x, y, z] = solar.sun.map(component => component * 80000);
+    Plotly.restyle("plot3d", {
+      "lightposition": {x, y, z},
+      "lighting.ambient": 0.22 + 0.52 * solar.daylight,
+      "lighting.diffuse": 0.15 + 0.65 * solar.daylight,
+      "lighting.specular": 0.03,
+    }, [0]);
+  }
+  const x = (lon - dem.west) * mLon / 1000, y = (lat - south) * mLat / 1000;
+  Plotly.restyle("plot3d", {x: [[x]], y: [[y]], z: [[elevAt(lat, lon) + 6]]}, [DATA.routes.length + 4]);
+  if (state.camera !== "track") return;
+  const now = performance.now();
+  if (state.playing && state.t > 0 && state.t < 1 && now - lastCameraUpdate < 120) return;
+  lastCameraUpdate = now;
+  const dx = (east - dem.west) * mLon / 6000, dy = (dem.north - south) * mLat / 6000;
+  Plotly.relayout("plot3d", {"scene.xaxis.range": [x - dx, x + dx], "scene.yaxis.range": [y - dy, y + dy]});
+}
+
+// The first-person camera uses the same CTX elevation samples at true vertical scale.
+const groundCanvas = $("ground-view");
+const groundGpu = $("ground-gpu");
+const groundContext = groundCanvas.getContext("2d");
+const groundDx = dem.cell_deg * mLon, groundDy = dem.cell_deg * mLat;
+const nearPlane = 1;
+const tileSize = 256;
+let groundMosaic, gpuMosaic, groundRenderer, openGroundPhoto, nearbyGroundPoint;
+const detailMosaics = {};
+const landingRoute = DATA.routes.find(r => r.id === "north").points;
+const groundReferences = {
+  A: {
+    point: ll(landingRoute[0]),
+    image: "https://assets.science.nasa.gov/dynamicimage/assets/science/psd/photojournal/pia/pia24/pia24264/PIA24264.jpg?crop=faces%2Cfocalpoint&fit=clip&h=408&w=1536",
+    source: "https://science.nasa.gov/photojournal/mastcam-zs-first-360-degree-panorama/",
+    en: "A · Octavia E. Butler Landing. Mastcam-Z panorama from the landing site, 21 February 2021 (sol 3).",
+    es: "A · Sitio de aterrizaje Octavia E. Butler. Panorámica de Mastcam-Z desde el lugar de aterrizaje, 21 de febrero de 2021 (sol 3).",
+  },
+  B: {
+    point: ll(landingRoute.at(-1)),
+    image: "https://science.nasa.gov/wp-content/uploads/2024/02/pia25736-figurea-1600.jpg",
+    source: "https://science.nasa.gov/photojournal/perseverances-portrait-of-the-sample-depot/",
+    en: "B · Three Forks. Mastcam-Z panorama of the sample depot in the area, 31 January 2023 (sol 693). The camera was at the depot, which serves here as a regional reference.",
+    es: "B · Three Forks. Panorámica de Mastcam-Z del depósito de muestras de la zona, 31 de enero de 2023 (sol 693). La cámara estaba en el depósito, que se muestra aquí como referencia de la zona.",
+  },
+};
+
+function renderGroundReference() {
+  const context = $("ground-reference-context");
+  const label = nearbyGroundPoint === "A" ? "A · Octavia E. Butler" : "B · Three Forks";
+  const text = nearbyGroundPoint
+    ? t(`Near ${label} · Open the NASA photograph to compare.`, `Cerca de ${label} · Abre la foto de NASA para comparar.`)
+    : t("Compare with Mastcam-Z photos of the start and destination areas.", "Compara con fotos de Mastcam-Z de las zonas de salida y destino.");
+  if (context.textContent !== text) context.textContent = text;
+  if (!openGroundPhoto) return;
+  const reference = groundReferences[openGroundPhoto], description = t(reference.en, reference.es);
+  const caption = $("ground-photo-caption");
+  if (caption.textContent === description) return;
+  caption.textContent = description;
+  $("ground-photo-image").alt = description;
+}
+
+all("[data-ground-photo]").forEach(button => button.onclick = () => {
+  const id = button.dataset.groundPhoto;
+  openGroundPhoto = openGroundPhoto === id ? null : id;
+  $("ground-photo").hidden = !openGroundPhoto;
+  all("[data-ground-photo]").forEach(control => control.setAttribute("aria-expanded", String(control.dataset.groundPhoto === openGroundPhoto)));
+  if (!openGroundPhoto) return;
+  const reference = groundReferences[id];
+  $("ground-photo-image").src = reference.image;
+  $("ground-photo-source").href = reference.source;
+  renderGroundReference();
+});
+
+function groundLocation(lat, lon) {
+  const site = Object.keys(groundReferences).find(id => metres([lat, lon], groundReferences[id].point) < 410);
+  if (site !== nearbyGroundPoint) {
+    nearbyGroundPoint = site;
+    renderGroundReference();
+  }
+  return site;
+}
+
+let lastGroundDetail;
+function groundDetail(lat, lon) {
+  const step = 400, span = 520;
+  const x = Math.round((lon - dem.west) * mLon / step);
+  const y = Math.round((lat - south) * mLat / step);
+  const key = `${x},${y}`;
+  if (!detailMosaics[key]) {
+    const centreLat = south + y * step / mLat, centreLon = dem.west + x * step / mLon;
+    detailMosaics[key] = loadGroundMosaic(true, DATA.ground_textures.detail,
+      [centreLat + span / mLat, centreLon - span / mLon], [centreLat - span / mLat, centreLon + span / mLon]);
+    for (const old of Object.keys(detailMosaics).slice(0, -4)) {
+      if (detailMosaics[old] !== lastGroundDetail) delete detailMosaics[old];
+    }
+  }
+  const current = detailMosaics[key];
+  if (!current.pending && current.loaded) lastGroundDetail = current;
+  return lastGroundDetail ?? current;
+}
+
+function loadGroundMosaic(gpu = false, definition = DATA.ground_textures.base, northWest = [dem.north, dem.west], southEast = [south, east]) {
+  const {zoom, url} = definition;
+  // Use the same equirectangular pixel coordinates as the 2D tile layer.
+  const origin = map.project([dem.north, dem.west], zoom), corner = map.project([south, east], zoom);
+  const nw = map.project(northWest, zoom), se = map.project(southEast, zoom);
+  const firstX = Math.floor(nw.x / tileSize), firstY = Math.floor(nw.y / tileSize);
+  const lastX = Math.floor(se.x / tileSize), lastY = Math.floor(se.y / tileSize);
+  const sheet = document.createElement("canvas");
+  sheet.width = (lastX - firstX + 1) * tileSize;
+  sheet.height = (lastY - firstY + 1) * tileSize;
+  const context = sheet.getContext("2d");
+  const mosaic = {sheet, u: origin.x - firstX * tileSize, v: origin.y - firstY * tileSize,
+    stepU: (corner.x - origin.x) / dem.cols, stepV: (corner.y - origin.y) / dem.rows, loaded: 0, pending: 0};
+  let redrawQueued = false;
+  const refresh = () => {
+    mosaic.pending--;
+    if (redrawQueued || state.playing || (gpu && mosaic.pending)) return;
+    redrawQueued = true;
+    requestAnimationFrame(() => {
+      redrawQueued = false;
+      if (state.camera === "ground" && !$("view3d").hidden) setT(state.t);
+    });
+  };
+  for (let y = firstY; y <= lastY; y++) {
+    for (let x = firstX; x <= lastX; x++) {
+      const tile = new Image();
+      if (gpu) tile.crossOrigin = "anonymous";
+      mosaic.pending++;
+      tile.onload = () => {
+        context.drawImage(tile, (x - firstX) * tileSize, (y - firstY) * tileSize, tileSize, tileSize);
+        mosaic.loaded++;
+        refresh();
+      };
+      tile.onerror = refresh;
+      tile.src = url.replace("{z}", zoom).replace("{y}", y).replace("{x}", x);
+    }
+  }
+  return mosaic;
+}
+
+function clipNearPlane(vertices) {
+  const clipped = [];
+  for (let i = 0; i < vertices.length; i++) {
+    const a = vertices[i], b = vertices[(i + 1) % vertices.length];
+    const aVisible = a[2] >= nearPlane, bVisible = b[2] >= nearPlane;
+    if (aVisible) clipped.push(a);
+    if (aVisible !== bVisible) {
+      const f = (nearPlane - a[2]) / (b[2] - a[2]);
+      clipped.push(a.map((value, axis) => axis === 2 ? nearPlane : value + (b[axis] - value) * f));
+    }
+  }
+  return clipped;
+}
+
+function paintGroundTexture(ctx, sheet, triangle, opacity) {
+  const [[x0, y0, u0, v0], [x1, y1, u1, v1], [x2, y2, u2, v2]] = triangle;
+  const du1 = u1 - u0, du2 = u2 - u0, dv1 = v1 - v0, dv2 = v2 - v0;
+  const det = du1 * dv2 - du2 * dv1;
+  if (Math.abs(det) < 0.00001) return;
+  const a = ((x1 - x0) * dv2 - (x2 - x0) * dv1) / det;
+  const b = ((y1 - y0) * dv2 - (y2 - y0) * dv1) / det;
+  const c = ((x2 - x0) * du1 - (x1 - x0) * du2) / det;
+  const d = ((y2 - y0) * du1 - (y1 - y0) * du2) / det;
+  const left = Math.max(0, Math.floor(Math.min(u0, u1, u2)) - 1);
+  const top = Math.max(0, Math.floor(Math.min(v0, v1, v2)) - 1);
+  const width = Math.min(sheet.width, Math.ceil(Math.max(u0, u1, u2)) + 1) - left;
+  const height = Math.min(sheet.height, Math.ceil(Math.max(v0, v1, v2)) + 1) - top;
+  if (width <= 0 || height <= 0) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.lineTo(x2, y2); ctx.closePath();
+  ctx.clip();
+  ctx.globalAlpha = opacity;
+  ctx.transform(a, b, c, d, x0 - a * u0 - c * v0, y0 - b * u0 - d * v0);
+  ctx.drawImage(sheet, left, top, width, height, left, top, width, height);
+  ctx.restore();
+}
+
+function renderGroundView(lat, lon, direction, solar, fallback = true) {
+  const site = groundLocation(lat, lon);
+  const {sun, daylight} = solar;
+  const night = daylight < 0.35;
+  const col = Math.min(dem.cols - 1.001, Math.max(0, (lon - dem.west) / dem.cell_deg - 0.5));
+  const row = Math.min(dem.rows - 1.001, Math.max(0, (dem.north - lat) / dem.cell_deg - 0.5));
+  const c = Math.floor(col), r = Math.floor(row), u = col - c, v = row - r, grid = dem.grid;
+  const tl = grid[r][c], tr = grid[r][c + 1], bl = grid[r + 1][c], br = grid[r + 1][c + 1];
+  const surface = u + v <= 1 ? tl + u * (tr - tl) + v * (bl - tl) : br + (1 - u) * (bl - br) + (1 - v) * (tr - br);
+  if (groundRenderer === undefined) {
+    groundRenderer = createGroundRenderer(groundGpu, dem, groundDx, groundDy);
+    if (groundRenderer) gpuMosaic = loadGroundMosaic(true);
+  }
+  if (groundRenderer) {
+    groundGpu.hidden = false;
+    groundCanvas.hidden = true;
+    const detail = groundDetail(lat, lon);
+    if (groundRenderer.draw({col, row, elevation: surface, direction, sun, daylight, mosaic: gpuMosaic, detail})) {
+      updateGroundCaption(groundRenderer.hasTexture(), gpuMosaic.pending, groundRenderer.hasDetail(detail));
+      return;
+    }
+  }
+  if (!fallback) return;
+  groundGpu.hidden = true;
+  groundCanvas.hidden = false;
+  if (!groundContext) return;
+  const width = groundCanvas.clientWidth, height = groundCanvas.clientHeight;
+  if (!width || !height) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  if (groundCanvas.width !== Math.round(width * dpr) || groundCanvas.height !== Math.round(height * dpr)) {
+    groundCanvas.width = Math.round(width * dpr);
+    groundCanvas.height = Math.round(height * dpr);
+  }
+  const ctx = groundContext;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingQuality = "high";
+  groundMosaic ??= loadGroundMosaic();
+  const {sheet, loaded, pending, u: textureU, v: textureV, stepU, stepV} = groundMosaic;
+  updateGroundCaption(loaded, pending);
+  const sky = ctx.createLinearGradient(0, 0, 0, height);
+  sky.addColorStop(0, night ? "#070d19" : "#6e473e");
+  sky.addColorStop(1, night ? "#333746" : "#d9a584");
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, width, height);
+
+  const eyeZ = surface + 1.7;
+  const yaw = direction * Math.PI / 180, sin = Math.sin(yaw), cos = Math.cos(yaw);
+  const pitch = Math.PI / 18, tiltSin = Math.sin(pitch), tiltCos = Math.cos(pitch);
+  const focal = width * 0.73;
+  const sunForward = sun[0] * sin + sun[1] * cos;
+  const sunDepth = sunForward * tiltCos - sun[2] * tiltSin;
+  if (sunDepth > 0.05 && sun[2] > 0 && daylight > 0.05) {
+    const x = width / 2 + focal * (sun[0] * cos - sun[1] * sin) / sunDepth;
+    const y = height / 2 - focal * (sun[2] * tiltCos + sunForward * tiltSin) / sunDepth;
+    ctx.beginPath();
+    ctx.arc(x, y, Math.max(2, focal * 0.005), 0, Math.PI * 2);
+    ctx.fillStyle = "#ffe6ae";
+    ctx.fill();
+  }
+  const minRow = Math.max(0, r - 14), maxRow = Math.min(dem.rows - 1, r + 15);
+  const minCol = Math.max(0, c - 14), maxCol = Math.min(dem.cols - 1, c + 15);
+  const vertices = [];
+  for (let i = minRow; i <= maxRow; i++) {
+    const strip = [];
+    for (let j = minCol; j <= maxCol; j++) {
+      const x = (j - col) * groundDx, y = (row - i) * groundDy, z = grid[i][j] - eyeZ;
+      const forward = x * sin + y * cos;
+      strip.push([x * cos - y * sin, z * tiltCos + forward * tiltSin, forward * tiltCos - z * tiltSin,
+        textureU + (j + 0.5) * stepU, textureV + (i + 0.5) * stepV]);
+    }
+    vertices.push(strip);
+  }
+  const faces = [];
+  const addTriangle = (a, b, c, shade) => {
+    const points = clipNearPlane([a, b, c]);
+    if (points.length < 3) return;
+    const depth = points.reduce((sum, p) => sum + p[2], 0) / points.length;
+    faces.push({points, depth, shade});
+  };
+  const midpoint = (a, b) => a.map((value, axis) => (value + b[axis]) / 2);
+  const addFace = (a, b, c, shade, near) => {
+    if (!near) { addTriangle(a, b, c, shade); return; }
+    const ab = midpoint(a, b), bc = midpoint(b, c), ca = midpoint(c, a);
+    addTriangle(a, ab, ca, shade); addTriangle(ab, b, bc, shade);
+    addTriangle(ca, bc, c, shade); addTriangle(ab, bc, ca, shade);
+  };
+  for (let i = minRow; i < maxRow; i++) {
+    const top = vertices[i - minRow], bottom = vertices[i + 1 - minRow];
+    for (let j = minCol; j < maxCol; j++) {
+      const k = j - minCol;
+      const eastGrade = (grid[i][j + 1] + grid[i + 1][j + 1] - grid[i][j] - grid[i + 1][j]) / (2 * groundDx);
+      const northGrade = (grid[i][j] + grid[i][j + 1] - grid[i + 1][j] - grid[i + 1][j + 1]) / (2 * groundDy);
+      const diffuse = Math.max(0, (sun[2] - sun[0] * eastGrade - sun[1] * northGrade) / Math.hypot(eastGrade, northGrade, 1));
+      const light = 0.55 + 0.22 * daylight + 0.55 * diffuse * daylight;
+      const near = !state.playing && Math.abs(r - i) <= 4 && Math.abs(c - j) <= 4;
+      addFace(top[k], top[k + 1], bottom[k], light, near);
+      addFace(bottom[k + 1], bottom[k], top[k + 1], light, near);
+    }
+  }
+  faces.sort((a, b) => b.depth - a.depth);
+  ctx.lineWidth = 0.6;
+  for (const {points, depth, shade} of faces) {
+    const projected = points.map(([x, y, z, u, v]) => [width / 2 + focal * x / z, height / 2 - focal * y / z, u, v]);
+    if (projected.every(([x]) => x < 0) || projected.every(([x]) => x > width) ||
+        projected.every(([, y]) => y < 0) || projected.every(([, y]) => y > height)) continue;
+    const fog = Math.min(0.45, depth / 2600);
+    const base = night ? [72, 56, 58] : [171, 94, 63];
+    const atmosphere = night ? [35, 39, 55] : [190, 139, 112];
+    const rgb = base.map((value, i) => Math.round(value * shade * (1 - fog) + atmosphere[i] * fog));
+    ctx.fillStyle = ctx.strokeStyle = `rgb(${rgb.join(",")})`;
+    ctx.beginPath();
+    projected.forEach(([px, py], i) => {
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    if (loaded) {
+      const opacity = (night ? 0.35 : 0.72) * (1 - fog) * Math.min(shade, 1);
+      for (let i = 1; i < projected.length - 1; i++) {
+        paintGroundTexture(ctx, sheet, [projected[0], projected[i], projected[i + 1]], opacity);
+      }
+    }
+  }
+}
+
+function updateGroundCaption(loaded, pending, detail = false) {
+  const caption = $("ground-caption");
+  const text = detail
+    ? t("NASA Mars Trek · HiRISE detail over CTX relief · simulated sunlight", "NASA Mars Trek · detalle HiRISE sobre relieve CTX · luz solar simulada")
+    : loaded
+    ? t("NASA Mars Trek imagery · USGS CTX terrain · simulated sunlight", "Imágenes de NASA Mars Trek · relieve CTX del USGS · luz solar simulada")
+    : pending
+      ? t("USGS CTX terrain · loading NASA imagery…", "Relieve CTX del USGS · cargando imágenes de NASA…")
+      : t("USGS CTX terrain · illustrative colours and simulated sunlight", "Relieve CTX del USGS · colores ilustrativos y luz solar simulada");
+  if (caption.textContent !== text) caption.textContent = text;
+}
+
+if (typeof ResizeObserver !== "undefined") {
+  new ResizeObserver(() => {
+    if (route && state.camera === "ground" && !$("view3d").hidden) setT(state.t);
+  }).observe($("view3d"));
+}
+
+function pointAlong(distance) {
+  const next = pts.findIndex((p, index) => index > 0 && p.dist_m >= distance);
+  const index = next < 0 ? pts.length - 1 : next;
+  const b = pts[index], a = pts[index - 1];
+  const fraction = (distance - a.dist_m) / (b.dist_m - a.dist_m || 1);
+  return [a.lat + (b.lat - a.lat) * fraction, a.lon + (b.lon - a.lon) * fraction];
+}
+
+function walkFrame(position) {
+  const progress = Math.min(Math.max(position, 0), state.returnStart ?? 1);
+  const d = progress * route.length_m;
+  const returning = state.returnStart !== null;
+  const next = pts.findIndex((p, index) => index > 0 && (returning ? p.dist_m >= d : p.dist_m > d));
+  const i = next === -1 ? pts.length - 1 : next;
+  const a = pts[i - 1], b = pts[i], f = (d - a.dist_m) / (b.dist_m - a.dist_m || 1);
+  const lat = a.lat + (b.lat - a.lat) * f, lon = a.lon + (b.lon - a.lon) * f, elev = a.elev_m + (b.elev_m - a.elev_m) * f;
+  const turnDistance = returning ? state.returnStart * route.length_m : 0;
+  const travelled = returning ? 2 * turnDistance - d : d;
+  const stopHours = returning && state.returnStart === 1 ? state.stop / 60 : 0;
+  const arrival = state.depart + solarHours(travelled / 1000 / state.speed + stopHours);
+  const before = pointAlong(Math.max(0, d - 24)), after = pointAlong(Math.min(route.length_m, d + 24));
+  const heading = returning ? bearing(after, before) : bearing(before, after);
+  return {progress, d, returning, a, b, lat, lon, elev, arrival, heading};
+}
+
+function setT(position) {
+  const {progress, d, returning, a, b, lat, lon, elev, arrival, heading} = walkFrame(position);
+  state.t = progress;
+  walker.setLatLng([lat, lon]);
+  $("scrub").value = (returning && state.returnStart ? 1 - progress / state.returnStart : progress) * 1000;
+  renderReturn(returning, d, arrival);
+  $("simout").textContent = `${km(d)} km ${t("from A · time", "desde A · hora")} ${hhmm(arrival % 24)} · ${t("elevation", "elevación")} ${Math.round(elev)} m · ${b.verified ? t("rover-driven ground", "recorrido por el rover") : t("never driven", "sin recorrido del rover")}`;
+  const solar = solarPosition(arrival % 24, lat);
+  renderLighting(solar);
+  const direction = returning ? bearing(ll(b), ll(a)) : bearing(ll(a), ll(b));
+  const following = $("view3d").hidden ? state.follow : state.camera !== "free";
+  if (following || returning) {
+    if (following && $("view3d").hidden) map.panTo([lat, lon], {animate: false});
+    const remaining = returning ? d : route.length_m - d;
+    $("walk-guide").hidden = false;
+    $("walk-guide").innerHTML = remaining === 0
+      ? `<b>${returning ? t("Arrived at A · Habitat", "Llegada a A · Hábitat") : t("Arrived at B · Three Forks", "Llegada a B · Three Forks")}</b>`
+      : `<b>${t("Heading", "Rumbo")} ${Math.round(direction) % 360}°</b> · ${Math.ceil(returning ? d - a.dist_m : b.dist_m - d)} m ${t("to the next point", "hasta el siguiente punto")} · ${km(remaining)} km ${returning ? t("to A", "hasta A") : t("to B", "hasta B")}`;
+  } else {
+    $("walk-guide").hidden = true;
+  }
+  Plotly.restyle("profile", {x: [[d / 1000]], y: [[elev]]}, [1]);
+  update3DWalk(lat, lon, heading, solar);
+}
+function renderReturn(returning, distance, arrival) {
+  $("return").classList.toggle("on", returning);
+  $("return").setAttribute("aria-pressed", String(returning));
+  $("return").disabled = !returning && distance === 0;
+  $("return-summary").hidden = !returning;
+  if (!returning) return;
+  const eta = arrival + solarHours(distance / 1000 / state.speed);
+  const margin = clock(wx.sunset) - eta;
+  const time = `${hhmm(eta % 24)}${eta >= 24 ? ` (+${Math.floor(eta / 24)} sol)` : ""}`;
+  $("return-summary").textContent = t(
+    `Estimated return to A: ${time} local solar time · ${km(distance)} km remaining · Sunset margin ${margin.toFixed(1)} Mars h (MEDA sol ${wx.sol}).`,
+    `Regreso estimado a A: ${time} hora solar local · Faltan ${km(distance)} km · Margen hasta el atardecer ${margin.toFixed(1)} h marcianas (MEDA sol ${wx.sol}).`
+  );
+}
+
+$("return").onclick = () => {
+  play(false);
+  state.returnStart = state.returnStart === null ? state.t : null;
+  setT(state.t);
+  if (state.returnStart !== null) play(true);
+};
+
+let animationFrame = 0;
 function play(on) {
+  cancelAnimationFrame(animationFrame);
   state.playing = on; $("play").textContent = on ? "❚❚" : "▶";
   if (!on) return;
-  if (state.t >= 1) state.t = 0;
+  const returning = state.returnStart !== null;
+  if (returning && state.t <= 0) state.t = state.returnStart;
+  if (!returning && state.t >= 1) state.t = 0;
   let last = performance.now(), drawn = 0;
   const step = now => {
     if (!state.playing) return;
-    state.t += (now - last) / 30000; last = now;  // the whole route plays in 30 seconds
-    if (now - drawn > 60 || state.t >= 1) { drawn = now; setT(state.t); }
-    state.t >= 1 ? play(false) : requestAnimationFrame(step);
+    state.t += (returning ? -1 : 1) * (now - last) / 30000; last = now;
+    const done = returning ? state.t <= 0 : state.t >= 1;
+    const firstPerson = state.camera === "ground" && !$("view3d").hidden;
+    if (now - drawn > (firstPerson ? 125 : 60) || done) {
+      drawn = now;
+      setT(state.t);
+    } else if (firstPerson && groundRenderer) {
+      const {lat, lon, heading, arrival} = walkFrame(state.t);
+      renderGroundView(lat, lon, heading, solarPosition(arrival % 24, lat), false);
+    }
+    if (done) play(false); else animationFrame = requestAnimationFrame(step);
   };
-  requestAnimationFrame(step);
+  animationFrame = requestAnimationFrame(step);
 }
 $("play").onclick = () => play(!state.playing);
-$("scrub").oninput = e => { play(false); setT(e.target.value / 1000); };
+$("scrub").oninput = e => {
+  play(false);
+  const position = e.target.value / 1000;
+  setT(state.returnStart === null ? position : state.returnStart * (1 - position));
+};
 
 // ---- EVA plan ----------------------------------------------------------------------------------------------------------
 function plan() {
-  const limits = DATA.limits, hours = 2 * route.length_m / 1000 / state.speed + state.stop / 60, rise = clock(wx.sunrise), set = clock(wx.sunset), back = state.depart + hours;
-  const why = route.verified_pct < 100 ? `${100 - route.verified_pct}% of this route was never driven by a rover` : hours > limits.eva_hours ? `EVA longer than ${limits.eva_hours} h`
-    : state.depart < rise ? "departure before sunrise" : back > set - limits.daylight_margin_hours ? `back less than ${limits.daylight_margin_hours} h before sunset` : "";
-  $("status").textContent = why ? `NO-GO · ${why}` : "GO · rover-driven route, fits suit and daylight"; $("status").classList.toggle("no", !!why);
+  renderCustomEta();
+  const limits = DATA.limits, hours = 2 * route.length_m / 1000 / state.speed + state.stop / 60, rise = clock(wx.sunrise), set = clock(wx.sunset), back = state.depart + solarHours(hours);
+  const failures = [];
+  if (route.verified_pct < 100) failures.push(t(`${100 - route.verified_pct}% outside the rover traverse`, `${100 - route.verified_pct}% fuera del recorrido del rover`));
+  if (hours > limits.eva_hours) failures.push(t(`EVA exceeds ${limits.eva_hours} h`, `la EVA supera ${limits.eva_hours} h`));
+  if (state.depart < rise) failures.push(t("departure before sunrise", "salida antes del amanecer"));
+  if (back > set - limits.daylight_margin_hours) failures.push(t(`less than ${limits.daylight_margin_hours} h of daylight left`, `menos de ${limits.daylight_margin_hours} h de luz al regreso`));
+  $("status").textContent = failures.length
+    ? `${t("Scenario · NO-GO", "Escenario · NO VIABLE")} · ${failures.join(" · ")}`
+    : t("Scenario · GO under these assumptions", "Escenario · VIABLE con estos supuestos");
+  $("status").classList.toggle("no", failures.length > 0);
+  $("terrain-summary").textContent = t(
+    `Terrain check · Max sampled slope ${route.max_slope}°. Nearest red-zone cell centre to a sampled route point: ${route.min_red_m} m.`,
+    `Terreno · Pendiente máxima muestreada: ${route.max_slope}°. Distancia mínima de un punto de ruta al centro de una celda roja: ${route.min_red_m} m.`
+  );
   $("depart").textContent = hhmm(state.depart); $("speed").textContent = state.speed; $("stop").textContent = state.stop;
   $("sTime").textContent = `${hours.toFixed(1)} h`; $("sBack").textContent = hhmm(back % 24); $("sDist").textContent = `${km(2 * route.length_m)} km`;
-  $("sLeft").textContent = `${(set - back).toFixed(1)} h`; $("sTemp").textContent = `${wx.min_temp_c} to ${wx.max_temp_c} °C`; $("sPress").textContent = `${(wx.pressure_pa / 100).toFixed(1)} mbar`;
+  $("sLeft").textContent = `${(set - back).toFixed(1)} ${t("Mars h", "h marcianas")}`; $("sTemp").textContent = `${wx.min_temp_c} ${t("to", "a")} ${wx.max_temp_c} °C`; $("sPress").textContent = `${(wx.pressure_pa / 100).toFixed(1)} mbar`;
   const pos = h => `${Math.min(Math.max((h - 4) / 16, 0), 1) * 100}%`;  // the bar spans 04:00 to 20:00
   Object.assign($("sun").style, {left: pos(rise), right: `calc(100% - ${pos(set)})`}); Object.assign($("eva").style, {left: pos(state.depart), right: `calc(100% - ${pos(back)})`});
-  $("wx").textContent = `Bar: daylight (${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}, MEDA sol ${wx.sol}, ${wx.earth_date}) with the EVA in blue.`;
+  $("wx").textContent = t(
+    `Historical scenario · MEDA sol ${wx.sol} (${wx.earth_date}). Daylight ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA in blue.`,
+    `Escenario histórico · MEDA sol ${wx.sol} (${wx.earth_date}). Luz ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}. EVA en azul.`
+  );
   setT(state.t);
 }
 const range = {speed: [0.5, 10], stop: [0, 240], depart: [4, 18]};
 all("[data-step]").forEach(b => b.onclick = () => { const [k, d] = b.dataset.step.split(","); state[k] = Math.min(Math.max(state[k] + +d, range[k][0]), range[k][1]); plan(); });
 
 // ---- Static content ----------------------------------------------------------------------------------------------------
-const badge = r => r.best ? '<i class="pill best">BEST</i>' : r.verified_pct < 100 ? '<i class="pill">NOT VERIFIED</i>' : "";
-$("routes").innerHTML = DATA.routes.map(r => `<button class="route" data-route="${r.id}">${badge(r)}<b>${r.name}</b><span>${km(r.length_m)} km one way · ${r.verified_pct}% rover-driven</span></button>`).join("");
-all("[data-route]").forEach(b => b.onclick = () => select(b.dataset.route));
-$("cmp").innerHTML = DATA.routes.map(r => `<tr class="${r.best ? "best" : ""}"><td>${r.name}${r.best ? " · best" : ""}</td><td>${km(r.length_m)} km</td><td>${r.verified_pct}%</td><td>${r.climb_m} m</td>
-  <td>${r.verified_pct ? r.max_tilt + "°" : "no data"}</td><td>${r.max_slope}°</td><td>${r.min_red_m} m</td></tr>`).join("");
+const badge = r => r.best ? `<i class="pill best">${t("RECOMMENDED", "RECOMENDADA")}</i>` : "";
+$("weather-sol").innerHTML = DATA.weather.map(w => `<option value="${w.sol}">Sol ${w.sol} · ${w.earth_date}</option>`).join("");
+$("weather-sol").value = wx.sol;
+$("weather-sol").onchange = e => {
+  wx = DATA.weather.find(w => w.sol === Number(e.target.value));
+  renderWeather();
+  plan();
+};
+
+function renderWeather() {
+  $("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} ${t("to", "a")} ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>${t("Daylight", "Luz")} ${wx.sunrise.slice(0, 5)}–${wx.sunset.slice(0, 5)}`;
+}
+function renderRoutes() {
+  $("routes").innerHTML = DATA.routes.map(r => `<button class="route" data-route="${r.id}">${badge(r)}<b>${routeName(r)}</b><span>${km(r.length_m)} km ${t("one way", "de ida")} · ${r.verified_pct}% ${t("rover-driven", "recorrido por el rover")}</span></button>`).join("");
+  all("[data-route]").forEach(b => b.onclick = () => select(b.dataset.route));
+  $("cmp").innerHTML = DATA.routes.map(r => `<tr class="${r.best ? "best" : ""}"><td>${routeName(r)}</td><td>${km(r.length_m)} km</td><td>${r.verified_pct}%</td><td>${r.climb_m} m</td>
+    <td>${r.verified_pct ? r.max_tilt + "°" : t("no data", "sin datos")}</td><td>${r.max_slope}°</td><td>${r.min_red_m} m</td></tr>`).join("");
+  renderWeather();
+}
 all("#tabs button").forEach(b => b.onclick = () => {
   all("#tabs button, .tab").forEach(x => x.classList.remove("on"));
   b.classList.add("on"); $(b.dataset.tab).classList.add("on");
   if (b.dataset.tab === "plan") Plotly.Plots.resize("profile");
 });
-$("weatherbox").innerHTML = `<b>MEDA · sol ${wx.sol}</b><br>${wx.min_temp_c} to ${wx.max_temp_c} °C · ${(wx.pressure_pa / 100).toFixed(1)} mbar<br>Sun ${wx.sunrise.slice(0, 5)} to ${wx.sunset.slice(0, 5)}`;
 $("wxrows").innerHTML = DATA.weather.map(w => `<tr><td>${w.sol}</td><td>${w.earth_date}</td><td>${w.max_temp_c} °C</td><td>${w.min_temp_c} °C</td><td>${(w.pressure_pa / 100).toFixed(1)} mbar</td><td>${w.sunrise.slice(0, 5)}</td><td>${w.sunset.slice(0, 5)}</td></tr>`).join("");
 $("layers").innerHTML = DATA.layers.map(l => `<li>${l.name}</li>`).join("") + "<li>3D terrain, slopes and red zones: USGS Mars 2020 CTX elevation model, 20 m</li><li>Routes: Perseverance waypoints (NASA/JPL)</li>";
 $("refs").innerHTML = DATA.references.map(([t, u]) => `<li>${t}<br><a href="${u}" target="_blank" rel="noreferrer">${u}</a></li>`).join("");
-draw(); select(DATA.routes.find(r => r.best).id); map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
-$("profile").on("plotly_click", e => { if (e.points[0].curveNumber === 0) goto(e.points[0].pointNumber); });
+$("language").onclick = () => {
+  document.documentElement.lang = t("es", "en");
+  $("language").textContent = t("ES", "EN");
+  $("language").lang = t("es", "en");
+  $("language").setAttribute("aria-label", t("Cambiar a español", "Switch to English"));
+  document.title = t("MARS-NAV · Jezero Western Delta EVA map", "MARS-NAV · Delta occidental de Jezero");
+  labels.forEach(([el, en]) => { el.textContent = t(en, el.dataset.es); });
+  accessibleLabels.forEach(([el, en]) => el.setAttribute("aria-label", t(en, el.dataset.ariaEs)));
+  $("b3d").textContent = $("view3d").hidden ? "3D" : t("2D MAP", "MAPA 2D");
+  $("relief").textContent = `${t("RELIEF", "RELIEVE")} ×${state.relief}`;
+  map.closePopup();
+  renderRoutes();
+  draw();
+  select(route.id, true);
+  renderCustomProfile();
+  renderGroundReference();
+};
+renderRoutes(); draw(); drawCoverage(); select(DATA.routes.find(r => r.best).id); map.fitBounds(L.latLngBounds(pts.map(ll)).pad(0.1));
+$("plot3d").on("plotly_click", e => {
+  if (!state.measuring) return;
+  const hazard = e.points.find(p => p.curveNumber === terrainTrace + 2);
+  if (hazard && terrainRoute?.hazards[hazard.pointNumber]) {
+    inspectHazard(terrainRoute.hazards[hazard.pointNumber]);
+    return;
+  }
+  const point = e.points.find(p => p.curveNumber === 0 && Number.isFinite(p.x) && Number.isFinite(p.y));
+  if (!point) return;
+  measurePoint({lat: south + point.y * 1000 / mLat, lng: dem.west + point.x * 1000 / mLon});
+});
+$("profile").on("plotly_click", e => {
+  const point = e.points.find(p => p.curveNumber === 0);
+  if (!point) return;
+  if ($("view2d").hidden) show3d(false);
+  setFollow(false);
+  map.panTo(ll(pts[point.pointNumber]));
+  inspectSegment(Math.min(point.pointNumber, pts.length - 2));
+});
 </script>
 </body>
 </html>
